@@ -2,9 +2,9 @@ import mysql from 'mysql';
 
 const db = mysql.createConnection({
   host: 'localhost',
-  user: 'regicssystem',
-  password: 'password',
-  db: 'regissystem'
+  user: 'regicsserver',
+  password: 'regicsserver',
+  db: 'regicsserver'
 });
 
 db.on('ready', () => console.log('Database is connected')).on('error', err => {
@@ -21,6 +21,6 @@ db.connect(err => {
   }
 });
 
-db.query('USE regissystem');
+db.query('USE regicsserver');
 
 export default db;

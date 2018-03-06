@@ -1,11 +1,14 @@
-DROP USER IF EXISTS ‘regicsserver’@’localhost’;
-CREATE USER ‘regicsserver’@’localhost’ IDENTIFIED BY "password";
+DROP USER IF EXISTS 'regicsserver'@'localhost';
+CREATE USER 'regicsserver'@'localhost' IDENTIFIED BY 'regicsserver';
 
 DROP DATABASE IF EXISTS regicsserver;
 CREATE DATABASE regicsserver;
 
-GRANT SUPER ON *.* TO ‘regicsserver’@’localhost’;
-GRANT ALL PRIVILEGES ON regicsserver.* TO ‘regicsserver’@’localhost’ WITH GRANT OPTION;
+-- GRANT SUPER ON *.* TO ‘regicsserver’@’localhost’;
+-- GRANT ALL PRIVILEGES ON regicsserver.* TO ‘regicsserver’@’localhost’ WITH GRANT OPTION;
+
+GRANT ALL PRIVILEGES ON regicsserver.* TO 'regicsserver'@'localhost';
+GRANT EXECUTE ON regicsserver.* TO 'regicsserver'@'localhost';
 
 USE regicsserver;
 
