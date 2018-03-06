@@ -1,0 +1,33 @@
+{
+  "name": "regics-server",
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-mysql-session": "^1.2.3",
+    "express-session": "^1.15.6",
+    "morgan": "^1.9.0",
+    "mysql": "^2.15.0"
+  },
+  "devDependencies": {
+    "backpack-core": "^0.4.3",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.3.0",
+    "prettier": "1.7.4"
+  },
+  "scripts": {
+    "start": "backpack",
+    "build": "backpack build",
+    "seed": "cat ./src/database/schema.sql ./src/database/entities/**/*.sql | mysql -u root -p",
+    "populate": "mysql -u root -p --silent < ./src/database/seed.sql",
+    "precommit": "lint-staged",
+    "prettify": "prettier --tab-width 2 --single-quote --jsx-bracket-same-line --write ./src/**/*.js"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --tab-width 2 --single-quote --jsx-bracket-same-line --write",
+      "git add"
+    ]
+  }
+}
