@@ -18,8 +18,8 @@ CREATE TABLE system_user (
     username VARCHAR(256) NOT NULL,
     password VARCHAR(256) NOT NULL,
     status_id INT NOT NULL,
-    system_position ENUM("Faculty", "Head", "Member"),
-    status ENUM("Admin", "User"),
+    system_position ENUM("faculty", "head", "member"),
+    status ENUM("resigned", "on_leave", "active"),
     teaching_load FLOAT NOT NULL,
     Is_adviser TINYINT NOT NULL 
 );
@@ -53,7 +53,7 @@ CREATE TABLE course(
 CREATE TABLE student(
     student_no VARCHAR(10) NOT NULL PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
-    Status enum("LOA", "Dropped", "Enrolled", "Dismissed") NOT NULL,
+    status enum("loa", "dropped", "enrolled", "dismissed") NOT NULL,
     adviser INT,
     CONSTRAINT FK_adviser FOREIGN KEY (adviser) REFERENCES system_user(empno)
 );
