@@ -3,13 +3,13 @@ import * as Ctrl from './controller';
 
 const router = Router();
 
-// get all users
+// Get all Users
 router.get('/api/users', async (req, res) => {
   try {
     const users = await Ctrl.getAllUsers();
     res.status(200).json({
       status: 200,
-      message: 'Successfullyhahahasudqwiduqsd fetched users',
+      message: 'Successfully fetched users',
       data: users
     });
   } catch (status) {
@@ -19,34 +19,12 @@ router.get('/api/users', async (req, res) => {
         message = 'Internal server error';
         break;
     }
+
     res.status(200).json({ status, message });
   }
 });
 
-// test cahnge
-router.get('/api/testchange', async (req, res) => {
-  try {
-    const users = await Ctrl.getAllUsers();
-    res.status(200).json({
-      status: 200,
-      message: ' testchangge',
-      data: users
-    });
-  } catch (status) {
-    let message = '';
-    switch (status) {
-      case 500:
-        message = 'Internal server error';
-        break;
-      case 408:
-        message = 'test message not found';
-        break;
-    }
-    res.status(200).json({ status, message });
-  }
-});
-
-// getUser
+// Get User
 router.get('/api/users/:empno', async (req, res) => {
   try {
     const user = await Ctrl.getUser(req.params);
@@ -69,7 +47,7 @@ router.get('/api/users/:empno', async (req, res) => {
   }
 });
 
-// removeUser
+// Remove User
 router.delete('/api/users/:empno', async (req, res) => {
   try {
     const id = await Ctrl.removeUser(req.params);
