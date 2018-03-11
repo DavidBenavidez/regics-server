@@ -8,6 +8,7 @@ const router = Router();
 
 // USE ROUTER HERE EXAMPLE BELOW
 //router.use(exampleRouter);
+// router.use('/', authRouter);
 router.use(userRouter);
 
 export default router;

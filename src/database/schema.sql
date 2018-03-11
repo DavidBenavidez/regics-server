@@ -41,10 +41,10 @@ CREATE TABLE course(
     course_time TIME, 
     minutes INT NOT NULL, 
     units INT NOT NULL,
-    room_no INT NOT NULL, 
+    room_no INT, 
     empno INT,
     CONSTRAINT FK_RoomNo FOREIGN KEY (room_no)
-    REFERENCES room(room_no),
+    REFERENCES room(room_no) ON DELETE SET NULL,
     CONSTRAINT FK_EmpNo FOREIGN KEY (empno)
     REFERENCES system_user(empno) ON DELETE SET NULL
  
@@ -59,8 +59,8 @@ CREATE TABLE student(
 );
 
 CREATE TABLE student_advisers_list(
-    student VARCHAR(10) NOT NULL,
+    student VARCHAR(10),
     empno INT, 
-    CONSTRAINT FK_student FOREIGN KEY (student) REFERENCES student(student_no),
+    CONSTRAINT FK_student FOREIGN KEY (student) REFERENCES student(student_no) ON DELETE SET NULL,
     CONSTRAINT FK_EmpNo2 FOREIGN KEY (empno) REFERENCES system_user(empno) ON DELETE SET NULL
 );
