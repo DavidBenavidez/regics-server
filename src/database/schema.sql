@@ -51,15 +51,15 @@ CREATE TABLE course(
 );
 
 CREATE TABLE student(
-student_no int NOT NULL PRIMARY KEY,
+    student_no VARCHAR(10) NOT NULL PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
     Status enum("LOA", "Dropped", "Enrolled", "Dismissed") NOT NULL,
-    adviser int,
+    adviser INT,
     CONSTRAINT FK_adviser FOREIGN KEY (adviser) REFERENCES system_user(empno)
 );
 
 CREATE TABLE student_advisers_list(
-    student INT NOT NULL,
+    student VARCHAR(10) NOT NULL,
     empno INT NOT NULL, 
     CONSTRAINT FK_student FOREIGN KEY (student) REFERENCES student(student_no),
     CONSTRAINT FK_EmpNo2 FOREIGN KEY (empno) REFERENCES system_user(empno)
