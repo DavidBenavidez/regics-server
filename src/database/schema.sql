@@ -21,7 +21,7 @@ CREATE TABLE system_user (
     system_position ENUM("faculty", "head", "member"),
     status ENUM("resigned", "on_leave", "active"),
     teaching_load FLOAT NOT NULL,
-    Is_adviser TINYINT NOT NULL 
+    is_adviser TINYINT NOT NULL 
 );
 
 CREATE TABLE room(
