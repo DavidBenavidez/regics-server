@@ -9,7 +9,7 @@ router.get('/api/users', async (req, res) => {
     const users = await Ctrl.getAllUsers();
     res.status(200).json({
       status: 200,
-      message: 'Successfully fetched users',
+      message: 'Successfullyhahahasudqwiduqsd fetched users',
       data: users
     });
   } catch (status) {
@@ -19,7 +19,29 @@ router.get('/api/users', async (req, res) => {
         message = 'Internal server error';
         break;
     }
+    res.status(200).json({ status, message });
+  }
+});
 
+// test cahnge
+router.get('/api/testchange', async (req, res) => {
+  try {
+    const users = await Ctrl.getAllUsers();
+    res.status(200).json({
+      status: 200,
+      message: ' testchangge',
+      data: users
+    });
+  } catch (status) {
+    let message = '';
+    switch (status) {
+      case 500:
+        message = 'Internal server error';
+        break;
+      case 408:
+        message = 'test message not found';
+        break;
+    }
     res.status(200).json({ status, message });
   }
 });
