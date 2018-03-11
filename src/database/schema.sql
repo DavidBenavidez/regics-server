@@ -42,11 +42,11 @@ CREATE TABLE course(
     minutes INT NOT NULL, 
     units INT NOT NULL,
     room_no INT NOT NULL, 
-    empno INT NOT NULL,
+    empno INT,
     CONSTRAINT FK_RoomNo FOREIGN KEY (room_no)
     REFERENCES room(room_no),
     CONSTRAINT FK_EmpNo FOREIGN KEY (empno)
-    REFERENCES system_user(empno)
+    REFERENCES system_user(empno) ON DELETE SET NULL
  
 );
 
@@ -55,12 +55,12 @@ CREATE TABLE student(
     name VARCHAR(256) NOT NULL,
     status enum("loa", "dropped", "enrolled", "dismissed") NOT NULL,
     adviser INT,
-    CONSTRAINT FK_adviser FOREIGN KEY (adviser) REFERENCES system_user(empno)
+    CONSTRAINT FK_adviser FOREIGN KEY (adviser) REFERENCES system_user(empno) ON DELETE SET NULL
 );
 
 CREATE TABLE student_advisers_list(
     student VARCHAR(10) NOT NULL,
-    empno INT NOT NULL, 
+    empno INT, 
     CONSTRAINT FK_student FOREIGN KEY (student) REFERENCES student(student_no),
-    CONSTRAINT FK_EmpNo2 FOREIGN KEY (empno) REFERENCES system_user(empno)
+    CONSTRAINT FK_EmpNo2 FOREIGN KEY (empno) REFERENCES system_user(empno) ON DELETE SET NULL
 );
