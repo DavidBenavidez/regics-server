@@ -3,6 +3,7 @@ import * as Ctrl from './controller';
 
 const router = Router();
 
+// get all users
 router.get('/api/users', async (req, res) => {
   try {
     const users = await Ctrl.getAllUsers();
