@@ -1,6 +1,6 @@
-# quISKO CMSC 100 Project
+# regICS CMSC 128 Project
 
-### CMSC 100 AY 2017-2018 1ST SEMESTER
+### CMSC 128 AY 2017-2018 2ND SEMESTER
 
 1. Check if you already have github on your desktop.
 
