@@ -23,20 +23,13 @@ export const getAllStudents = () => {
 export const getStudentByStudNo = ({ student_no }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
-        SELECT 
-          *
-        FROM 
-          student
-        WHERE
-          student_no = ?
-      `;
+        SELECT * FROM student WHERE student_no = ?`;
 
-    db.query(queryString, empno, (err, rows) => {
+    db.query(queryString, student_no, (err, rows) => {
       if (err) {
         console.log(err);
         return reject(500);
       }
-
       if (!rows.length) {
         return reject(404);
       }
@@ -49,20 +42,13 @@ export const getStudentByStudNo = ({ student_no }) => {
 export const getStudentByName = ({ name }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
-        SELECT 
-          *
-        FROM 
-          student
-        WHERE
-          name = ?
-      `;
+        SELECT * FROM student WHERE name = ?`;
 
-    db.query(queryString, empno, (err, rows) => {
+    db.query(queryString, name, (err, rows) => {
       if (err) {
         console.log(err);
         return reject(500);
       }
-
       if (!rows.length) {
         return reject(404);
       }
@@ -75,20 +61,13 @@ export const getStudentByName = ({ name }) => {
 export const getStudentByStatus = ({ status }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
-        SELECT 
-          *
-        FROM 
-          student
-        WHERE
-          status = ?
-      `;
+        SELECT * FROM student WHERE status = ?`;
 
-    db.query(queryString, empno, (err, rows) => {
+    db.query(queryString, status, (err, rows) => {
       if (err) {
         console.log(err);
         return reject(500);
       }
-
       if (!rows.length) {
         return reject(404);
       }
