@@ -13,14 +13,7 @@ router.get('/api/users', async (req, res) => {
       data: users
     });
   } catch (status) {
-    let message = '';
-    switch (status) {
-      case 500:
-        message = 'Internal server error';
-        break;
-    }
-
-    res.status(200).json({ status, message });
+    res.status(200).json({ status });
   }
 });
 
@@ -34,16 +27,7 @@ router.get('/api/users/:empno', async (req, res) => {
       data: user
     });
   } catch (status) {
-    let message = '';
-    switch (status) {
-      case 404:
-        message = 'User not found';
-        break;
-      case 500:
-        message = 'Internal server error';
-        break;
-    }
-    res.status(status).json({ status, message });
+    res.status(status).json({ status });
   }
 });
 
@@ -58,16 +42,7 @@ router.delete('/api/users/:empno', async (req, res) => {
       data: id
     });
   } catch (status) {
-    let message = '';
-    switch (status) {
-      case 404:
-        message = 'User not found';
-        break;
-      case 500:
-        message = 'Internal server error';
-        break;
-    }
-    res.status(status).json({ status, message });
+    res.status(status).json({ status });
   }
 });
 
