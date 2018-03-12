@@ -9,7 +9,6 @@ router.get('/api/users', async (req, res) => {
     const users = await Ctrl.getAllUsers();
     res.status(200).json({
       status: 200,
-      message: 'Successfully fetched users',
       data: users
     });
   } catch (status) {
@@ -23,7 +22,6 @@ router.get('/api/users/:empno', async (req, res) => {
     const user = await Ctrl.getUser(req.params);
     res.status(200).json({
       status: 200,
-      message: 'Successfully fetched user',
       data: user
     });
   } catch (status) {
@@ -38,7 +36,6 @@ router.delete('/api/users/:empno', async (req, res) => {
 
     res.status(200).json({
       status: 200,
-      message: 'Successfully removed user',
       data: id
     });
   } catch (status) {
