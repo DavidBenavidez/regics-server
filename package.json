@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "express-mysql-session": "^1.2.3",

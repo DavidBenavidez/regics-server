@@ -1,4 +1,7 @@
 import db from '../../database';
+import bcrypt from 'bcryptjs';
+
+const salt = bcrypt.genSaltSync(10);
 
 export const getUser = ({ empno }) => {
   return new Promise((resolve, reject) => {
@@ -53,6 +56,7 @@ export const addUser = ({
   username,
   email,
   password,
+  confirm_password,
   status_id,
   system_position,
   status,
@@ -60,29 +64,88 @@ export const addUser = ({
   is_adviser
 }) => {
   return new Promise((resolve, reject) => {
-    const queryString = `
-      INSERT INTO
-        system_user
-      VALUES
-        (DEFAULT,?,?,?,?,?,?,?,?,?)
-      `;
-    const values = [
-      name,
-      username,
-      email,
-      password,
-      status_id,
-      system_position,
-      status,
-      teaching_load,
-      is_adviser
-    ];
-    db.query(queryString, values, (err, rows) => {
-      if (err) {
-        console.log(err);
-        return reject(500);
-      }
-      return resolve(rows.insertId);
+    bcrypt.hash(password, salt, function(err, hash) {
+      const queryString = `
+              INSERT INTO system_user VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          `;
+      const values = [
+        name,
+        username,
+        email,
+        hash,
+        status_id,
+        system_position,
+        status,
+        teaching_load,
+        is_adviser
+      ];
+
+      db.query(queryString, values, (err, results) => {
+        if (err) {
+          console.log(err);
+          return reject(500);
+        }
+        return resolve(results.insertId);
+      });
+    });
+  });
+};
+
+export const editUser = ({
+  empno,
+  name,
+  username,
+  email,
+  password,
+  confirm_password,
+  status_id,
+  system_position,
+  status,
+  teaching_load,
+  is_adviser
+}) => {
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(password, salt, function(err, hash) {
+      const queryString = `
+        UPDATE system_user 
+        SET 
+        name = ?, 
+        username = ?, 
+        email = ?, 
+        password = ?, 
+        status_id = ?, 
+        system_position = ?, 
+        status = ?, 
+        teaching_load = ?, 
+        is_adviser = ? 
+        WHERE 
+        empno = ?`;
+
+      const values = [
+        name,
+        username,
+        email,
+        hash,
+        status_id,
+        system_position,
+        status,
+        teaching_load,
+        is_adviser,
+        empno
+      ];
+
+      db.query(queryString, values, (err, res) => {
+        if (err) {
+          console.log(err);
+          return reject(500);
+        }
+
+        if (!res.affectedRows) {
+          return reject(404);
+        }
+
+        return resolve();
+      });
     });
   });
 };
