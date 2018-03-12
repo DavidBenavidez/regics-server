@@ -13,6 +13,7 @@ CREATE TABLE system_user (
     empno INT NOT NULL PRIMARY KEY, 
     name VARCHAR(256) NOT NULL,
     username VARCHAR(256) NOT NULL,
+    email VARCHAR(256) NOT NULL,
     password VARCHAR(256) NOT NULL,
     status_id INT NOT NULL,
     system_position ENUM("faculty", "head", "member") NOT NULL,
