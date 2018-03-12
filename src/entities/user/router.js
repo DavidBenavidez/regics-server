@@ -16,6 +16,31 @@ router.get('/api/users/:empno', async (req, res) => {
   }
 });
 
+// Add User
+router.post('/api/users', async (req, res) => {
+  if (
+    req.body.name &&
+    req.body.username &&
+    req.body.password &&
+    (req.body.status == 'resigned' ||
+      req.body.status == 'on_leave' ||
+      req.body.status == 'active')
+  ) {
+    try {
+      const id = await Ctrl.addUser(req.body);
+
+      res.status(200).json({
+        status: 200,
+        data: id
+      });
+    } catch (status) {
+      res.status(500).json({ status });
+    }
+  } else {
+    res.status(400).json({ status: 400 });
+  }
+});
+
 // Remove User
 router.delete('/api/users/:empno', async (req, res) => {
   try {
