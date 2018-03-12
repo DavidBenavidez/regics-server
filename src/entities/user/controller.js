@@ -28,28 +28,6 @@ export const getUser = ({ empno }) => {
   });
 };
 
-export const addUser = ({ name, username, password, status }) => {
-  return new Promise((resolve, reject) => {
-    const queryString = `
-            INSERT INTO
-              system_user
-            VALUES
-              (DEFAULT, ?, ?, ?, 0, "faculty", ?, 0, 1)
-        `; // DEFAULT works only if empno is AUTO_INCREMENT
-
-    const values = [name, username, password, status];
-
-    db.query(queryString, values, (err, results) => {
-      if (err) {
-        console.log(err);
-        return reject(500);
-      }
-
-      return resolve(results.insertId);
-    });
-  });
-};
-
 export const removeUser = ({ empno }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
