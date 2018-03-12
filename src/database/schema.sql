@@ -61,9 +61,6 @@ CREATE TABLE student_advisers_list(
     empno INT, 
     CONSTRAINT FK_student FOREIGN KEY (student) REFERENCES student(student_no) ON DELETE SET NULL,
     CONSTRAINT FK_EmpNo2 FOREIGN KEY (empno) REFERENCES system_user(empno) ON DELETE SET NULL
-<<<<<<< HEAD
-);
-=======
 );
 
 -- DUMMY  DATA
@@ -173,4 +170,3 @@ insert into student_advisers_list (student, empno) values ('2018-75288', 17);
 insert into student_advisers_list (student, empno) values ('2017-17335', 18);
 insert into student_advisers_list (student, empno) values ('2018-99049', 19);
 insert into student_advisers_list (student, empno) values ('2017-24301', 20);
->>>>>>> CRUD_login_signup
