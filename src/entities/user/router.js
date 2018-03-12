@@ -3,19 +3,6 @@ import * as Ctrl from './controller';
 
 const router = Router();
 
-// Get all Users
-router.get('/api/users', async (req, res) => {
-  try {
-    const users = await Ctrl.getAllUsers();
-    res.status(200).json({
-      status: 200,
-      data: users
-    });
-  } catch (status) {
-    res.status(200).json({ status });
-  }
-});
-
 // Get User
 router.get('/api/users/:empno', async (req, res) => {
   try {
@@ -36,6 +23,20 @@ router.delete('/api/users/:empno', async (req, res) => {
 
     res.status(200).json({
       status: 200,
+      data: id
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
+// Add User
+router.post('/api/users', async (req, res) => {
+  try {
+    const id = await Ctrl.addUser(req.body);
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully added user',
       data: id
     });
   } catch (status) {

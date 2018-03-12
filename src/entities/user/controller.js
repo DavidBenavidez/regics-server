@@ -1,22 +1,5 @@
 import db from '../../database';
 
-export const getAllUsers = () => {
-  return new Promise((resolve, reject) => {
-    const queryString = `
-        SELECT *
-        FROM system_user
-      `;
-
-    db.query(queryString, (err, rows) => {
-      if (err) {
-        console.log(err);
-        return reject(500);
-      }
-      return resolve(rows);
-    });
-  });
-};
-
 export const getUser = ({ empno }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
@@ -61,6 +44,45 @@ export const removeUser = ({ empno }) => {
         return reject(404);
       }
       return resolve(empno);
+    });
+  });
+};
+
+export const addUser = ({
+  name,
+  username,
+  email,
+  password,
+  status_id,
+  system_position,
+  status,
+  teaching_load,
+  is_adviser
+}) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+      INSERT INTO
+        system_user
+      VALUES
+        (DEFAULT,?,?,?,?,?,?,?,?,?)
+      `;
+    const values = [
+      name,
+      username,
+      email,
+      password,
+      status_id,
+      system_position,
+      status,
+      teaching_load,
+      is_adviser
+    ];
+    db.query(queryString, values, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      return resolve(rows.insertId);
     });
   });
 };

@@ -10,7 +10,7 @@ GRANT EXECUTE ON regicsserver.* TO 'regicsserver'@'localhost';
 USE regicsserver;
 
 CREATE TABLE system_user (
-    empno INT NOT NULL PRIMARY KEY, 
+    empno INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
     name VARCHAR(256) NOT NULL,
     username VARCHAR(256) NOT NULL,
     email VARCHAR(256) NOT NULL,
@@ -64,27 +64,28 @@ CREATE TABLE student_advisers_list(
 );
 
 -- DUMMY  DATA
+USE regicsserver;
 
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (1, 'Meriel John', 'mjohn0', 'FZEvjCmKjFN', 67, 'faculty', 'resigned', 29.1136, 'false');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (2, 'Anny Whelan', 'awhelan1', '2VWKdGcd', 82, 'head', 'resigned', 13.9978, 'false');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (3, 'Sandy Macvain', 'smacvain2', 'Acieo9', 83, 'member', 'on_leave', 10.9264, 'false');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (4, 'Thalia Beedell', 'tbeedell3', '2GCz245', 48, 'member', 'on_leave', 13.5265, 'false');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (5, 'Oswald Keast', 'okeast4', 'Klm8iXSSp', 11, 'member', 'active', 17.08, 'false');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (6, 'Hermia McCraine', 'hmccraine5', 'tMMlu7ruu1', 60, 'member', 'active', 16.1024, 'false');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (7, 'Ailbert Legg', 'alegg6', 'Fy8OjUI', 87, 'member', 'active', 21.1179, 'false');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (8, 'Linnie Creffeild', 'lcreffeild7', 'LTZJm32EEpE', 2, 'member', 'active', 10.8194, 'false');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (9, 'Gwenora Veschambre', 'gveschambre8', 'UTfZ5Bkp', 8, 'member', 'active', 14.5526, 'false');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (10, 'Starla Bodleigh', 'sbodleigh9', 'QHbWCsu5C', 21, 'member', 'active', 13.2486, 'false');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (11, 'Audrey Monger', 'amongera', 'FlM1Mj', 4, 'member', 'active', 29.0812, 'true');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (12, 'Markos Dudderidge', 'mdudderidgeb', 'OomKCZ7', 2, 'member', 'active', 16.8789, 'true');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (13, 'Suzanna Mellanby', 'smellanbyc', 'rCz2bO', 36, 'member', 'active', 22.5513, 'true');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (14, 'Elfie Mathewson', 'emathewsond', 'tTsHGyPv', 46, 'member', 'active', 20.6449, 'true');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (15, 'Cello Blaydon', 'cblaydone', 'Pi3j7dfy', 92, 'member', 'active', 24.9033, 'true');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (16, 'Talbot Bernat', 'tbernatf', 'sSSdJH', 11, 'member', 'active', 24.0789, 'true');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (17, 'Dov Goddard', 'dgoddardg', 'R71u1DG', 41, 'member', 'active', 15.784, 'true');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (18, 'Roseann Franklyn', 'rfranklynh', 'eGfz799', 78, 'faculty', 'active', 20.8323, 'true');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (19, 'Shaughn Tumielli', 'stumiellii', 'vO4ndRz', 57, 'faculty', 'active', 27.267, 'true');
-insert into system_user (empno, name, username, password, status_id, system_position, status, teaching_load, is_adviser) values (20, 'Cissy Giraudot', 'cgiraudotj', 'wve0ducx', 62, 'faculty', 'active', 16.1819, 'true');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Meriel John', 'mjohn0', 'example@email.com', 'FZEvjCmKjFN', 67, 'faculty', 'resigned', 29.1136, 'false');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Anny Whelan', 'awhelan1', 'example@email.com', '2VWKdGcd', 82, 'head', 'resigned', 13.9978, 'false');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Sandy Macvain', 'smacvain2', 'example@email.com', 'Acieo9', 83, 'member', 'on_leave', 10.9264, 'false');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Thalia Beedell', 'tbeedell3', 'example@email.com', '2GCz245', 48, 'member', 'on_leave', 13.5265, 'false');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Oswald Keast', 'okeast4', 'example@email.com', 'Klm8iXSSp', 11, 'member', 'active', 17.08, 'false');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Hermia McCraine', 'hmccraine5', 'example@email.com', 'tMMlu7ruu1', 60, 'member', 'active', 16.1024, 'false');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Ailbert Legg', 'alegg6', 'example@email.com', 'Fy8OjUI', 87, 'member', 'active', 21.1179, 'false');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Linnie Creffeild', 'lcreffeild7', 'example@email.com', 'LTZJm32EEpE', 2, 'member', 'active', 10.8194, 'false');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Gwenora Veschambre', 'gveschambre8', 'example@email.com', 'UTfZ5Bkp', 8, 'member', 'active', 14.5526, 'false');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Starla Bodleigh', 'sbodleigh9', 'example@email.com', 'QHbWCsu5C', 21, 'member', 'active', 13.2486, 'false');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Audrey Monger', 'amongera', 'example@email.com', 'FlM1Mj', 4, 'member', 'active', 29.0812, 'true');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Markos Dudderidge', 'mdudderidgeb', 'example@email.com', 'OomKCZ7', 2, 'member', 'active', 16.8789, 'true');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Suzanna Mellanby', 'smellanbyc', 'example@email.com', 'rCz2bO', 36, 'member', 'active', 22.5513, 'true');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Elfie Mathewson', 'emathewsond', 'example@email.com', 'tTsHGyPv', 46, 'member', 'active', 20.6449, 'true');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Cello Blaydon', 'cblaydone', 'example@email.com', 'Pi3j7dfy', 92, 'member', 'active', 24.9033, 'true');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Talbot Bernat', 'tbernatf', 'example@email.com', 'sSSdJH', 11, 'member', 'active', 24.0789, 'true');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Dov Goddard', 'dgoddardg', 'example@email.com', 'R71u1DG', 41, 'member', 'active', 15.784, 'true');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Roseann Franklyn', 'rfranklynh', 'example@email.com', 'eGfz799', 78, 'faculty', 'active', 20.8323, 'true');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Shaughn Tumielli', 'stumiellii', 'example@email.com', 'vO4ndRz', 57, 'faculty', 'active', 27.267, 'true');
+insert into system_user (empno, name, username, email, password, status_id, system_position, status, teaching_load, is_adviser) values (DEFAULT, 'Cissy Giraudot', 'cgiraudotj', 'example@email.com', 'wve0ducx', 62, 'faculty', 'active', 16.1819, 'true');
 
 insert into room (room_no, room_name) values (50, 'PCLAB 1');
 insert into room (room_no, room_name) values (53, 'PCLAB 7');
