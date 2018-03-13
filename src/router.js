@@ -5,6 +5,7 @@ import { Router } from 'express';
 import userRouter from './entities/user/router';
 import authRouter from './entities/auth/router';
 import studentRouter from './entities/student/router';
+import profTeachingLoadRouter from './entities/professor_teaching_load/router';
 
 const router = Router();
 
@@ -15,5 +16,6 @@ const router = Router();
 router.use(userRouter);
 router.use(authRouter);
 router.use(studentRouter);
+router.use(profTeachingLoadRouter);
 
 export default router;

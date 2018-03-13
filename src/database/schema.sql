@@ -62,6 +62,21 @@ CREATE TABLE student_advisers_list(
     CONSTRAINT FK_EmpNo2 FOREIGN KEY (empno) REFERENCES system_user(empno) ON DELETE SET NULL
 );
 
+CREATE TABLE prof_teaching_load(
+  empno INT NOT NULL PRIMARY KEY, 
+  prof_name VARCHAR(256) NOT NULL,
+  course VARCHAR(256) NOT NULL,
+  section VARCHAR(256) NOT NULL,
+  course_time TIME,
+  course_day enum("Mon","Tues", "Wed","Thurs","Fri") NOT NULL,
+  room INT NOT NULL,
+  class_size INT NOT NULL,
+  units FLOAT NOT NULL,
+  teaching_load FLOAT NOT NULL,
+  total_teaching_load FLOAT NOT NULL  
+);
+
+
 -- DUMMY  DATA
 USE regicsserver;
 
