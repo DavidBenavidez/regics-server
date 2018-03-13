@@ -17,26 +17,37 @@ import db from '../../database';
 //   });
 // };
 
-IN empno INT,
-  IN prof_name VARCHAR(256),
-  IN course VARCHAR(256),
-  IN section VARCHAR(256),
-  IN time TIME,
-  IN day DAY,
-  IN room INT,
-  IN class_size INT,
-  IN units FLOAT,
-  IN teaching_load FLOAT,
-  IN total_teaching_load FLOAT
-
-
-export const add_teaching_load = ({ empno, prof_name, course, section, time, day, room, class_size, units, teaching_load, total_teaching_load  }) => {
+export const add_teaching_load = ({
+  empno,
+  prof_name,
+  course,
+  section,
+  time,
+  day,
+  room,
+  class_size,
+  units,
+  teaching_load,
+  total_teaching_load
+}) => {
   return new Promise((resolve, reject) => {
     const query = `
       CALL add_teaching_load(?, ?, ?,?, ?, ?,?, ?, ?,?, ?)
     `;
 
-    const values = [uempno, prof_name, course, section, time, day, room, class_size, units, teaching_load, total_teaching_loade];
+    const values = [
+      uempno,
+      prof_name,
+      course,
+      section,
+      time,
+      day,
+      room,
+      class_size,
+      units,
+      teaching_load,
+      total_teaching_loade
+    ];
     db.query(query, values, (err, result) => {
       if (err) {
         if (err.code === 'ER_DUP_ENTRY') {
@@ -51,19 +62,42 @@ export const add_teaching_load = ({ empno, prof_name, course, section, time, day
   });
 };
 
-
-export const update_teaching_load = ({ empno, prof_name, course, section, time, day, room, class_size, units, teaching_load, total_teaching_load  }) => {
+export const update_teaching_load = ({
+  empno,
+  prof_name,
+  course,
+  section,
+  time,
+  day,
+  room,
+  class_size,
+  units,
+  teaching_load,
+  total_teaching_load
+}) => {
   return new Promise((resolve, reject) => {
     const query = `
       CALL update_teaching_load(?, ?, ?,?, ?, ?,?, ?, ?,?, ?)
     `;
 
-    const values = [uempno, prof_name, course, section, time, day, room, class_size, units, teaching_load, total_teaching_loade];
+    const values = [
+      uempno,
+      prof_name,
+      course,
+      section,
+      time,
+      day,
+      room,
+      class_size,
+      units,
+      teaching_load,
+      total_teaching_loade
+    ];
     db.query(query, values, (err, result) => {
       if (err) {
         if (!results.affectedRows) {
-        return reject(404);
-      }
+          return reject(404);
+        }
         console.log(err.message);
         return reject(500);
       }
