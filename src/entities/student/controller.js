@@ -116,7 +116,7 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
 
       `;
 
-    db.query(queryString, empno, (err, rows) => {
+    db.query(queryString, student_no, (err, rows) => {
       if (err) {
         console.log(err);
         return reject(500);
@@ -125,50 +125,21 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
       if (!rows.length) {
         return reject(404);
       }
-      return resolve(rows[0]);
+      return resolve(rows);
     });
   });
 };
-
-//Retrieve students per adviser
-export const getStudentsPerAdviser = () => {
-  return new Promise((resolve, reject) => {
-    const queryString = `
-     SELECT b.name AS Advisers, GROUP_CONCAT(a.name SEPARATOR ', ') AS
-     ADVISEES  
-     FROM (select student_no, name, adviser from student) AS a JOIN
-     system_user AS b 
-     WHERE b.empno = a.adviser GROUP BY b.empno`;
-
-    db.query(queryString, empno, (err, rows) => {
-      if (err) {
-        console.log(err);
-        return reject(500);
-      }
-
-      if (!rows.length) {
-        return reject(404);
-      }
-      return resolve(rows[0]);
-    });
-  });
-};
-
 // U P D A T E
 //update student's adviser and add to adviser history
-export const updateAdvisers = ({}) => {
+export const updateAdviser = ({ adviser, student_no }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
         UPDATE student
 		SET adviser = ?
 		WHERE student_no = ?
-		;
-    	INSERT INTO student_advisers_list(student, empno)
-VALUES (?, ?)
-
-      `;
-
-    db.query(queryString, (err, rows) => {
+    ; INSERT INTO student_advisers_list(student, empno) VALUES (?, ?);`;
+    const values = [adviser, student_no, student_no, adviser];
+    db.query(queryString, values, (err, rows) => {
       if (err) {
         console.log(err);
         return reject(500);
@@ -200,4 +171,5 @@ VALUES (?, ?)
       return resolve(empno);
     });
   });
-};*/
+};
+*/

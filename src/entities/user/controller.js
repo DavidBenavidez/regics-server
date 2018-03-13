@@ -149,3 +149,23 @@ export const editUser = ({
     });
   });
 };
+
+// List all advisers and the students assigned to them
+export const getAdvisersAndAdvisees = () => {
+  return new Promise((resolve, reject) => {
+    const queryString = `SELECT b.name AS Advisers, GROUP_CONCAT(a.name SEPARATOR ', ') AS ADVISEES   FROM (select student_no, name, adviser from student) AS a JOIN system_user AS b  WHERE b.empno = a.adviser GROUP BY b.empno`;
+
+    db.query(queryString, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+
+      if (!rows.length) {
+        return reject(404);
+      }
+
+      return resolve(rows);
+    });
+  });
+};

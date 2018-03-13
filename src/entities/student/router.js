@@ -60,6 +60,38 @@ router.get('/api/students/status/:status', async (req, res) => {
   }
 });
 
+// Retrieve all advisers of a student
+router.get('/api/students/advisers/:student_no', async (req, res) => {
+  try {
+    const user = await Ctrl.getAllAdvisersByStudNo(req.params);
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully fetched user',
+      data: user
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
+// update user adviser
+router.put('/api/students/adviser', async (req, res) => {
+  try {
+    console.log('I tried');
+    await Ctrl.updateAdviser(req.body);
+    const user = await Ctrl.getStudentByStudNo({
+      student_no: req.body.student_no
+    });
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully edited user',
+      data: user
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
 // // removeUser
 // router.delete('/api/users/:empno', async (req, res) => {
 //   try {
