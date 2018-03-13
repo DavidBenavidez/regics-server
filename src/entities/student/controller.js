@@ -71,7 +71,7 @@ export const getStudentByStatus = ({ status }) => {
       if (!rows.length) {
         return reject(404);
       }
-      return resolve(rows[0]);
+      return resolve(rows);
     });
   });
 };

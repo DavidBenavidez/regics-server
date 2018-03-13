@@ -46,7 +46,7 @@ router.get('/api/students/name/:name', async (req, res) => {
   }
 });
 
-// Get Student by Student status
+// Get Students by Student status
 router.get('/api/students/status/:status', async (req, res) => {
   try {
     const user = await Ctrl.getStudentByStatus(req.params);
@@ -77,7 +77,6 @@ router.get('/api/students/advisers/:student_no', async (req, res) => {
 // update user adviser
 router.put('/api/students/adviser', async (req, res) => {
   try {
-    console.log('I tried');
     await Ctrl.updateAdviser(req.body);
     const user = await Ctrl.getStudentByStudNo({
       student_no: req.body.student_no

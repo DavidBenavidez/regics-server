@@ -58,7 +58,7 @@ CREATE TABLE student(
 CREATE TABLE student_advisers_list(
     student_no VARCHAR(10),
     empno INT, 
-    CONSTRAINT FK_student FOREIGN KEY (student_no) REFERENCES student(student_no) ON DELETE SET NULL,
+    CONSTRAINT FK_student FOREIGN KEY (student_no) REFERENCES student(student_no) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT FK_EmpNo2 FOREIGN KEY (empno) REFERENCES system_user(empno) ON DELETE SET NULL
 );
 
