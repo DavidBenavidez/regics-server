@@ -27,6 +27,23 @@
   ```
   https://github.com/DavidBenavidez/regics-server
   ```
+## Running the server
+
+1. Populate the database using yarn.
+
+  ```
+  yarn seed
+  ```
+2. Install the dependencies
+
+  ```
+  yarn install
+  ```
+  
+3. Run the server 
+  ```
+  yarn start
+
 ## Conventions
 
 1. Now each time you create your module, you create a new branch.
