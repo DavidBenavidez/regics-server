@@ -132,9 +132,11 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
 
 // U P D A T E
 //update student's adviser and add to adviser history
-export const updateAdviser = ({ adviser, student_no }) => {
+export const updateStudentAdviser = ({ adviser, student_no }) => {
   return new Promise((resolve, reject) => {
-    const queryString = `UPDATE student SET adviser = ? WHERE student_no = ?; INSERT INTO student_advisers_list(student_no, empno) VALUES (?, ?);`;
+    const queryString = `UPDATE student SET adviser = ? WHERE student_no = ?; 
+    INSERT INTO student_advisers_list(student_no, empno) VALUES (?, ?)`;
+
     const values = [adviser, student_no, student_no, adviser];
 
     db.query(queryString, values, (err, rows) => {
@@ -142,22 +144,22 @@ export const updateAdviser = ({ adviser, student_no }) => {
         console.log(err);
         return reject(500);
       }
-      return resolve(rows);
+      return resolve();
     });
   });
 };
 
 //removes a student
-/*export const removeUser = ({ empno }) => {
+export const removeStudent = ({ student_no }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
         DELETE 
-          FROM system_user
+          FROM student
         WHERE 
-          empno = ?
+          student_no = ?
       `;
 
-    db.query(queryString, empno, (err, results) => {
+    db.query(queryString, student_no, (err, results) => {
       if (err) {
         console.log(err);
         return reject(500);
@@ -166,8 +168,7 @@ export const updateAdviser = ({ adviser, student_no }) => {
       if (!results.affectedRows) {
         return reject(404);
       }
-      return resolve(empno);
+      return resolve(student_no);
     });
   });
 };
-*/

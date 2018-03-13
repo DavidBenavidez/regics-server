@@ -4,7 +4,7 @@ import * as Ctrl from './controller';
 const router = Router();
 
 // Get all students
-router.get('/api/students', async (req, res) => {
+router.get('/api/students/', async (req, res) => {
   try {
     const users = await Ctrl.getAllStudents();
     res.status(200).json({
@@ -77,7 +77,7 @@ router.get('/api/students/advisers/:student_no', async (req, res) => {
 // update user adviser
 router.put('/api/students/adviser', async (req, res) => {
   try {
-    await Ctrl.updateAdviser(req.body);
+    await Ctrl.updateStudentAdviser(req.body);
     const user = await Ctrl.getStudentByStudNo({
       student_no: req.body.student_no
     });
@@ -91,19 +91,19 @@ router.put('/api/students/adviser', async (req, res) => {
   }
 });
 
-// // removeUser
-// router.delete('/api/users/:empno', async (req, res) => {
-//   try {
-//     const id = await Ctrl.removeUser(req.params);
+// remove student
+router.delete('/api/students/:student_no', async (req, res) => {
+  try {
+    const id = await Ctrl.removeStudent(req.params);
 
-//     res.status(200).json({
-//       status: 200,
-//       message: 'Successfully removed user',
-//       data: id
-//     });
-//   } catch (status) {
-//     res.status(status).json({ status, message });
-//   }
-// });
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully removed user',
+      data: id
+    });
+  } catch (status) {
+    res.status(status).json({ status, message });
+  }
+});
 
 export default router;
