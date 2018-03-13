@@ -25,6 +25,7 @@ export const getAllTeachingLoads = ({ empno }) => {
 //     [
 //       {
 //         prof: "lskdfja;sd",
+//         teaching load: 32532,
 //         subjects:
 //           [
 //             {
@@ -39,6 +40,7 @@ export const getAllTeachingLoads = ({ empno }) => {
 //           ]
 //       }, {
 //         prof: "dsagdsa",
+//         teaching load: 3232432324, (see computation; nasa group chat)
 //         subjects:
 //           [
 //             {
