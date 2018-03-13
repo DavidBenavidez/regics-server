@@ -134,7 +134,7 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
 //update student's adviser and add to adviser history
 export const updateAdviser = ({ adviser, student_no }) => {
   return new Promise((resolve, reject) => {
-    const queryString = `UPDATE student SET adviser = ? WHERE student_no = ?; INSERT INTO student_advisers_list(student, empno) VALUES (?, ?);`;
+    const queryString = `UPDATE student SET adviser = ? WHERE student_no = ?; INSERT INTO student_advisers_list(student_no, empno) VALUES (?, ?);`;
     const values = [adviser, student_no, student_no, adviser];
 
     db.query(queryString, values, (err, rows) => {

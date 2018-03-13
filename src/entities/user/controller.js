@@ -57,7 +57,6 @@ export const addUser = ({
   email,
   password,
   confirm_password,
-  status_id,
   system_position,
   status,
   teaching_load,
@@ -66,14 +65,13 @@ export const addUser = ({
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, salt, function(err, hash) {
       const queryString = `
-              INSERT INTO system_user VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+              INSERT INTO system_user VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?)
           `;
       const values = [
         name,
         username,
         email,
         hash,
-        status_id,
         system_position,
         status,
         teaching_load,
@@ -98,7 +96,6 @@ export const editUser = ({
   email,
   password,
   confirm_password,
-  status_id,
   system_position,
   status,
   teaching_load,
@@ -112,8 +109,7 @@ export const editUser = ({
         name = ?, 
         username = ?, 
         email = ?, 
-        password = ?, 
-        status_id = ?, 
+        password = ?,
         system_position = ?, 
         status = ?, 
         teaching_load = ?, 
@@ -126,7 +122,6 @@ export const editUser = ({
         username,
         email,
         hash,
-        status_id,
         system_position,
         status,
         teaching_load,
