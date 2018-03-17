@@ -52,6 +52,8 @@ CREATE TABLE student(
     student_no VARCHAR(10) NOT NULL PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
     status enum("loa", "dropped", "enrolled", "dismissed") NOT NULL,
+    classification ENUM("freshman", "sophomore", "junior", "senior") NOT NULL,
+    curriculum ENUM("2011", "2018") NOT NULL,
     adviser INT,
     CONSTRAINT FK_adviser FOREIGN KEY (adviser) REFERENCES system_user(empno) ON DELETE SET NULL
 );
@@ -129,26 +131,26 @@ insert into course (course_no, course_name, section, class_size, sais_class_coun
 insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'justo aliquam quis turpis eget elit sodales scelerisque mauris sit amet eros', 'SA-8L', 127, 44, 37, 17, '2018-03-24', 109, 3, 'false', 52, 19);
 insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus etiam vel augue', 'IO-5L', 58, 68, 36, 13, '2018-03-24', 87, 2, 'false', 10, 20);
 
-insert into student (student_no, name, status, adviser) values ('2018-23282', 'Eddy Purrier', 'loa', 1);
-insert into student (student_no, name, status, adviser) values ('2017-30691', 'Robinetta Knappe', 'loa', 2);
-insert into student (student_no, name, status, adviser) values ('2018-67066', 'Cosme Topping', 'dropped', 3);
-insert into student (student_no, name, status, adviser) values ('2016-68009', 'Marice Goodchild', 'dropped', 4);
-insert into student (student_no, name, status, adviser) values ('2018-05432', 'Dal Eagers', 'dismissed', 5);
-insert into student (student_no, name, status, adviser) values ('2018-35865', 'Marmaduke Wintersgill', 'dismissed', 6);
-insert into student (student_no, name, status, adviser) values ('2016-25262', 'Kendrick Payton', 'enrolled', 7);
-insert into student (student_no, name, status, adviser) values ('2016-27560', 'Gussie Valsler', 'enrolled', 8);
-insert into student (student_no, name, status, adviser) values ('2015-56535', 'Katya Fardy', 'enrolled', 9);
-insert into student (student_no, name, status, adviser) values ('2017-82739', 'Alfred Bandiera', 'enrolled', 10);
-insert into student (student_no, name, status, adviser) values ('2018-19733', 'Vannie Bilbrook', 'enrolled', 11);
-insert into student (student_no, name, status, adviser) values ('2018-83712', 'Dennis Wankling', 'enrolled', 12);
-insert into student (student_no, name, status, adviser) values ('2018-79569', 'Kippar Thresher', 'enrolled', 13);
-insert into student (student_no, name, status, adviser) values ('2018-52649', 'Brewer Jirka', 'enrolled', 14);
-insert into student (student_no, name, status, adviser) values ('2018-94008', 'Abram Morillas', 'enrolled', 15);
-insert into student (student_no, name, status, adviser) values ('2018-02164', 'Enrique Frangello', 'enrolled', 16);
-insert into student (student_no, name, status, adviser) values ('2018-75288', 'Shanon Stinchcombe', 'enrolled', 17);
-insert into student (student_no, name, status, adviser) values ('2017-17335', 'Nedda Jorgensen', 'enrolled', 18);
-insert into student (student_no, name, status, adviser) values ('2018-99049', 'Rozina MacGahy', 'enrolled', 19);
-insert into student (student_no, name, status, adviser) values ('2017-24301', 'Robena Gundry', 'enrolled', 20);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-23282', 'Eddy Purrier', 'loa','freshman','2018', 1);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2017-30691', 'Robinetta Knappe', 'loa','freshman','2018', 2);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-67066', 'Cosme Topping', 'dropped','freshman','2018', 3);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2016-68009', 'Marice Goodchild', 'dropped','freshman','2018', 4);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-05432', 'Dal Eagers', 'dismissed','freshman','2018', 5);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-35865', 'Marmaduke Wintersgill', 'dismissed','freshman','2018', 6);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2016-25262', 'Kendrick Payton', 'enrolled', 'sophomore', '2011', 7);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2016-27560', 'Gussie Valsler', 'enrolled', 'sophomore', '2011', 8);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2015-56535', 'Katya Fardy', 'enrolled', 'sophomore', '2011', 9);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2017-82739', 'Alfred Bandiera', 'enrolled', 'sophomore', '2011', 10);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-19733', 'Vannie Bilbrook', 'enrolled', 'sophomore', '2011', 11);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-83712', 'Dennis Wankling', 'enrolled', 'sophomore', '2011', 12);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-79569', 'Kippar Thresher', 'enrolled', 'sophomore', '2011', 13);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-52649', 'Brewer Jirka', 'enrolled', 'sophomore', '2011', 14);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-94008', 'Abram Morillas', 'enrolled', 'sophomore', '2011', 15);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-02164', 'Enrique Frangello', 'enrolled', 'sophomore', '2011', 16);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-75288', 'Shanon Stinchcombe', 'enrolled', 'junior', '2011', 17);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2017-17335', 'Nedda Jorgensen', 'enrolled', 'junior', '2011', 18);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-99049', 'Rozina MacGahy', 'enrolled', 'senior', '2011', 19);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2017-24301', 'Robena Gundry', 'enrolled', 'senior', '2011', 20);
 
 insert into student_advisers_list (student_no, empno) values ('2018-23282', 1);
 insert into student_advisers_list (student_no, empno) values ('2017-30691', 2);

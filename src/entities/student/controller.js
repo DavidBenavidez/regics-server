@@ -43,7 +43,6 @@ export const getStudentByName = ({ name }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
         SELECT * FROM student WHERE name = ?`;
-
     db.query(queryString, name, (err, rows) => {
       if (err) {
         console.log(err);
@@ -76,15 +75,12 @@ export const getStudentByStatus = ({ status }) => {
   });
 };
 
-//get all current adviser from student
-export const getCurrentAdvisers = ({ student_no }) => {
+//get all current advisers of students
+export const getCurrentAdvisers = ({}) => {
   return new Promise((resolve, reject) => {
-    const queryString = `
-        SELECT name, adviser
-		FROM student
-      `;
+    const queryString = `SELECT name, adviser FROM student`;
 
-    db.query(queryString, empno, (err, rows) => {
+    db.query(queryString, (err, rows) => {
       if (err) {
         console.log(err);
         return reject(500);
@@ -93,7 +89,7 @@ export const getCurrentAdvisers = ({ student_no }) => {
       if (!rows.length) {
         return reject(404);
       }
-      return resolve(rows[0]);
+      return resolve(rows);
     });
   });
 };
@@ -102,19 +98,16 @@ export const getCurrentAdvisers = ({ student_no }) => {
 export const getAllAdvisersByStudNo = ({ student_no }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
-        SELECT b.student_no, b.name,
-		(SELECT 
-		name 
-		FROM system_user 
-		WHERE empno = b.adviser) AS currentAdviser,
-		GROUP_CONCAT(a.name SEPARATOR ', ') AS Advisers
-		FROM (
-		  SELECT name, student AS student_no 
-		  FROM student_advisers_list JOIN system_user USING(empno)
-		) 
-		AS a JOIN student AS b WHERE b.student_no = ?
-
-      `;
+    SELECT 
+      b.student_no, 
+      b.name, 
+      GROUP_CONCAT(a.name SEPARATOR ', ') AS Advisers 
+    FROM (
+      SELECT name, student_no AS student_no 
+      FROM student_advisers_list 
+      JOIN system_user USING(empno)
+    ) 
+    AS a JOIN student AS b WHERE b.student_no = ? `;
 
     db.query(queryString, student_no, (err, rows) => {
       if (err) {
