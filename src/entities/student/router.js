@@ -46,22 +46,6 @@ router.get('/api/students/status/:classification', async (req, res) => {
   }
 });
 
-
-// Get all advisee cpount by classification
-router.get('/api/students/', async (req, res) => {
-  try {
-    const users = await Ctrl.getAllAdviseeClassification();
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully fetched users',
-      data: users
-    });
-  } catch (status) {
-    let message = '';
-    res.status(status).json({ status });
-  }
-});
-
 // Get Student by Student name
 router.get('/api/students/name/:name', async (req, res) => {
   try {

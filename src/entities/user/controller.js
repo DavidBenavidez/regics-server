@@ -28,6 +28,32 @@ export const getUser = ({ empno }) => {
   });
 };
 
+//Retrieve adviser and advisee per classification
+export const getAllAdviseeClassification = () => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+        select a.name, count(case classification when 'Freshman' then 1 else null end) as "Freshmen", 
+        count(case classification when 'sophomore' then 1 else null end) as "Sophomore", 
+        count(case classification when 'junior' then 1 else null end) as "Junior", 
+        count(case classification when 'senior' then 1 else null end) as "Senior", 
+        count(student_no) as "Total" 
+        from system_user a join student b on a.empno = b.adviser group by empno
+      `;
+
+    db.query(queryString, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+
+      if (!rows.length) {
+        return reject(404);
+      }
+      return resolve(rows);
+    });
+  });
+};
+
 export const removeUser = ({ empno }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
