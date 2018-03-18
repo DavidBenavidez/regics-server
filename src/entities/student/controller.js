@@ -5,8 +5,12 @@ import db from '../../database';
 export const getAllStudents = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
-        SELECT *
-        FROM student
+        SELECT
+          a.student_no, a.name, a.status, a.curriculum, a.classification, b.name AS adviser
+        FROM
+          student a, system_user b
+        WHERE
+          a.adviser = b.empno
       `;
 
     db.query(queryString, (err, rows) => {
@@ -98,12 +102,20 @@ export const getStudentByClassification = ({ classification }) => {
 export const getAllAdviseeClassification = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
-        select a.name, count(case classification when 'freshman' then 1 else null end) as "Freshmen", 
-        count(case classification when 'sophomore' then 1 else null end) as "Sophomore", 
-        count(case classification when 'junior' then 1 else null end) as "Junior", 
-        count(case classification when 'senior' then 1 else null end) as "Senior", 
-        count(student_no) as "total" 
-        from system_user a join student b on a.empno = b.adviser group by empno
+        SELECT
+          a.name, COUNT(CASE classification WHEN 'freshman' THEN 1 ELSE null END) AS "freshman", 
+          COUNT(CASE classification WHEN 'sophomore' THEN 1 ELSE null END) AS "sophomore", 
+          COUNT(CASE classification WHEN 'junior' THEN 1 ELSE null END) AS "junior", 
+          COUNT(CASE classification WHEN 'senior' THEN 1 ELSE null END) AS "senior", 
+          COUNT(student_no) AS "total" 
+        FROM
+          system_user a
+        JOIN
+          student b
+        ON
+          a.empno = b.adviser
+        GROUP BY
+          empno
       `;
 
     db.query(queryString, (err, rows) => {
@@ -120,7 +132,7 @@ export const getAllAdviseeClassification = () => {
 };
 
 //get all current advisers of students
-export const getCurrentAdvisers = ({}) => {
+export const getCurrentAdvisers = () => {
   return new Promise((resolve, reject) => {
     const queryString = `SELECT name, adviser FROM student`;
 
