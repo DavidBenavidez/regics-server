@@ -2,52 +2,73 @@ import db from '../../database';
 
 export const getAllTeachingLoads = () => {
   return new Promise((resolve, reject) => {
-    const queryString = `
-        select a.name, 
-        GROUP_CONCAT(CONCAT(b.course_no,","),CONCAT(b.course_name,","),CONCAT(b.section,","),CONCAT(b.class_size,","),CONCAT(b.sais_class_count,","),CONCAT(b.sais_waitlisted_count,","),
-        CONCAT(b.actual_count,","),CONCAT(b.course_date,","),CONCAT(b.minutes,","),CONCAT(b.units,","),CONCAT(b.room_no,","),CONCAT(b.empno,",") order by b.course_no desc separator ' | ') as SUBJECTS
-        from system_user a left join course b on a.empno = b.empno group by a.name
-      `;
+    const queryString = `select * from system_user;`;
+    const q1 = `select * from course`;
+    var allSub = [];
 
-    db.query(queryString, (err, rows) => {
+    db.query(q1, (err, rows1) => {
+      for (var a = 0; a < rows1.length; a++) {
+        allSub.push(rows1[a]);
+      }
       if (err) {
         console.log(err);
         return reject(500);
       }
-      return resolve(rows);
+    });
+
+    db.query(queryString, (err, rows) => {
+      var subjects = [];
+      var professor = [];
+      for (var i = 0; i < rows.length; i++) {
+        for (var j = 0; j < allSub.length; j++) {
+          if (rows[i].empno == allSub[j].empno) {
+            subjects.push({
+              course_name: allSub[j].course_name,
+              course_no: allSub[j].course_no,
+              section: allSub[j].section,
+              class_size: allSub[j].class_size,
+              sais_class_count: allSub[j].sais_class_count,
+              sais_waitlisted_count: allSub[j].sais_waitlisted_count,
+              actual_count: allSub[j].actual_count,
+              course_date: allSub[j].course_date,
+              minutes: allSub[j].minutes,
+              units: allSub[j].units,
+              empno: allSub[j].room_no
+            });
+          }
+        }
+
+        professor.push({
+          name: rows[i].name,
+          teaching_load: rows[i].teaching_load,
+          subjects: subjects
+        });
+        subjects = [];
+      }
+
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      return resolve(professor);
     });
   });
 };
 
-// {
-//   data:
-//     [
-//       {
-//         prof: "lskdfja;sd",
-//         teaching load: 32532,
-//         subjects:
-//           [
-//             {
-//               name: "CMSC 2",
-//               units: 3,
-//               etc.......
-//             }, {
-//               name: "CMSC 123125",
-//               units: 5,
-//               etc.......
-//             }
-//           ]
-//       }, {
-//         prof: "dsagdsa",
-//         teaching load: 3232432324, (see computation; nasa group chat)
-//         subjects:
-//           [
-//             {
-//               name: "CMSC 232",
-//               units: 3,
-//               etc.......
-//             }
-//           ]
+// export const getProfInfo = ({ empno }) => {
+//   return new Promise((resolve, reject) => {
+//     const queryString = `
+//         SELECT name, system_position, status, teaching_load FROM system_user WHERE empno = ?`;
+
+//     db.query(queryString, empno, (err, rows) => {
+//       if (err) {
+//         console.log(err);
+//         return reject(500);
 //       }
-//     ]
-// }
+//       if (!rows.length) {
+//         return reject(404);
+//       }
+//       return resolve(rows);
+//     });
+//   });
+// };

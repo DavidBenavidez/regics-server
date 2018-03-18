@@ -38,6 +38,7 @@ CREATE TABLE course(
     course_time TIME, 
     minutes INT NOT NULL, 
     units INT NOT NULL,
+    is_lab ENUM("true", "false") NOT NULL,
     room_no INT, 
     empno INT,
     CONSTRAINT FK_RoomNo FOREIGN KEY (room_no)
@@ -51,6 +52,8 @@ CREATE TABLE student(
     student_no VARCHAR(10) NOT NULL PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
     status enum("loa", "dropped", "enrolled", "dismissed") NOT NULL,
+    classification ENUM("freshman", "sophomore", "junior", "senior") NOT NULL,
+    curriculum ENUM("2011", "2018") NOT NULL,
     adviser INT,
     CONSTRAINT FK_adviser FOREIGN KEY (adviser) REFERENCES system_user(empno) ON DELETE SET NULL
 );
@@ -107,47 +110,47 @@ insert into room (room_no, room_name) values (68, 'PCLAB 8');
 insert into room (room_no, room_name) values (52, 'PCLAB 1');
 insert into room (room_no, room_name) values (10, 'PCLAB 7');
 
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'duis aliquam convallis nunc proin at turpis a pede posuere nonummy integer non velit donec diam', 'JF-9L', 70, 64, 142, 12, '2018-03-24', 68, 3, 50, 1);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'duis bibendum felis sed interdum venenatis turpis enim blandit mi in porttitor pede justo eu', 'YU-6L', 39, 55, 47, 86, '2018-03-24', 90, 2, 53, 2);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'ornare imperdiet sapien urna pretium nisl ut volutpat sapien arcu sed augue aliquam erat volutpat in congue etiam', 'NE-4L', 96, 32, 139, 140, '2018-03-24', 87, 5, 73, 3);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'at velit vivamus vel nulla eget eros elementum pellentesque quisque porta', 'LH-8L', 11, 129, 43, 107, '2018-03-24', 77, 3, 79, 4);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'nascetur ridiculus mus etiam vel augue vestibulum rutrum rutrum neque aenean auctor gravida sem praesent id', 'OY-3L', 77, 49, 77, 14, '2018-03-24', 104, 3, 76, 5);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'morbi porttitor lorem id ligula suspendisse ornare consequat lectus in est risus auctor sed tristique in tempus sit', 'BB-3L', 144, 77, 126, 130, '2018-03-24', 94, 2, 62, 6);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'suspendisse ornare consequat lectus in est risus auctor sed tristique', 'UG-5L', 124, 131, 44, 108, '2018-03-24', 90, 2, 35, 7);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'nulla eget eros elementum pellentesque quisque porta volutpat erat quisque erat eros viverra eget congue eget semper rutrum', 'SU-4L', 12, 94, 24, 88, '2018-03-24', 111, 2, 94, 8);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'quam pede lobortis ligula sit amet eleifend pede libero quis orci nullam molestie nibh', 'DE-5L', 57, 105, 84, 82, '2018-03-24', 117, 4, 65, 9);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'elit ac nulla sed vel enim sit amet nunc viverra dapibus nulla suscipit ligula in lacus curabitur at', 'YS-2L', 115, 127, 20, 77, '2018-03-24', 115, 4, 93, 10);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'eros vestibulum ac est lacinia nisi venenatis tristique fusce congue diam id ornare', 'EG-4L', 54, 54, 56, 114, '2018-03-24', 111, 2, 9, 11);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae mauris viverra diam', 'OV-3L', 61, 83, 38, 116, '2018-03-24', 60, 4, 77, 12);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'vivamus tortor duis mattis egestas metus aenean fermentum donec ut mauris eget massa tempor convallis', 'GH-4L', 138, 72, 72, 81, '2018-03-24', 120, 4, 4, 13);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'non mauris morbi non lectus aliquam sit amet diam in magna bibendum imperdiet nullam orci pede', 'GR-8L', 35, 67, 10, 24, '2018-03-24', 64, 3, 23, 14);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'dapibus nulla suscipit ligula in lacus curabitur at ipsum ac', 'BH-4L', 53, 61, 92, 149, '2018-03-24', 103, 5, 74, 15);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'tempus sit amet sem fusce consequat nulla nisl nunc nisl duis bibendum felis sed interdum venenatis turpis', 'TQ-9L', 68, 75, 148, 149, '2018-03-24', 80, 5, 55, 16);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'turpis a pede posuere nonummy integer non velit donec diam neque', 'IN-5L', 91, 145, 122, 19, '2018-03-24', 76, 2, 31, 17);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'libero quis orci nullam molestie nibh in lectus pellentesque at nulla suspendisse potenti cras in', 'CR-4L', 116, 66, 141, 88, '2018-03-24', 72, 2, 68, 18);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'justo aliquam quis turpis eget elit sodales scelerisque mauris sit amet eros', 'SA-8L', 127, 44, 37, 17, '2018-03-24', 109, 3, 52, 19);
-insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, room_no, empno) values (DEFAULT, 'sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus etiam vel augue', 'IO-5L', 58, 68, 36, 13, '2018-03-24', 87, 2, 10, 20);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'duis aliquam convallis nunc proin at turpis a pede posuere nonummy integer non velit donec diam', 'JF-9L', 70, 64, 142, 12, '2018-03-24', 68, 3, 'true', 50, 1);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'duis bibendum felis sed interdum venenatis turpis enim blandit mi in porttitor pede justo eu', 'YU-6L', 39, 55, 47, 86, '2018-03-24', 90, 2, 'true', 53, 2);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'ornare imperdiet sapien urna pretium nisl ut volutpat sapien arcu sed augue aliquam erat volutpat in congue etiam', 'NE-4L', 96, 32, 139, 140, '2018-03-24', 87, 5, 'true', 73, 3);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'at velit vivamus vel nulla eget eros elementum pellentesque quisque porta', 'LH-8L', 11, 129, 43, 107, '2018-03-24', 77, 3, 'true', 79, 4);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'nascetur ridiculus mus etiam vel augue vestibulum rutrum rutrum neque aenean auctor gravida sem praesent id', 'OY-3L', 77, 49, 77, 14, '2018-03-24', 104, 3, 'true', 76, 5);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'morbi porttitor lorem id ligula suspendisse ornare consequat lectus in est risus auctor sed tristique in tempus sit', 'BB-3L', 144, 77, 126, 130, '2018-03-24', 94, 2, 'true', 62, 6);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'suspendisse ornare consequat lectus in est risus auctor sed tristique', 'UG-5L', 124, 131, 44, 108, '2018-03-24', 90, 2, 'true', 35, 7);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'nulla eget eros elementum pellentesque quisque porta volutpat erat quisque erat eros viverra eget congue eget semper rutrum', 'SU-4L', 12, 94, 24, 88, '2018-03-24', 111, 2, 'true', 94, 8);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'quam pede lobortis ligula sit amet eleifend pede libero quis orci nullam molestie nibh', 'DE-5L', 57, 105, 84, 82, '2018-03-24', 117, 4, 'false', 65, 9);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'elit ac nulla sed vel enim sit amet nunc viverra dapibus nulla suscipit ligula in lacus curabitur at', 'YS-2L', 115, 127, 20, 77, '2018-03-24', 115, 4, 'false', 93, 10);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'eros vestibulum ac est lacinia nisi venenatis tristique fusce congue diam id ornare', 'EG-4L', 54, 54, 56, 114, '2018-03-24', 111, 2, 'false', 9, 11);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae mauris viverra diam', 'OV-3L', 61, 83, 38, 116, '2018-03-24', 60, 4, 'false', 77, 12);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'vivamus tortor duis mattis egestas metus aenean fermentum donec ut mauris eget massa tempor convallis', 'GH-4L', 138, 72, 72, 81, '2018-03-24', 120, 4, 'false', 4, 13);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'non mauris morbi non lectus aliquam sit amet diam in magna bibendum imperdiet nullam orci pede', 'GR-8L', 35, 67, 10, 24, '2018-03-24', 64, 3, 'false', 23, 14);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'dapibus nulla suscipit ligula in lacus curabitur at ipsum ac', 'BH-4L', 53, 61, 92, 149, '2018-03-24', 103, 5, 'false', 74, 15);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'tempus sit amet sem fusce consequat nulla nisl nunc nisl duis bibendum felis sed interdum venenatis turpis', 'TQ-9L', 68, 75, 148, 149, '2018-03-24', 80, 5, 'false', 55, 16);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'turpis a pede posuere nonummy integer non velit donec diam neque', 'IN-5L', 91, 145, 122, 19, '2018-03-24', 76, 2, 'true', 31, 17);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'libero quis orci nullam molestie nibh in lectus pellentesque at nulla suspendisse potenti cras in', 'CR-4L', 116, 66, 141, 88, '2018-03-24', 72, 2, 'true', 68, 18);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'justo aliquam quis turpis eget elit sodales scelerisque mauris sit amet eros', 'SA-8L', 127, 44, 37, 17, '2018-03-24', 109, 3, 'false', 52, 19);
+insert into course (course_no, course_name, section, class_size, sais_class_count, sais_waitlisted_count, actual_count, course_date, minutes, units, is_lab,room_no, empno) values (DEFAULT, 'sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus etiam vel augue', 'IO-5L', 58, 68, 36, 13, '2018-03-24', 87, 2, 'false', 10, 20);
 
-insert into student (student_no, name, status, adviser) values ('2018-23282', 'Eddy Purrier', 'loa', 1);
-insert into student (student_no, name, status, adviser) values ('2017-30691', 'Robinetta Knappe', 'loa', 2);
-insert into student (student_no, name, status, adviser) values ('2018-67066', 'Cosme Topping', 'dropped', 3);
-insert into student (student_no, name, status, adviser) values ('2016-68009', 'Marice Goodchild', 'dropped', 4);
-insert into student (student_no, name, status, adviser) values ('2018-05432', 'Dal Eagers', 'dismissed', 5);
-insert into student (student_no, name, status, adviser) values ('2018-35865', 'Marmaduke Wintersgill', 'dismissed', 6);
-insert into student (student_no, name, status, adviser) values ('2016-25262', 'Kendrick Payton', 'enrolled', 7);
-insert into student (student_no, name, status, adviser) values ('2016-27560', 'Gussie Valsler', 'enrolled', 8);
-insert into student (student_no, name, status, adviser) values ('2015-56535', 'Katya Fardy', 'enrolled', 9);
-insert into student (student_no, name, status, adviser) values ('2017-82739', 'Alfred Bandiera', 'enrolled', 10);
-insert into student (student_no, name, status, adviser) values ('2018-19733', 'Vannie Bilbrook', 'enrolled', 11);
-insert into student (student_no, name, status, adviser) values ('2018-83712', 'Dennis Wankling', 'enrolled', 12);
-insert into student (student_no, name, status, adviser) values ('2018-79569', 'Kippar Thresher', 'enrolled', 13);
-insert into student (student_no, name, status, adviser) values ('2018-52649', 'Brewer Jirka', 'enrolled', 14);
-insert into student (student_no, name, status, adviser) values ('2018-94008', 'Abram Morillas', 'enrolled', 15);
-insert into student (student_no, name, status, adviser) values ('2018-02164', 'Enrique Frangello', 'enrolled', 16);
-insert into student (student_no, name, status, adviser) values ('2018-75288', 'Shanon Stinchcombe', 'enrolled', 17);
-insert into student (student_no, name, status, adviser) values ('2017-17335', 'Nedda Jorgensen', 'enrolled', 18);
-insert into student (student_no, name, status, adviser) values ('2018-99049', 'Rozina MacGahy', 'enrolled', 19);
-insert into student (student_no, name, status, adviser) values ('2017-24301', 'Robena Gundry', 'enrolled', 20);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-23282', 'Eddy Purrier', 'loa','freshman','2018', 1);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2017-30691', 'Robinetta Knappe', 'loa','freshman','2018', 2);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-67066', 'Cosme Topping', 'dropped','freshman','2018', 3);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2016-68009', 'Marice Goodchild', 'dropped','freshman','2018', 4);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-05432', 'Dal Eagers', 'dismissed','freshman','2018', 5);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-35865', 'Marmaduke Wintersgill', 'dismissed','freshman','2018', 6);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2016-25262', 'Kendrick Payton', 'enrolled', 'sophomore', '2011', 7);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2016-27560', 'Gussie Valsler', 'enrolled', 'sophomore', '2011', 8);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2015-56535', 'Katya Fardy', 'enrolled', 'sophomore', '2011', 9);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2017-82739', 'Alfred Bandiera', 'enrolled', 'sophomore', '2011', 10);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-19733', 'Vannie Bilbrook', 'enrolled', 'sophomore', '2011', 11);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-83712', 'Dennis Wankling', 'enrolled', 'sophomore', '2011', 12);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-79569', 'Kippar Thresher', 'enrolled', 'sophomore', '2011', 13);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-52649', 'Brewer Jirka', 'enrolled', 'sophomore', '2011', 14);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-94008', 'Abram Morillas', 'enrolled', 'sophomore', '2011', 15);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-02164', 'Enrique Frangello', 'enrolled', 'sophomore', '2011', 16);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-75288', 'Shanon Stinchcombe', 'enrolled', 'junior', '2011', 17);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2017-17335', 'Nedda Jorgensen', 'enrolled', 'junior', '2011', 18);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2018-99049', 'Rozina MacGahy', 'enrolled', 'senior', '2011', 19);
+insert into student (student_no, name, status, classification, curriculum, adviser) values ('2017-24301', 'Robena Gundry', 'enrolled', 'senior', '2011', 20);
 
 insert into student_advisers_list (student_no, empno) values ('2018-23282', 1);
 insert into student_advisers_list (student_no, empno) values ('2017-30691', 2);
