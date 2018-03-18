@@ -126,7 +126,7 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
       FROM student_advisers_list 
       JOIN system_user USING(empno)
     ) 
-    AS a JOIN student AS b WHERE b.student_no = ? `;
+    AS a JOIN student AS b WHERE b.student_no = ? AND a.student_no = b.student_no`;
 
     db.query(queryString, student_no, (err, rows) => {
       if (err) {

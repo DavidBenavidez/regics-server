@@ -33,7 +33,7 @@ router.get('/api/students/:student_no', async (req, res) => {
 });
 
 // Get Students by Student classification
-router.get('/api/students/status/:classification', async (req, res) => {
+router.get('/api/students/class/:classification', async (req, res) => {
   try {
     const user = await Ctrl.getStudentByClassification(req.params);
     res.status(200).json({
