@@ -11,6 +11,8 @@ export const getAllStudents = () => {
           student a, system_user b
         WHERE
           a.adviser = b.empno
+        ORDER BY
+          a.name
       `;
 
     db.query(queryString, (err, rows) => {
@@ -116,6 +118,8 @@ export const getAllAdviseeClassification = () => {
           a.empno = b.adviser
         GROUP BY
           empno
+        ORDER BY
+          a.name
       `;
 
     db.query(queryString, (err, rows) => {
