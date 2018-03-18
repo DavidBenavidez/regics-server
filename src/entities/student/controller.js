@@ -5,8 +5,14 @@ import db from '../../database';
 export const getAllStudents = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
-        SELECT *
-        FROM student
+        SELECT
+          a.student_no, a.name, a.status, a.curriculum, a.classification, b.name AS adviser
+        FROM
+          student a, system_user b
+        WHERE
+          a.adviser = b.empno
+        ORDER BY
+          a.name
       `;
 
     db.query(queryString, (err, rows) => {
@@ -94,8 +100,43 @@ export const getStudentByClassification = ({ classification }) => {
   });
 };
 
+//Retrieve adviser and advisee per classification
+export const getAllAdviseeClassification = () => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+        SELECT
+          a.name, COUNT(CASE classification WHEN 'freshman' THEN 1 ELSE null END) AS "freshman", 
+          COUNT(CASE classification WHEN 'sophomore' THEN 1 ELSE null END) AS "sophomore", 
+          COUNT(CASE classification WHEN 'junior' THEN 1 ELSE null END) AS "junior", 
+          COUNT(CASE classification WHEN 'senior' THEN 1 ELSE null END) AS "senior", 
+          COUNT(student_no) AS "total" 
+        FROM
+          system_user a
+        JOIN
+          student b
+        ON
+          a.empno = b.adviser
+        GROUP BY
+          empno
+        ORDER BY
+          a.name
+      `;
+
+    db.query(queryString, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!rows.length) {
+        return reject(404);
+      }
+      return resolve(rows);
+    });
+  });
+};
+
 //get all current advisers of students
-export const getCurrentAdvisers = ({}) => {
+export const getCurrentAdvisers = () => {
   return new Promise((resolve, reject) => {
     const queryString = `SELECT name, adviser FROM student`;
 

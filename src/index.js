@@ -10,10 +10,14 @@ import router from './router';
 const app = express();
 const MySQLStore = store(session);
 const sessionStore = new MySQLStore({}, db);
+const cors = require('cors');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger('dev'));
+app.use(cors());
+
+app.options('*', cors());
 
 app.use(
   session({
