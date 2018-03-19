@@ -19,7 +19,7 @@ router.get('/api/users/advisers', async (req, res) => {
 });
 
 // Get all advisee cpount by classification
-router.get('/api/users/class', async (req, res) => {
+router.get('/api/students-count', async (req, res) => {
   try {
     const users = await Ctrl.getAllAdviseeClassification();
     res.status(200).json({

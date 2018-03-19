@@ -100,41 +100,6 @@ export const getStudentByClassification = ({ classification }) => {
   });
 };
 
-//Retrieve adviser and advisee per classification
-export const getAllAdviseeClassification = () => {
-  return new Promise((resolve, reject) => {
-    const queryString = `
-        SELECT
-          a.name, COUNT(CASE classification WHEN 'freshman' THEN 1 ELSE null END) AS "freshman", 
-          COUNT(CASE classification WHEN 'sophomore' THEN 1 ELSE null END) AS "sophomore", 
-          COUNT(CASE classification WHEN 'junior' THEN 1 ELSE null END) AS "junior", 
-          COUNT(CASE classification WHEN 'senior' THEN 1 ELSE null END) AS "senior", 
-          COUNT(student_no) AS "total" 
-        FROM
-          system_user a
-        JOIN
-          student b
-        ON
-          a.empno = b.adviser
-        GROUP BY
-          empno
-        ORDER BY
-          a.name
-      `;
-
-    db.query(queryString, (err, rows) => {
-      if (err) {
-        console.log(err);
-        return reject(500);
-      }
-      if (!rows.length) {
-        return reject(404);
-      }
-      return resolve(rows);
-    });
-  });
-};
-
 //get all current advisers of students
 export const getCurrentAdvisers = () => {
   return new Promise((resolve, reject) => {
@@ -183,14 +148,17 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
   });
 };
 
+// Add student
+
 // U P D A T E
 //update student's adviser and add to adviser history
 export const updateStudentAdviser = ({ adviser, student_no }) => {
   return new Promise((resolve, reject) => {
-    const queryString = `UPDATE student SET adviser = ? WHERE student_no = ?; 
-    INSERT INTO student_advisers_list(student_no, empno) VALUES (?, ?)`;
+    const queryString = `CALL edit_student_adviser(?, ?)`;
+    // const queryString = `UPDATE student SET adviser = ? WHERE student_no = ?;
+    // INSERT INTO student_advisers_list(student_no, empno) VALUES (?, ?)`;
 
-    const values = [adviser, student_no, student_no, adviser];
+    const values = [adviser, student_no];
 
     db.query(queryString, values, (err, rows) => {
       if (err) {

@@ -5,12 +5,12 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
     "express": "^4.16.2",
     "express-mysql-session": "^1.2.3",
     "express-session": "^1.15.6",
     "morgan": "^1.9.0",
-    "mysql": "^2.15.0",
-    "cors": "^2.8.4"
+    "mysql": "^2.15.0"
   },
   "devDependencies": {
     "backpack-core": "^0.4.3",
@@ -31,5 +31,8 @@
       "prettier --tab-width 2 --single-quote --jsx-bracket-same-line --write",
       "git add"
     ]
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/DavidBenavidez/regics-server/",
+  "author": "DavidBenavidez <ddbenavidez2@up.edu.ph>"
 }

@@ -1,7 +1,7 @@
 import db from '../../database';
 import bcrypt from 'bcryptjs';
 
-export const login = ({ email, password }) => {
+export const login = ({ username, password }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
         SELECT 
@@ -9,10 +9,9 @@ export const login = ({ email, password }) => {
         FROM
           system_user
         WHERE
-          email = ?
+          username = ?
       `;
-    const values = [email];
-    db.query(queryString, values, (err, rows) => {
+    db.query(queryString, username, (err, rows) => {
       if (err) {
         console.log(err);
         return reject(500);
@@ -21,6 +20,7 @@ export const login = ({ email, password }) => {
       if (!rows.length) {
         return reject(404);
       }
+
       bcrypt.compare(password, rows[0].password, (error, isMatch) => {
         if (error) return reject(500);
         else if (!isMatch) return reject(401);
