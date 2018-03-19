@@ -17,7 +17,7 @@ export const getAllCourses = () => {
         date_format(course_date, "%W") AS course_date,
         TIME_FORMAT(course_time_start, '%h:%i %p') AS course_time_start,
         TIME_FORMAT(course_time_end, '%h:%i %p') AS course_time_end,
-        minutes/30 AS course_hours,
+        ROUND(minutes/30,1) AS course_hours,
         units,
         is_lab,
         room_no,

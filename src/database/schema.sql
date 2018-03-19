@@ -38,7 +38,7 @@ CREATE TABLE course(
     course_time_start TIME,
     course_time_end TIME, 
     minutes INT NOT NULL, 
-    units INT NOT NULL,
+    units FLOAT NOT NULL,
     is_lab ENUM("true", "false") NOT NULL,
     course_status ENUM("dissolved", "petitioned", "addition", "approved") NOT NULL,
     reason TEXT NOT NULL,
