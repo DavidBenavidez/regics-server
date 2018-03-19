@@ -41,7 +41,7 @@ CREATE TABLE course(
     units INT NOT NULL,
     is_lab ENUM("true", "false") NOT NULL,
     course_status ENUM("dissolved", "petitioned", "addition", "approved") NOT NULL,
-    reason BLOB(99999) NOT NULL,
+    reason TEXT NOT NULL,
     room_no INT, 
     empno INT,
     CONSTRAINT FK_RoomNo FOREIGN KEY (room_no)

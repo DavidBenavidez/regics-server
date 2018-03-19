@@ -6,18 +6,15 @@ import userRouter from './entities/user/router';
 import authRouter from './entities/auth/router';
 import studentRouter from './entities/student/router';
 import courseRouter from './entities/course/router';
-import teachingLoadRouter from './entities/teaching_load/router';
 
 const router = Router();
 
 // USE ROUTER HERE EXAMPLE BELOW
-//router.use(exampleRouter);
-// router.use('/', authRouter);
+// router.use(exampleRouter);
 
 router.use(userRouter);
 router.use(authRouter);
 router.use(courseRouter);
 router.use(studentRouter);
-router.use(teachingLoadRouter);
 
 export default router;

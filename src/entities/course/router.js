@@ -45,8 +45,23 @@ router.delete('/api/course/delete/:course_no', async (req, res) => {
   }
 });
 
-// update course
-router.put('/api/users/update', async (req, res) => {
+// Add Course
+router.post('/api/course/add', async (req, res) => {
+  try {
+    const id = await Ctrl.addCourse(req.body);
+
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully added course',
+      data: id
+    });
+  } catch (status) {
+    res.status(500).json({ status });
+  }
+});
+
+// edit course
+router.put('/api/course/edit', async (req, res) => {
   try {
     await Ctrl.editCourse(req.body);
     const user = await Ctrl.getCourse({ course_no: req.body.course_no });

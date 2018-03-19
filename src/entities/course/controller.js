@@ -15,8 +15,8 @@ export const getAllCourses = () => {
         sais_waitlisted_count,
         actual_count,
         date_format(course_date, "%W") AS course_date,
-        TIME_FORMAT(course_time_start, '%h:%i%p') AS course_time_start,
-        TIME_FORMAT(course_time_end, '%h:%i%p') AS course_time_end,
+        TIME_FORMAT(course_time_start, '%h:%i %p') AS course_time_start,
+        TIME_FORMAT(course_time_end, '%h:%i %p') AS course_time_end,
         minutes/30 AS course_hours,
         units,
         is_lab,
@@ -102,37 +102,41 @@ export const addCourse = ({
   minutes,
   units,
   is_lab,
+  course_status,
+  reason,
   room_no,
   empno
 }) => {
   return new Promise((resolve, reject) => {
-    bcrypt.hash(password, salt, function(err, hash) {
-      const queryString = `
-              INSERT INTO course VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-          `;
-      const values = [
-        course_name,
-        section,
-        class_size,
-        sais_class_count,
-        sais_waitlisted_count,
-        actual_count,
-        course_date,
-        course_time,
-        minutes,
-        units,
-        is_lab,
-        room_no,
-        empno
-      ];
+    const queryString = `
+            INSERT INTO course VALUES 
+            (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+    const values = [
+      course_name,
+      section,
+      class_size,
+      sais_class_count,
+      sais_waitlisted_count,
+      actual_count,
+      course_date,
+      course_time_start,
+      course_time_end,
+      minutes,
+      units,
+      is_lab,
+      course_status,
+      reason,
+      room_no,
+      empno
+    ];
 
-      db.query(queryString, values, (err, results) => {
-        if (err) {
-          console.log(err);
-          return reject(500);
-        }
-        return resolve(results.insertId);
-      });
+    db.query(queryString, values, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      return resolve(results.insertId);
     });
   });
 };
@@ -146,63 +150,66 @@ export const editCourse = ({
   sais_waitlisted_count,
   actual_count,
   course_date,
-  course_time,
+  course_time_start,
+  course_time_end,
   minutes,
   units,
   is_lab,
+  course_status,
+  reason,
   room_no,
   empno
 }) => {
   return new Promise((resolve, reject) => {
-    bcrypt.hash(password, salt, function(err, hash) {
-      const queryString = `
-        UPDATE system_user 
-        SET 
-          course_name = ?,
-          section = ?,
-          class_size = ?,
-          sais_class_count = ?,
-          sais_waitlisted_count = ?,
-          actual_count = ?,
-          course_date = ?,
-          course_time = ?,
-          minutes = ?,
-          units = ?,
-          is_lab = ?,
-          room_no = ?,
-          empno = ? 
-        WHERE 
-          course_no = ?`;
-
-      const values = [
-        course_name,
-        section,
-        class_size,
-        sais_class_count,
-        sais_waitlisted_count,
-        actual_count,
-        course_date,
-        course_time,
-        minutes,
-        units,
-        is_lab,
-        room_no,
-        empno,
-        course_no
-      ];
-
-      db.query(queryString, values, (err, res) => {
-        if (err) {
-          console.log(err);
-          return reject(500);
-        }
-
-        if (!res.affectedRows) {
-          return reject(404);
-        }
-
-        return resolve();
-      });
+    const queryString = `
+      UPDATE course 
+      SET 
+        course_name = ?,
+        section = ?,
+        class_size = ?,
+        sais_class_count = ?,
+        sais_waitlisted_count = ?,
+        actual_count = ?,
+        course_date = ?,
+        course_time_start = ?,
+        course_time_end = ?,
+        minutes = ?,
+        units = ?,
+        is_lab = ?,
+        course_status = ?,
+        reason = ?,
+        room_no = ?,
+        empno = ? 
+      WHERE 
+        course_no = ?`;
+    const values = [
+      course_name,
+      section,
+      class_size,
+      sais_class_count,
+      sais_waitlisted_count,
+      actual_count,
+      course_date,
+      course_time_start,
+      course_time_end,
+      minutes,
+      units,
+      is_lab,
+      course_status,
+      reason,
+      room_no,
+      empno,
+      course_no
+    ];
+    db.query(queryString, values, (err, res) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!res.affectedRows) {
+        return reject(404);
+      }
+      return resolve();
     });
   });
 };
