@@ -9,6 +9,7 @@
     "express": "^4.16.2",
     "express-mysql-session": "^1.2.3",
     "express-session": "^1.15.6",
+    "json2csv": "^4.0.2",
     "morgan": "^1.9.0",
     "mysql": "^2.15.0"
   },

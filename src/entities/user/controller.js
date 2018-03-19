@@ -1,6 +1,9 @@
 import db from '../../database';
 import bcrypt from 'bcryptjs';
+import fs from 'fs';
 
+const Json2csvParser = require('json2csv').Parser;
+const ws = fs.createWriteStream('./mycsv');
 const salt = bcrypt.genSaltSync(10);
 
 export const getUser = ({ empno }) => {
@@ -23,6 +26,8 @@ export const getUser = ({ empno }) => {
       if (!rows.length) {
         return reject(404);
       }
+      console.log(rows[0].name);
+
       return resolve(rows[0]);
     });
   });
