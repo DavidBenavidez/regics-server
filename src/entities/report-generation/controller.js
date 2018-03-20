@@ -43,7 +43,23 @@ export const getUser = () => {
         return reject(404);
       }
 
-      return resolve(rows[0]);
+      const fields = [
+        'empno',
+        'name',
+        'username',
+        'email',
+        'pw',
+        'pos',
+        'stat',
+        'tload',
+        'isadvuser'
+      ];
+      const json2csvParser = new Json2csvParser({ fields });
+      const csv = json2csvParser.parse(rows);
+
+      console.log(csv);
+
+      return resolve({ data: csv });
     });
   });
 };
