@@ -4,14 +4,15 @@ import * as Ctrl from './controller';
 const router = Router();
 
 // Get all advisers and the students assigned to them
-router.get('/api/report-generation/generate', async (req, res) => {
+router.get('/api/report-generation', async (req, res) => {
   try {
-    const users = await Ctrl.getUser();
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully fetched advisers',
-      data: users
-    });
+    const courses = await Ctrl.getCourses();
+
+    status: 200,
+      res.status(200).json({
+        message: 'Successfully fetched courses',
+        data: courses
+      });
   } catch (status) {
     res.status(status).json({ status });
   }
