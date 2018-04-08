@@ -62,7 +62,11 @@ router.get('/api/teaching_load', async (req, res) => {
 // Remove User
 router.delete('/api/users/:empno', async (req, res) => {
   try {
-    const id = await Ctrl.removeUser(req.params);
+    if (req.session.user.empno == req.params.empno) {
+      return res.status(400).json({ status: 400 });
+    }
+
+    const id = await Ctrl.removeUser(req.session.user.name, req.params);
 
     res.status(200).json({
       status: 200,
@@ -96,7 +100,7 @@ router.post('/api/users', async (req, res) => {
         data: id
       });
     } catch (status) {
-      res.status(500).json({ status });
+      res.status(status).json({ status });
     }
   } else {
     res.status(400).json({ status: 400 });
@@ -122,7 +126,7 @@ router.put('/api/users/', async (req, res) => {
     (req.body.is_adviser == 'true' || req.body.is_adviser == 'false')
   ) {
     try {
-      await Ctrl.editUser(req.body);
+      await Ctrl.editUser(req.session.user.name, req.body);
       const user = await Ctrl.getUser({ empno: req.body.empno });
 
       res.status(200).json({

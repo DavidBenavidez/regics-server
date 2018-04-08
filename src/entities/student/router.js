@@ -90,12 +90,9 @@ router.get('/api/students/advisers/:student_no', async (req, res) => {
 
 // update user adviser
 router.put('/api/students/adviser', async (req, res) => {
-  if (
-    req.body.adviser &&
-    req.body.student_no
-  ) {
+  if (req.body.adviser && req.body.student_no) {
     try {
-      await Ctrl.updateStudentAdviser(req.body);
+      await Ctrl.updateStudentAdviser(req.session.user.name, req.body);
       const user = await Ctrl.getStudentByStudNo({
         student_no: req.body.student_no
       });
@@ -115,7 +112,7 @@ router.put('/api/students/adviser', async (req, res) => {
 // remove student
 router.delete('/api/students/:student_no', async (req, res) => {
   try {
-    const id = await Ctrl.removeStudent(req.params);
+    const id = await Ctrl.removeStudent(req.session.user.name, req.params);
 
     res.status(200).json({
       status: 200,

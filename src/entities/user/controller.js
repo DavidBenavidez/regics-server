@@ -53,9 +53,34 @@ export const getAllTeachingLoads = () => {
       var subjects = [];
       var professor = [];
       var totalTeachingLoad;
+      var totalCourseCredit;
       for (var i = 0; i < rows.length; i++) {
         totalTeachingLoad = 0;
         for (var j = 0; j < allSub.length; j++) {
+          totalCourseCredit = 0;
+          // Compute course credit
+          if ((allSub[j].course_name = 'CMSC 190-1')) {
+            if (allSub[j].sais_class_count * (0.5 / 3) > 3) {
+              totalCourseCredit = 3;
+            } else {
+              totalCourseCredit = allSub[j].sais_class_count * (0.5 / 3);
+            }
+          } else if ((allSub[j].course_name = 'CMSC 190-2')) {
+            if (2 * allSub[j].sais_class_count * (0.5 / 3) > 3) {
+              totalCourseCredit = 3;
+            } else {
+              totalCourseCredit = 2 * allSub[j].sais_class_count * (0.5 / 3);
+            }
+          } else if (!allSub[j].is_lab) {
+            if (allSub[j].sais_class_count <= 40) {
+              totalCourseCredit = 2;
+            } else {
+              totalCourseCredit =
+                2 * ((allSub[j].sais_class_count - 40) / 120 + 1);
+            }
+          } else {
+            totalCourseCredit = 1.5;
+          }
           if (rows[i].empno == allSub[j].empno) {
             subjects.push({
               course_name: allSub[j].course_name,
@@ -127,16 +152,17 @@ export const getAllAdviseeClassification = () => {
   });
 };
 
-export const removeUser = ({ empno }) => {
+export const removeUser = (session_user, { empno }) => {
   return new Promise((resolve, reject) => {
-    const queryString = `CALL deleteUser(?)`;
+    const queryString = `CALL deleteUser(?, ?)`;
 
-    db.query(queryString, empno, (err, results) => {
+    const values = [session_user, empno];
+
+    db.query(queryString, values, (err, results) => {
       if (err) {
         console.log(err);
         return reject(500);
       }
-
       if (!results.affectedRows) {
         return reject(404);
       }
@@ -159,8 +185,8 @@ export const addUser = ({
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, salt, function(err, hash) {
       const queryString = `
-              CALL addUser(?, ?, ?, ?, ?, ?, ?, ?)
-          `;
+                CALL addUser(?, ?, ?, ?, ?, ?, ?, ?)
+        `;
       const values = [
         name,
         username,
@@ -171,7 +197,6 @@ export const addUser = ({
         teaching_load,
         is_adviser
       ];
-
       db.query(queryString, values, (err, results) => {
         if (err) {
           console.log(err);
@@ -183,25 +208,29 @@ export const addUser = ({
   });
 };
 
-export const editUser = ({
-  empno,
-  name,
-  username,
-  email,
-  password,
-  confirm_password,
-  system_position,
-  status,
-  teaching_load,
-  is_adviser
-}) => {
+export const editUser = (
+  session_user,
+  {
+    empno,
+    name,
+    username,
+    email,
+    password,
+    confirm_password,
+    system_position,
+    status,
+    teaching_load,
+    is_adviser
+  }
+) => {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, salt, function(err, hash) {
       const queryString = `
-        CALL editUser(?,?,?,?,?,?,?,?,?);
+        CALL editUser(?,?,?,?,?,?,?,?,?,?);
       `;
 
       const values = [
+        session_user,
         name,
         username,
         email,

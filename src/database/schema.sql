@@ -95,10 +95,11 @@ $$
 DELIMITER ;
 
 -- SYSTEM_USER
+
 -- Adding a user
 DROP PROCEDURE IF EXISTS addUser;
 DELIMITER $$
-CREATE PROCEDURE addUser (
+CREATE PROCEDURE addUser(
     IN name VARCHAR(256),
     IN username VARCHAR(256),
     IN email VARCHAR(256),
@@ -121,6 +122,10 @@ BEGIN
     teaching_load,
     is_adviser
   );
+   CALL log(
+      concat('New system user: ', name, ' Position: ', system_position),
+      name
+    );
 END;
 $$
 DELIMITER ;
@@ -129,11 +134,16 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS deleteUser;
 DELIMITER $$
 CREATE PROCEDURE deleteUser (
+  IN session_user_name VARCHAR(256),
   IN empno INT
 )
 BEGIN
   DELETE FROM system_user
   WHERE system_user.empno = empno;
+  CALL log(
+      concat('Deleted system user: ', empno),
+      session_user_name
+    );
 END;
 $$
 DELIMITER ;
@@ -142,6 +152,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS editUser;
 DELIMITER $$
 CREATE PROCEDURE editUser (
+  IN session_user_name VARCHAR(256),
   IN name VARCHAR(256),
   IN username VARCHAR(256),
   IN email VARCHAR(256), 
@@ -164,10 +175,13 @@ BEGIN
     system_user.teaching_load = teaching_load,
     system_user.is_adviser = is_adviser
   WHERE system_user.empno = empno;
+  CALL log(
+      concat('Edited system user: ', name, ' Position: ', system_position),
+      session_user_name
+    );
 END;
 $$
 DELIMITER ;
-
 
 
 
@@ -290,7 +304,7 @@ BEGIN
     DELETE FROM course
     WHERE course_no = course_num;
     CALL log(
-      concat('Deleted Course: ', course_name, ' Section: ', section),
+      concat('Deleted Course: ', course_num),
       session_user_name
     );
 END;
@@ -303,6 +317,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS updateStudentAdviser;
 DELIMITER $$
 CREATE PROCEDURE updateStudentAdviser (
+      IN session_user_name VARCHAR(256),
     IN student_no VARCHAR(10),
     IN adviser INT
 )
@@ -313,6 +328,10 @@ BEGIN
     WHERE student.student_no = student_no;
     INSERT INTO student_advisers_list(student_no, empno) 
     VALUES (student_no, adviser);
+    CALL log(
+      concat('Updated student adviser of sudent with student number: ', student_no, ' Adviser_no: ', adviser),
+      session_user_name
+    );
 END;
 $$
 DELIMITER ;
@@ -322,28 +341,16 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS removeStudent;
 DELIMITER $$
 CREATE PROCEDURE removeStudent (
+    IN session_user_name VARCHAR(256),
     IN student_no VARCHAR(10)
 )
 BEGIN
     DELETE FROM student
     WHERE student.student_no = student_no;
-END;
-$$
-DELIMITER ;
-
-
--- TRIGGERS
--- On adding a user
-DROP TRIGGER IF EXISTS new_user_log;
-DELIMITER $$
-CREATE TRIGGER new_user_log
-AFTER INSERT ON system_user
-FOR EACH ROW
-  BEGIN
     CALL log(
-      concat('Added New user: ', NEW.name, ' With email: ', NEW.email, ' With position: ', NEW.system_position),
-      NEW.name
+      concat('Deleted student: ', student_no),
+      session_user_name
     );
-  END;
+END;
 $$
 DELIMITER ;

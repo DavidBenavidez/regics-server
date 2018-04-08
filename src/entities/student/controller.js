@@ -152,11 +152,11 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
 
 // U P D A T E
 //update student's adviser and add to adviser history
-export const updateStudentAdviser = ({ adviser, student_no }) => {
+export const updateStudentAdviser = (session_user, { adviser, student_no }) => {
   return new Promise((resolve, reject) => {
-    const queryString = `CALL updateStudentAdviser(?,?)`;
+    const queryString = `CALL updateStudentAdviser(?,?,?)`;
 
-    const values = [student_no, adviser];
+    const values = [session_user, student_no, adviser];
 
     db.query(queryString, values, (err, rows) => {
       if (err) {
@@ -169,13 +169,14 @@ export const updateStudentAdviser = ({ adviser, student_no }) => {
 };
 
 //removes a student
-export const removeStudent = ({ student_no }) => {
+export const removeStudent = (session_user, { student_no }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
-        CALL removeStudent(?)
+        CALL removeStudent(?, ?)
       `;
+    const values = [session_user, student_no];
 
-    db.query(queryString, student_no, (err, results) => {
+    db.query(queryString, values, (err, results) => {
       if (err) {
         console.log(err);
         return reject(500);
