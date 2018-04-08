@@ -47,9 +47,9 @@ router.get('/api/users/:empno', async (req, res) => {
 });
 
 // getAllTeachingLoads
-router.get('/api/users/teaching_load', async (req, res) => {
+router.get('/api/teaching_load', async (req, res) => {
   try {
-    const professors = await Ctrl.getAllTeachingLoads(req.params);
+    const professors = await Ctrl.getAllTeachingLoads();
     res.status(200).json({
       status: 200,
       data: professors
@@ -90,7 +90,6 @@ router.post('/api/users', async (req, res) => {
   ) {
     try {
       const id = await Ctrl.addUser(req.body);
-
       res.status(200).json({
         status: 200,
         message: 'Successfully created user',
@@ -120,8 +119,7 @@ router.put('/api/users/', async (req, res) => {
       req.body.status == 'on_leave' ||
       req.body.status == 'active') &&
     req.body.teaching_load &&
-    (req.body.is_adviser == 'true' ||
-      req.body.is_adviser == 'false')
+    (req.body.is_adviser == 'true' || req.body.is_adviser == 'false')
   ) {
     try {
       await Ctrl.editUser(req.body);

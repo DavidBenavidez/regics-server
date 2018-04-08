@@ -50,7 +50,8 @@ export const getCourse = ({ course_no }) => {
       FROM 
         course
       WHERE 
-        course_no = ?`;
+        course_no = ?
+        `;
 
     db.query(queryString, course_no, (err, rows) => {
       if (err) {
@@ -67,15 +68,13 @@ export const getCourse = ({ course_no }) => {
 };
 
 // Remove Course
-export const removeCourse = ({ course_no }) => {
+export const removeCourse = (session_user, { course_no }) => {
   return new Promise((resolve, reject) => {
-    const queryString = `
-        DELETE 
-          FROM course
-        WHERE 
-          course_no = ?
-      `;
-    db.query(queryString, course_no, (err, results) => {
+    const queryString = `CALL deleteCourse(?, ?)`;
+
+    values = [session_user, course_no];
+
+    db.query(queryString, values, (err, results) => {
       if (err) {
         console.log(err);
         return reject(500);
@@ -89,30 +88,34 @@ export const removeCourse = ({ course_no }) => {
   });
 };
 
-export const addCourse = ({
-  course_name,
-  section,
-  class_size,
-  sais_class_count,
-  sais_waitlisted_count,
-  actual_count,
-  course_date,
-  course_time_start,
-  course_time_end,
-  minutes,
-  units,
-  is_lab,
-  course_status,
-  reason,
-  room_no,
-  empno
-}) => {
+export const addCourse = (
+  session_user,
+  {
+    course_name,
+    section,
+    class_size,
+    sais_class_count,
+    sais_waitlisted_count,
+    actual_count,
+    course_date,
+    course_time_start,
+    course_time_end,
+    minutes,
+    units,
+    course_credit,
+    is_lab,
+    course_status,
+    reason,
+    room_no,
+    empno
+  }
+) => {
   return new Promise((resolve, reject) => {
     const queryString = `
-            INSERT INTO course VALUES 
-            (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
+    CALL addCourse(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
     const values = [
+      session_user,
       course_name,
       section,
       class_size,
@@ -124,6 +127,7 @@ export const addCourse = ({
       course_time_end,
       minutes,
       units,
+      course_credit,
       is_lab,
       course_status,
       reason,
@@ -141,48 +145,36 @@ export const addCourse = ({
   });
 };
 
-export const editCourse = ({
-  course_no,
-  course_name,
-  section,
-  class_size,
-  sais_class_count,
-  sais_waitlisted_count,
-  actual_count,
-  course_date,
-  course_time_start,
-  course_time_end,
-  minutes,
-  units,
-  is_lab,
-  course_status,
-  reason,
-  room_no,
-  empno
-}) => {
+export const editCourse = (
+  session_user,
+  {
+    course_no,
+    course_name,
+    section,
+    class_size,
+    sais_class_count,
+    sais_waitlisted_count,
+    actual_count,
+    course_date,
+    course_time_start,
+    course_time_end,
+    minutes,
+    units,
+    course_credit,
+    is_lab,
+    course_status,
+    reason,
+    room_no,
+    empno
+  }
+) => {
   return new Promise((resolve, reject) => {
     const queryString = `
-      UPDATE course 
-      SET 
-        course_name = ?,
-        section = ?,
-        class_size = ?,
-        sais_class_count = ?,
-        sais_waitlisted_count = ?,
-        actual_count = ?,
-        course_date = ?,
-        course_time_start = ?,
-        course_time_end = ?,
-        minutes = ?,
-        units = ?,
-        is_lab = ?,
-        course_status = ?,
-        reason = ?,
-        room_no = ?,
-        empno = ? 
-      WHERE 
-        course_no = ?`;
+      CALL editCourse(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  
+    `;
+
     const values = [
+      session_user,
       course_name,
       section,
       class_size,
@@ -194,6 +186,7 @@ export const editCourse = ({
       course_time_end,
       minutes,
       units,
+      course_credit,
       is_lab,
       course_status,
       reason,

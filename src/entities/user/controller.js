@@ -52,7 +52,9 @@ export const getAllTeachingLoads = () => {
     db.query(queryString, (err, rows) => {
       var subjects = [];
       var professor = [];
+      var totalTeachingLoad;
       for (var i = 0; i < rows.length; i++) {
+        totalTeachingLoad = 0;
         for (var j = 0; j < allSub.length; j++) {
           if (rows[i].empno == allSub[j].empno) {
             subjects.push({
@@ -66,14 +68,16 @@ export const getAllTeachingLoads = () => {
               course_date: allSub[j].course_date,
               minutes: allSub[j].minutes,
               units: allSub[j].units,
+              course_credit: allSub[j].course_credit,
               empno: allSub[j].room_no
             });
+            totalTeachingLoad += allSub[j].course_credit;
           }
         }
 
         professor.push({
           name: rows[i].name,
-          teaching_load: rows[i].teaching_load,
+          teaching_load: totalTeachingLoad,
           subjects: subjects
         });
         subjects = [];
@@ -125,12 +129,7 @@ export const getAllAdviseeClassification = () => {
 
 export const removeUser = ({ empno }) => {
   return new Promise((resolve, reject) => {
-    const queryString = `
-        DELETE 
-          FROM system_user
-        WHERE 
-          empno = ?
-      `;
+    const queryString = `CALL deleteUser(?)`;
 
     db.query(queryString, empno, (err, results) => {
       if (err) {
@@ -160,7 +159,7 @@ export const addUser = ({
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, salt, function(err, hash) {
       const queryString = `
-              INSERT INTO system_user VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?)
+              CALL addUser(?, ?, ?, ?, ?, ?, ?, ?)
           `;
       const values = [
         name,
@@ -199,18 +198,8 @@ export const editUser = ({
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, salt, function(err, hash) {
       const queryString = `
-        UPDATE system_user 
-        SET 
-        name = ?, 
-        username = ?, 
-        email = ?, 
-        password = ?,
-        system_position = ?, 
-        status = ?, 
-        teaching_load = ?, 
-        is_adviser = ? 
-        WHERE 
-        empno = ?`;
+        CALL editUser(?,?,?,?,?,?,?,?,?);
+      `;
 
       const values = [
         name,
