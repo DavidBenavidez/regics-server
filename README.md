@@ -27,24 +27,34 @@
   ```
   https://github.com/DavidBenavidez/regics-server
   ```
-## Running the server
+### Running the server
 
-1. Populate the database using yarn.
+1. Create the database using yarn.
 
   ```
   yarn seed
   ```
-2. Install the dependencies
+  then you will be prompted to enter your password.
+
+2. (OPTIONAL/ FOR TESTING) You can populate the database with dummy/fake data.
+
+  ```
+  yarn populate
+  ```
+
+3. Install the dependencies
 
   ```
   yarn install
   ```
+  again, you will be prompted to enter your password.
   
-3. Run the server 
+4. Run the server 
   ```
   yarn start
+  ```
 
-## Conventions
+### Conventions
 
 1. Now each time you create your module, you create a new branch.
   Do NOT ever push something to master. ALWAYS create a new branch and then do your magic there

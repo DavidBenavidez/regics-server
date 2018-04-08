@@ -7,6 +7,7 @@ import authRouter from './entities/auth/router';
 import studentRouter from './entities/student/router';
 import courseRouter from './entities/course/router';
 import reportGenerationRouter from './entities/report-generation/router';
+import logRouter from './entities/log/router';
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use(authRouter);
 router.use(courseRouter);
 router.use(studentRouter);
 router.use(reportGenerationRouter);
+router.use(logRouter);
 
 export default router;
