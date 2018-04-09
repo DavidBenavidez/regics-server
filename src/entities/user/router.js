@@ -106,6 +106,24 @@ router.put('/api/users/', async (req, res) => {
   }
 });
 
+// Remove Adviser/Advisee
+router.delete('/api/deleteStudentAdviser/:id', async (req, res) => {
+  try {
+    const id = await Ctrl.deleteAdviserAdvisee(
+      req.session.user.name,
+      req.params.id
+    );
+
+    res.status(200).json({
+      status: 200,
+      message: 'successfully deleted user',
+      data: id
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
 // router.get('/api/prof_info/:empno', async (req, res) => {
 //   try {
 //     const professor = await Ctrl.getProfInfo(req.params);

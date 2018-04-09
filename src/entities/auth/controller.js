@@ -44,7 +44,6 @@ export const checkUser = ({ username, password }) => {
     `;
 
     db.query(query, username, (err, res) => {
-      console.log(res[0]);
       res = res[0];
 
       if (err) {
@@ -53,6 +52,27 @@ export const checkUser = ({ username, password }) => {
       }
 
       if (res.length == 0) return reject(404);
+
+      return resolve();
+    });
+  });
+};
+
+export const checkExists = ({ username, password }) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT * FROM system_user WHERE username = ?;
+    `;
+
+    db.query(query, username, (err, res) => {
+      res = res[0];
+
+      if (err) {
+        console.log(err.message);
+        return reject(500);
+      }
+
+      if (res) return reject(405);
 
       return resolve();
     });

@@ -234,6 +234,26 @@ export const getAdvisersAndAdvisees = () => {
   });
 };
 
+export const deleteAdviserAdvisee = (session_user, { id }) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `CALL deleteAdviserAdvisee(?, ?)`;
+    const values = [session_user, id];
+    db.query(queryString, values, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!results.affectedRows) {
+        return reject(404);
+      }
+      return resolve(id);
+    });
+  });
+};
+
+// stdnt num, empno,
+//
+
 // export const getProfInfo = ({ empno }) => {
 //   return new Promise((resolve, reject) => {
 //     const queryString = `

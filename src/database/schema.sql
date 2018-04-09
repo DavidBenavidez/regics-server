@@ -63,6 +63,7 @@ CREATE TABLE student(
 );
 
 CREATE TABLE student_advisers_list(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     student_no VARCHAR(10),
     empno INT, 
     CONSTRAINT FK_student FOREIGN KEY (student_no) REFERENCES student(student_no) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -331,8 +332,8 @@ BEGIN
     SET
     student.adviser = adviser
     WHERE student.student_no = student_no;
-    INSERT INTO student_advisers_list(student_no, empno) 
-    VALUES (student_no, adviser);
+    INSERT INTO student_advisers_list  
+    VALUES (DEFAULT, student_no, adviser);
     CALL log(
       concat('Updated student adviser of sudent with student number: ', student_no, ' Adviser_no: ', adviser),
       session_user_name
@@ -354,6 +355,24 @@ BEGIN
     WHERE student.student_no = student_no;
     CALL log(
       concat('Deleted student: ', student_no),
+      session_user_name
+    );
+END;
+$$
+DELIMITER ;
+
+-- On delete adviser advisee
+DROP PROCEDURE IF EXISTS deleteAdviserAdvisee;
+DELIMITER $$
+CREATE PROCEDURE deleteAdviserAdvisee (
+    IN session_user_name VARCHAR(256),
+    IN id INT
+)
+BEGIN
+    DELETE FROM student_advisers_list
+    WHERE student_advisers_list.id = id;
+    CALL log(
+      "Deleted from student advisers list",
       session_user_name
     );
 END;

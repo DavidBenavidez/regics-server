@@ -18,6 +18,7 @@ router.post('/api/users', async (req, res) => {
       req.body.status == 'active')
   ) {
     try {
+      await Ctrl.checkExists(req.body);
       const id = await Ctrl.addUser(req.body);
       res.status(200).json({
         status: 200,
