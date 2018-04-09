@@ -1,9 +1,6 @@
 import db from '../../database';
 import bcrypt from 'bcryptjs';
-import fs from 'fs';
 
-// const Json2csvParser = require('json2csv').Parser;
-// const ws = fs.createWriteStream('./mycsv');
 const salt = bcrypt.genSaltSync(10);
 
 export const getUser = ({ empno }) => {
@@ -162,41 +159,6 @@ export const getUsers = () => {
         return reject(404);
       }
       return resolve(results);
-    });
-  });
-};
-
-export const addUser = ({
-  name,
-  username,
-  email,
-  password,
-  confirm_password,
-  system_position,
-  status,
-  teaching_load
-}) => {
-  return new Promise((resolve, reject) => {
-    bcrypt.hash(password, salt, function(err, hash) {
-      const queryString = `
-                CALL addUser(?, ?, ?, ?, ?, ?, ?)
-        `;
-      const values = [
-        name,
-        username,
-        email,
-        hash,
-        system_position,
-        status,
-        teaching_load
-      ];
-      db.query(queryString, values, (err, results) => {
-        if (err) {
-          console.log(err);
-          return reject(500);
-        }
-        return resolve(results.insertId);
-      });
     });
   });
 };
