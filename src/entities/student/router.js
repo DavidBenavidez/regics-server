@@ -32,20 +32,6 @@ router.get('/api/students/:student_no', async (req, res) => {
   }
 });
 
-// Get Students by Student classification
-router.get('/api/students/class/:classification', async (req, res) => {
-  try {
-    const user = await Ctrl.getStudentByClassification(req.params);
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully fetched user',
-      data: user
-    });
-  } catch (status) {
-    res.status(status).json({ status });
-  }
-});
-
 // Get Student by Student name
 router.get('/api/students/name/:name', async (req, res) => {
   try {

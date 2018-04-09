@@ -81,25 +81,6 @@ export const getStudentByStatus = ({ status }) => {
   });
 };
 
-//get student by classification
-export const getStudentByClassification = ({ classification }) => {
-  return new Promise((resolve, reject) => {
-    const queryString = `
-        SELECT * FROM student WHERE classification = ?`;
-
-    db.query(queryString, status, (err, rows) => {
-      if (err) {
-        console.log(err);
-        return reject(500);
-      }
-      if (!rows.length) {
-        return reject(404);
-      }
-      return resolve(rows);
-    });
-  });
-};
-
 //get all current advisers of students
 export const getCurrentAdvisers = () => {
   return new Promise((resolve, reject) => {

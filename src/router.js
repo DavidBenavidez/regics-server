@@ -2,16 +2,22 @@ import { Router } from 'express';
 
 // INSERT ROUTERS HERE EXAMPLE BELOW
 // import exampleRouter from './entities/exampleEntity/router';
-import userRouter from './entities/user/router';
 import authRouter from './entities/auth/router';
+
+import userRouter from './entities/user/router';
+import adminUserRouter from './entities/user/adminRouter';
+
 import studentRouter from './entities/student/router';
+
 import courseRouter from './entities/course/router';
+import adminCourseRouter from './entities/course/adminRouter';
+
 import reportGenerationRouter from './entities/report-generation/router';
+
 import logRouter from './entities/log/router';
 
 const router = Router();
 
-router.use(userRouter);
 router.use(authRouter);
 
 // Middleware for auth
@@ -26,9 +32,7 @@ router.use((req, res, next) => {
   });
 });
 
-// USE ROUTER HERE EXAMPLE BELOW
-// router.use(exampleRouter);
-
+router.use(userRouter);
 router.use(courseRouter);
 router.use(studentRouter);
 router.use(reportGenerationRouter);
@@ -45,5 +49,7 @@ router.use((req, res, next) => {
 });
 
 router.use(logRouter);
+router.use(adminUserRouter);
+router.use(adminCourseRouter);
 
 export default router;

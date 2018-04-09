@@ -189,6 +189,7 @@ export const editCourse = (
     course_time_end,
     minutes,
     units,
+    course_credit,
     is_lab,
     course_status,
     day1,
