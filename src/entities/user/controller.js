@@ -58,29 +58,7 @@ export const getAllTeachingLoads = () => {
         totalTeachingLoad = 0;
         for (var j = 0; j < allSub.length; j++) {
           totalCourseCredit = 0;
-          // Compute course credit
-          if ((allSub[j].course_name = 'CMSC 190-1')) {
-            if (allSub[j].sais_class_count * (0.5 / 3) > 3) {
-              totalCourseCredit = 3;
-            } else {
-              totalCourseCredit = allSub[j].sais_class_count * (0.5 / 3);
-            }
-          } else if ((allSub[j].course_name = 'CMSC 190-2')) {
-            if (2 * allSub[j].sais_class_count * (0.5 / 3) > 3) {
-              totalCourseCredit = 3;
-            } else {
-              totalCourseCredit = 2 * allSub[j].sais_class_count * (0.5 / 3);
-            }
-          } else if (!allSub[j].is_lab) {
-            if (allSub[j].sais_class_count <= 40) {
-              totalCourseCredit = 2;
-            } else {
-              totalCourseCredit =
-                2 * ((allSub[j].sais_class_count - 40) / 120 + 1);
-            }
-          } else {
-            totalCourseCredit = 1.5;
-          }
+
           if (rows[i].empno == allSub[j].empno) {
             subjects.push({
               course_name: allSub[j].course_name,
