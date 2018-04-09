@@ -104,16 +104,16 @@ export const getCurrentAdvisers = () => {
 export const getAllAdvisersByStudNo = ({ student_no }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
-    SELECT 
-      b.student_no, 
-      b.name, 
-      GROUP_CONCAT(a.name SEPARATOR ', ') AS Advisers 
-    FROM (
-      SELECT name, student_no AS student_no 
-      FROM student_advisers_list 
-      JOIN system_user USING(empno)
-    ) 
-    AS a JOIN student AS b WHERE b.student_no = ? AND a.student_no = b.student_no`;
+    SELECT
+      id,
+      student_no,
+      name
+    FROM
+      student_advisers_list
+    NATURAL JOIN
+      system_user
+    WHERE
+      student_no = ?`;
 
     db.query(queryString, student_no, (err, rows) => {
       if (err) {
