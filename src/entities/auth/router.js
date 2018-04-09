@@ -34,15 +34,31 @@ router.post('/api/users', async (req, res) => {
 
 router.post('/api/login', async (req, res) => {
   try {
+    await Ctrl.checkUser(req.body);
     const user = await Ctrl.login(req.body);
     req.session.user = user;
+
     res.status(200).json({
       status: 200,
       message: 'Successfully logged in',
       data: user
     });
   } catch (status) {
-    res.status(status).json({ status });
+    let message = '';
+
+    switch (status) {
+      case 500:
+        message = 'Internal server error while logging in';
+        break;
+      case 404:
+        message = 'User does not exist';
+        break;
+      case 401:
+        message = 'Incorrect username and password combination';
+        break;
+    }
+
+    res.status(status).json({ status, message });
   }
 });
 
@@ -55,6 +71,14 @@ router.post('/api/logout', (req, res) => {
 });
 
 router.post('/api/session', (req, res) => {
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully fetched current session',
+    data: req.session.user ? req.session.user : null
+  });
+});
+
+router.post('/api/check-session', (req, res) => {
   res.status(200).json({
     status: 200,
     message: 'Successfully fetched current session',

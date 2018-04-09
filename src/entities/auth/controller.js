@@ -37,6 +37,27 @@ export const addUser = ({
     });
   });
 };
+export const checkUser = ({ username, password }) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT * FROM system_user WHERE username = ?;
+    `;
+
+    db.query(query, username, (err, res) => {
+      console.log(res[0]);
+      res = res[0];
+
+      if (err) {
+        console.log(err.message);
+        return reject(500);
+      }
+
+      if (res.length == 0) return reject(404);
+
+      return resolve();
+    });
+  });
+};
 
 export const login = ({ username, password }) => {
   return new Promise((resolve, reject) => {
