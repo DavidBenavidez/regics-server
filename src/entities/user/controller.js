@@ -171,6 +171,23 @@ export const removeUser = (session_user, { empno }) => {
   });
 };
 
+export const getUsers = () => {
+  return new Promise((resolve, reject) => {
+    const queryString = `SELECT empno, name FROM system_user`;
+
+    db.query(queryString, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!results.length) {
+        return reject(404);
+      }
+      return resolve(results);
+    });
+  });
+};
+
 export const addUser = ({
   name,
   username,
@@ -179,13 +196,12 @@ export const addUser = ({
   confirm_password,
   system_position,
   status,
-  teaching_load,
-  is_adviser
+  teaching_load
 }) => {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, salt, function(err, hash) {
       const queryString = `
-                CALL addUser(?, ?, ?, ?, ?, ?, ?, ?)
+                CALL addUser(?, ?, ?, ?, ?, ?, ?)
         `;
       const values = [
         name,
@@ -194,8 +210,7 @@ export const addUser = ({
         hash,
         system_position,
         status,
-        teaching_load,
-        is_adviser
+        teaching_load
       ];
       db.query(queryString, values, (err, results) => {
         if (err) {
@@ -219,14 +234,13 @@ export const editUser = (
     confirm_password,
     system_position,
     status,
-    teaching_load,
-    is_adviser
+    teaching_load
   }
 ) => {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, salt, function(err, hash) {
       const queryString = `
-        CALL editUser(?,?,?,?,?,?,?,?,?,?);
+        CALL editUser(?,?,?,?,?,?,?,?,?);
       `;
 
       const values = [
@@ -238,7 +252,6 @@ export const editUser = (
         system_position,
         status,
         teaching_load,
-        is_adviser,
         empno
       ];
 

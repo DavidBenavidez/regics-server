@@ -17,8 +17,7 @@ CREATE TABLE system_user (
     password VARCHAR(256) NOT NULL,
     system_position ENUM("faculty", "head", "member") NOT NULL,
     status ENUM("resigned", "on_leave", "active") NOT NULL,
-    teaching_load FLOAT NOT NULL,
-    is_adviser ENUM("true", "false") NOT NULL
+    teaching_load FLOAT NOT NULL
 );
 
 CREATE TABLE room(
@@ -42,6 +41,8 @@ CREATE TABLE course(
     course_credit FLOAT NOT NULL,
     is_lab ENUM("true", "false") NOT NULL,
     course_status ENUM("dissolved", "petitioned", "addition", "approved") NOT NULL,
+    day1 ENUM("Monday", "Tuesday", "Wednesday", "Thursday", "Friday") NOT NULL,
+    day2 ENUM("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"),
     reason TEXT NOT NULL,
     room_no INT, 
     empno INT,
@@ -106,8 +107,7 @@ CREATE PROCEDURE addUser(
     IN password VARCHAR(256),
     IN system_position ENUM("faculty", "head", "member"),
     IN status ENUM("resigned", "on_leave", "active"),
-    IN teaching_load FLOAT,
-    IN is_adviser ENUM("true", "false")
+    IN teaching_load FLOAT
 )
 BEGIN
   INSERT INTO system_user
@@ -119,8 +119,7 @@ BEGIN
     password,
     system_position,
     status,
-    teaching_load,
-    is_adviser
+    teaching_load
   );
    CALL log(
       concat('New system user: ', name, ' Position: ', system_position),
@@ -160,7 +159,6 @@ CREATE PROCEDURE editUser (
   IN system_position ENUM("faculty", "head", "member"),
   IN status ENUM("resigned", "on_leave", "active"),
   IN teaching_load FLOAT,
-  IN is_adviser ENUM("true", "false"),
   IN empno INT
 )
 BEGIN
@@ -172,8 +170,7 @@ BEGIN
     system_user.password = password,
     system_user.system_position = system_position,
     system_user.status = status,
-    system_user.teaching_load = teaching_load,
-    system_user.is_adviser = is_adviser
+    system_user.teaching_load = teaching_load
   WHERE system_user.empno = empno;
   CALL log(
       concat('Edited system user: ', name, ' Position: ', system_position),
@@ -205,6 +202,8 @@ CREATE PROCEDURE addCourse (
     IN course_credit FLOAT,
     IN is_lab ENUM("true", "false"),
     IN course_status ENUM("dissolved", "petitioned", "addition", "approved"),
+    IN day1 ENUM("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"),
+    IN day2 ENUM("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"),
     IN reason TEXT,
     IN room_no INT, 
     IN empno INT
@@ -227,6 +226,8 @@ BEGIN
     course_credit,
     is_lab,
     course_status,
+    day1,
+    day2,
     reason,
     room_no,
     empno
@@ -258,6 +259,8 @@ CREATE PROCEDURE editCourse (
     IN course_credit FLOAT,
     IN is_lab ENUM("true", "false"),
     IN course_status ENUM("dissolved", "petitioned", "addition", "approved"),
+    IN day1 ENUM("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"),
+    IN day2 ENUM("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"),
     IN reason TEXT,
     IN room_no INT, 
     IN empno INT,
@@ -280,6 +283,8 @@ BEGIN
         course.course_credit = course_credit,
         course.is_lab = is_lab,
         course.course_status = course_status,
+        course.day1 = day1,
+        course.day2 = day2,
         course.reason = reason,
         course.room_no = room_no,
         course.empno = empno 
