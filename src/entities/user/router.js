@@ -18,7 +18,7 @@ router.get('/api/users/advisers', async (req, res) => {
   }
 });
 
-// Get all advisee cpount by classification
+// Get all advisee count by classification
 router.get('/api/students-count', async (req, res) => {
   try {
     const users = await Ctrl.getAllAdviseeClassification();
@@ -29,6 +29,19 @@ router.get('/api/students-count', async (req, res) => {
     });
   } catch (status) {
     let message = '';
+    res.status(status).json({ status });
+  }
+});
+
+// Get All Users/Professors/Instructors
+router.get('/api/users', async (req, res) => {
+  try {
+    const id = await Ctrl.getUsers();
+    res.status(200).json({
+      status: 200,
+      data: id
+    });
+  } catch (status) {
     res.status(status).json({ status });
   }
 });
