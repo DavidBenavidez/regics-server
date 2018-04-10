@@ -1,24 +1,25 @@
 import db from '../../database';
 import fs from 'fs';
-const Json2csvParser = require('json2csv').Parser;
 
 export const importCourses = (session_user, data) => {
   return new Promise((resolve, reject) => {
-    course = {};
-    course.course_status = NULL;
-    course.minutes = NULL;
+    var course = {};
+    course.course_status = null;
+    course.minutes = null;
     course.course_status = 'addition';
-    course.actual_count = NULL;
-    course.reason = NULL;
+    course.actual_count = null;
+    course.reason = null;
+    course.date = null;
+    var course_name;
 
-    for (var i = 1; i < data.size(); i++) {
+    for (var i = 1; i < data.length; i++) {
       if (data[i][0] != '') {
-        course_code = data[i][0];
+        course.course_code = data[i][0];
         course_name = data[i][1];
         i++;
       } else {
         course.units = ParseFloat(
-          course_name.split(' ')[course_name.split(' ').size() - 1][2]
+          course_name.split(' ')[course_name.split(' ').length - 1][2]
         ); //kunin sa name
         course.is_lab = 'true';
         professor = '';
@@ -37,24 +38,28 @@ export const importCourses = (session_user, data) => {
           course.day2 = 'Thu';
         } else {
           course.day1 = data[i][4];
-          course.day2 = NULL;
+          course.day2 = null;
         }
         course.room_no = data[i][5]
           .split(' ')
-          [data[i][5].split(' ').size() - 1].slice(1, 6);
+          [data[i][5].split(' ').length - 1].slice(1, 6);
         professor = data[i][6];
         course.class_size = data[i][7];
         course.sais_class_count = data[i][8];
         course.sais_waitlisted_count = data[i][9];
-        const queryString = 'SELECT empno FROM system_user WHERE = ?';
+
+        const queryString = `SELECT empno FROM system_user WHERE name = ?`;
 
         db.query(queryString, professor, (err, results) => {
           if (err) {
             console.log(err);
             return reject(500);
           }
+          if (!results.length) {
+            return reject(404);
+          }
+          course.empno = results[0];
         });
-        course.empno = results[0];
       }
 
       var totalCourseCredit;
@@ -71,7 +76,7 @@ export const importCourses = (session_user, data) => {
         } else {
           totalCourseCredit = 2.0 * sais_class_count * (0.5 / 3);
         }
-      } else if (is_lab == 'false') {
+      } else if (course.is_lab == 'false') {
         if (sais_class_count <= 40) {
           totalCourseCredit = 2;
         } else {
@@ -83,25 +88,25 @@ export const importCourses = (session_user, data) => {
 
       var values = [
         session_user,
-        course_name,
-        section,
-        class_size,
-        sais_class_count,
-        sais_waitlisted_count,
-        actual_count,
-        course_date,
-        course_time_start,
-        course_time_end,
-        minutes,
-        units,
+        course.course_code,
+        course.section,
+        course.class_size,
+        course.sais_class_count,
+        course.sais_waitlisted_count,
+        course.actual_count,
+        course.course_date,
+        course.course_time_start,
+        course.course_time_end,
+        course.minutes,
+        course.units,
         totalCourseCredit,
-        is_lab,
-        course_status,
-        day1,
-        day2,
-        reason,
-        room_no,
-        empno
+        course.is_lab,
+        course.course_status,
+        course.day1,
+        course.day2,
+        course.reason,
+        course.room_no,
+        course.empno
       ];
 
       const queryString = `
