@@ -263,3 +263,23 @@ export const editCourse = (
     });
   });
 };
+
+export const swapProf = (session_user, { course_no, empno }) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+      CALL swapProf(?,?,?)  
+    `;
+
+    const values = [session_user, course_no, empno];
+    db.query(queryString, values, (err, res) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!res.affectedRows) {
+        return reject(404);
+      }
+      return resolve();
+    });
+  });
+};
