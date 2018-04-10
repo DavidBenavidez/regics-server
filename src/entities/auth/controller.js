@@ -1,6 +1,84 @@
 import db from '../../database';
 import bcrypt from 'bcryptjs';
 
+const salt = bcrypt.genSaltSync(10);
+
+export const addUser = ({
+  name,
+  username,
+  email,
+  password,
+  confirm_password,
+  system_position,
+  status,
+  teaching_load
+}) => {
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(password, salt, function(err, hash) {
+      const queryString = `
+                CALL addUser(?, ?, ?, ?, ?, ?, ?)
+        `;
+      const values = [
+        name,
+        username,
+        email,
+        hash,
+        system_position,
+        status,
+        teaching_load
+      ];
+      db.query(queryString, values, (err, results) => {
+        if (err) {
+          console.log(err);
+          return reject(500);
+        }
+        return resolve(results.insertId);
+      });
+    });
+  });
+};
+export const checkUser = ({ username, password }) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT * FROM system_user WHERE username = ?;
+    `;
+
+    db.query(query, username, (err, res) => {
+      res = res[0];
+
+      if (err) {
+        console.log(err.message);
+        return reject(500);
+      }
+
+      if (res.length == 0) return reject(404);
+
+      return resolve();
+    });
+  });
+};
+
+export const checkExists = ({ username, password }) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT * FROM system_user WHERE username = ?;
+    `;
+
+    db.query(query, username, (err, res) => {
+      res = res[0];
+
+      if (err) {
+        console.log(err.message);
+        return reject(500);
+      }
+
+      if (res) return reject(405);
+
+      return resolve();
+    });
+  });
+};
+
 export const login = ({ username, password }) => {
   return new Promise((resolve, reject) => {
     const queryString = `

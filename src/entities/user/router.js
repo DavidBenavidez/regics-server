@@ -18,7 +18,7 @@ router.get('/api/users/advisers', async (req, res) => {
   }
 });
 
-// Get all advisee cpount by classification
+// Get all advisee count by classification
 router.get('/api/students-count', async (req, res) => {
   try {
     const users = await Ctrl.getAllAdviseeClassification();
@@ -29,6 +29,19 @@ router.get('/api/students-count', async (req, res) => {
     });
   } catch (status) {
     let message = '';
+    res.status(status).json({ status });
+  }
+});
+
+// Get All Users/Professors/Instructors
+router.get('/api/users', async (req, res) => {
+  try {
+    const id = await Ctrl.getUsers();
+    res.status(200).json({
+      status: 200,
+      data: id
+    });
+  } catch (status) {
     res.status(status).json({ status });
   }
 });
@@ -59,50 +72,6 @@ router.get('/api/teaching_load', async (req, res) => {
   }
 });
 
-// Remove User
-router.delete('/api/users/:empno', async (req, res) => {
-  try {
-    const id = await Ctrl.removeUser(req.params);
-
-    res.status(200).json({
-      status: 200,
-      message: 'successfully deleted user',
-      data: id
-    });
-  } catch (status) {
-    res.status(status).json({ status });
-  }
-});
-
-// Add User
-router.post('/api/users', async (req, res) => {
-  if (
-    req.body.name &&
-    req.body.username &&
-    req.body.password &&
-    req.body.password == req.body.confirm_password &&
-    (req.body.system_position == 'faculty' ||
-      req.body.system_position == 'head' ||
-      req.body.system_position == 'member') &&
-    (req.body.status == 'resigned' ||
-      req.body.status == 'on_leave' ||
-      req.body.status == 'active')
-  ) {
-    try {
-      const id = await Ctrl.addUser(req.body);
-      res.status(200).json({
-        status: 200,
-        message: 'Successfully created user',
-        data: id
-      });
-    } catch (status) {
-      res.status(500).json({ status });
-    }
-  } else {
-    res.status(400).json({ status: 400 });
-  }
-});
-
 // update user
 router.put('/api/users/', async (req, res) => {
   if (
@@ -118,11 +87,10 @@ router.put('/api/users/', async (req, res) => {
     (req.body.status == 'resigned' ||
       req.body.status == 'on_leave' ||
       req.body.status == 'active') &&
-    req.body.teaching_load &&
-    (req.body.is_adviser == 'true' || req.body.is_adviser == 'false')
+    req.body.teaching_load
   ) {
     try {
-      await Ctrl.editUser(req.body);
+      await Ctrl.editUser(req.session.user.name, req.body);
       const user = await Ctrl.getUser({ empno: req.body.empno });
 
       res.status(200).json({
@@ -135,6 +103,24 @@ router.put('/api/users/', async (req, res) => {
     }
   } else {
     res.status(400).json({ status: 400 });
+  }
+});
+
+// Remove Adviser/Advisee
+router.delete('/api/deleteStudentAdviser/:id', async (req, res) => {
+  try {
+    const id = await Ctrl.deleteAdviserAdvisee(
+      req.session.user.name,
+      req.params.id
+    );
+
+    res.status(200).json({
+      status: 200,
+      message: 'successfully deleted user',
+      data: id
+    });
+  } catch (status) {
+    res.status(status).json({ status });
   }
 });
 

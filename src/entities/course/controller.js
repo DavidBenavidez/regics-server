@@ -72,7 +72,7 @@ export const removeCourse = (session_user, { course_no }) => {
   return new Promise((resolve, reject) => {
     const queryString = `CALL deleteCourse(?, ?)`;
 
-    values = [session_user, course_no];
+    const values = [session_user, course_no];
 
     db.query(queryString, values, (err, results) => {
       if (err) {
@@ -102,9 +102,10 @@ export const addCourse = (
     course_time_end,
     minutes,
     units,
-    course_credit,
     is_lab,
     course_status,
+    day1,
+    day2,
     reason,
     room_no,
     empno
@@ -112,8 +113,34 @@ export const addCourse = (
 ) => {
   return new Promise((resolve, reject) => {
     const queryString = `
-    CALL addCourse(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    CALL addCourse(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
+
+    var totalCourseCredit;
+    // Compute course credit
+    if (course_name == 'CMSC 190-1') {
+      if (sais_class_count * (0.5 / 3) > 3) {
+        totalCourseCredit = 3;
+      } else {
+        totalCourseCredit = sais_class_count * (0.5 / 3);
+      }
+    } else if (course_name == 'CMSC 190-2') {
+      if (2.0 * sais_class_count * (0.5 / 3) > 3) {
+        totalCourseCredit = 3;
+      } else {
+        totalCourseCredit = 2.0 * sais_class_count * (0.5 / 3);
+      }
+    } else if (is_lab == 'false') {
+      console.log('not lab');
+      if (sais_class_count <= 40) {
+        totalCourseCredit = 2;
+      } else {
+        totalCourseCredit = 2.0 * ((sais_class_count - 40) / 120 + 1);
+      }
+    } else {
+      totalCourseCredit = 1.5;
+    }
+
     const values = [
       session_user,
       course_name,
@@ -127,9 +154,11 @@ export const addCourse = (
       course_time_end,
       minutes,
       units,
-      course_credit,
+      totalCourseCredit,
       is_lab,
       course_status,
+      day1,
+      day2,
       reason,
       room_no,
       empno
@@ -163,6 +192,8 @@ export const editCourse = (
     course_credit,
     is_lab,
     course_status,
+    day1,
+    day2,
     reason,
     room_no,
     empno
@@ -170,8 +201,32 @@ export const editCourse = (
 ) => {
   return new Promise((resolve, reject) => {
     const queryString = `
-      CALL editCourse(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  
+      CALL editCourse(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  
     `;
+    var totalCourseCredit;
+    // Compute course credit
+    if (course_name == 'CMSC 190-1') {
+      if (sais_class_count * (0.5 / 3) > 3) {
+        totalCourseCredit = 3;
+      } else {
+        totalCourseCredit = sais_class_count * (0.5 / 3);
+      }
+    } else if (course_name == 'CMSC 190-2') {
+      if (2.0 * sais_class_count * (0.5 / 3) > 3) {
+        totalCourseCredit = 3;
+      } else {
+        totalCourseCredit = 2.0 * sais_class_count * (0.5 / 3);
+      }
+    } else if (is_lab == 'false') {
+      console.log('not lab');
+      if (sais_class_count <= 40) {
+        totalCourseCredit = 2;
+      } else {
+        totalCourseCredit = 2.0 * ((sais_class_count - 40) / 120 + 1);
+      }
+    } else {
+      totalCourseCredit = 1.5;
+    }
 
     const values = [
       session_user,
@@ -186,9 +241,11 @@ export const editCourse = (
       course_time_end,
       minutes,
       units,
-      course_credit,
+      totalCourseCredit,
       is_lab,
       course_status,
+      day1,
+      day2,
       reason,
       room_no,
       empno,

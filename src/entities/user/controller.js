@@ -1,9 +1,6 @@
 import db from '../../database';
 import bcrypt from 'bcryptjs';
-import fs from 'fs';
 
-// const Json2csvParser = require('json2csv').Parser;
-// const ws = fs.createWriteStream('./mycsv');
 const salt = bcrypt.genSaltSync(10);
 
 export const getUser = ({ empno }) => {
@@ -53,9 +50,12 @@ export const getAllTeachingLoads = () => {
       var subjects = [];
       var professor = [];
       var totalTeachingLoad;
+      var totalCourseCredit;
       for (var i = 0; i < rows.length; i++) {
         totalTeachingLoad = 0;
         for (var j = 0; j < allSub.length; j++) {
+          totalCourseCredit = 0;
+
           if (rows[i].empno == allSub[j].empno) {
             subjects.push({
               course_name: allSub[j].course_name,
@@ -127,16 +127,17 @@ export const getAllAdviseeClassification = () => {
   });
 };
 
-export const removeUser = ({ empno }) => {
+export const removeUser = (session_user, { empno }) => {
   return new Promise((resolve, reject) => {
-    const queryString = `CALL deleteUser(?)`;
+    const queryString = `CALL deleteUser(?, ?)`;
 
-    db.query(queryString, empno, (err, results) => {
+    const values = [session_user, empno];
+
+    db.query(queryString, values, (err, results) => {
       if (err) {
         console.log(err);
         return reject(500);
       }
-
       if (!results.affectedRows) {
         return reject(404);
       }
@@ -145,56 +146,37 @@ export const removeUser = ({ empno }) => {
   });
 };
 
-export const addUser = ({
-  name,
-  username,
-  email,
-  password,
-  confirm_password,
-  system_position,
-  status,
-  teaching_load,
-  is_adviser
-}) => {
+export const getUsers = () => {
   return new Promise((resolve, reject) => {
-    bcrypt.hash(password, salt, function(err, hash) {
-      const queryString = `
-              CALL addUser(?, ?, ?, ?, ?, ?, ?, ?)
-          `;
-      const values = [
-        name,
-        username,
-        email,
-        hash,
-        system_position,
-        status,
-        teaching_load,
-        is_adviser
-      ];
+    const queryString = `SELECT empno, name FROM system_user`;
 
-      db.query(queryString, values, (err, results) => {
-        if (err) {
-          console.log(err);
-          return reject(500);
-        }
-        return resolve(results.insertId);
-      });
+    db.query(queryString, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!results.length) {
+        return reject(404);
+      }
+      return resolve(results);
     });
   });
 };
 
-export const editUser = ({
-  empno,
-  name,
-  username,
-  email,
-  password,
-  confirm_password,
-  system_position,
-  status,
-  teaching_load,
-  is_adviser
-}) => {
+export const editUser = (
+  session_user,
+  {
+    empno,
+    name,
+    username,
+    email,
+    password,
+    confirm_password,
+    system_position,
+    status,
+    teaching_load
+  }
+) => {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, salt, function(err, hash) {
       const queryString = `
@@ -202,6 +184,7 @@ export const editUser = ({
       `;
 
       const values = [
+        session_user,
         name,
         username,
         email,
@@ -209,7 +192,6 @@ export const editUser = ({
         system_position,
         status,
         teaching_load,
-        is_adviser,
         empno
       ];
 
@@ -251,6 +233,26 @@ export const getAdvisersAndAdvisees = () => {
     });
   });
 };
+
+export const deleteAdviserAdvisee = (session_user, { id }) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `CALL deleteAdviserAdvisee(?, ?)`;
+    const values = [session_user, id];
+    db.query(queryString, values, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!results.affectedRows) {
+        return reject(404);
+      }
+      return resolve(id);
+    });
+  });
+};
+
+// stdnt num, empno,
+//
 
 // export const getProfInfo = ({ empno }) => {
 //   return new Promise((resolve, reject) => {
