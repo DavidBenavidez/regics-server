@@ -67,6 +67,32 @@ export const getCourse = ({ course_no }) => {
   });
 };
 
+//get course by empno
+export const getCoursesByEmpno = ({ empno }) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+      SELECT
+        *
+      FROM 
+        course
+      WHERE 
+        empno = ?
+        `;
+
+    db.query(queryString, empno, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!rows.length) {
+        return reject(404);
+      }
+
+      return resolve(rows);
+    });
+  });
+};
+
 // Remove Course
 export const removeCourse = (session_user, { course_no }) => {
   return new Promise((resolve, reject) => {

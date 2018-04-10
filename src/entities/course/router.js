@@ -49,6 +49,20 @@ router.get('/api/course/:course_no', async (req, res) => {
   }
 });
 
+//Get course by empno
+router.get('/api/course/empno/:empno', async (req, res) => {
+  try {
+    const course = await Ctrl.getCoursesByEmpno(req.params);
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully fetched courses',
+      data: course
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
 // edit course
 router.put('/api/course/edit', async (req, res) => {
   if (
