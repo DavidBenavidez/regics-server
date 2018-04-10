@@ -264,13 +264,16 @@ export const editCourse = (
   });
 };
 
-export const swapProf = (session_user, { course_no, empno }) => {
+export const swapProf = (
+  session_user,
+  { course_no, empno, swap_course_no, swap_empno }
+) => {
   return new Promise((resolve, reject) => {
     const queryString = `
-      CALL swapProf(?,?,?)  
+      CALL swapProf(?,?,?,?,?)  
     `;
 
-    const values = [session_user, course_no, empno];
+    const values = [session_user, course_no, empno, swap_course_no, swap_empno];
     db.query(queryString, values, (err, res) => {
       if (err) {
         console.log(err);

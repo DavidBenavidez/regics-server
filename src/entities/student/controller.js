@@ -103,6 +103,7 @@ export const getCurrentAdvisers = () => {
 //Retrieve all advisers of a student based on student number
 export const getAllAdvisersByStudNo = ({ student_no }) => {
   return new Promise((resolve, reject) => {
+    var data = [];
     const queryString = `
     SELECT
       id,
@@ -120,10 +121,16 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
         console.log(err);
         return reject(500);
       }
-
       if (!rows.length) {
         return reject(404);
       }
+
+      var i;
+      for (i = 0; i < rows.length; i++) {
+        data.push(rows[i].name);
+      }
+      console.log(data);
+
       return resolve(rows);
     });
   });

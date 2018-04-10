@@ -316,12 +316,18 @@ DELIMITER $$
 CREATE PROCEDURE swapProf (
     IN session_user_name VARCHAR(256),
     IN course_no INT,
-    IN empno INT
+    IN empno INT,
+    IN swap_course_no INT,
+    IN swap_empno INT
 )
 BEGIN
     UPDATE course
     SET
     course.empno = empno
+    WHERE course.course_no = swap_course_no;
+    UPDATE course
+    SET
+    course.empno = swap_empno
     WHERE course.course_no = course_no;
     CALL log(
       concat('Swapped profs course num: ', course_no, ' empno: ', empno),
