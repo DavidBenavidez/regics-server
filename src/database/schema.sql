@@ -310,6 +310,30 @@ END;
 $$
 DELIMITER ;
 
+-- On swap profs
+DROP PROCEDURE IF EXISTS swapProf;
+DELIMITER $$
+CREATE PROCEDURE swapProf (
+    IN session_user_name VARCHAR(256),
+    IN course_no INT,
+    IN empno INT
+)
+BEGIN
+    UPDATE course
+    SET
+    course.empno = empno
+    WHERE course.course_no = course_no;
+    CALL log(
+      concat('Swapped profs course num: ', course_no, ' empno: ', empno),
+      session_user_name
+    );
+END;
+$$
+DELIMITER ;
+
+
+
+
 -- Delete course procedure
 DROP PROCEDURE IF EXISTS deleteCourse;
 DELIMITER $$
@@ -328,11 +352,11 @@ END;
 $$
 DELIMITER ; 
 
--- On Swap Prof
+-- On update student adviser
 DROP PROCEDURE IF EXISTS updateStudentAdviser;
 DELIMITER $$
 CREATE PROCEDURE updateStudentAdviser (
-      IN session_user_name VARCHAR(256),
+    IN session_user_name VARCHAR(256),
     IN student_no VARCHAR(10),
     IN adviser INT
 )
@@ -351,6 +375,7 @@ END;
 $$
 DELIMITER ;
 
+-- on edit student
 DROP PROCEDURE IF EXISTS updateStudent;
 DELIMITER $$
 CREATE PROCEDURE updateStudent (

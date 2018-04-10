@@ -71,4 +71,23 @@ router.put('/api/course/edit', async (req, res) => {
   }
 });
 
+router.put('/api/course/swap-prof', async (req, res) => {
+  console.log('haha');
+  if (req.body.course_no && req.body.empno) {
+    try {
+      await Ctrl.swapProf(req.session.user.name, req.body);
+      const user = await Ctrl.getCourse({ course_no: req.body.course_no });
+      res.status(200).json({
+        status: 200,
+        message: 'Successfully swapped profs',
+        data: user
+      });
+    } catch (status) {
+      res.status(status).json({ status });
+    }
+  } else {
+    res.status(400).json({ status: 400 });
+  }
+});
+
 export default router;
