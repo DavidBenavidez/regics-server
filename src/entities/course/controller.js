@@ -263,3 +263,45 @@ export const editCourse = (
     });
   });
 };
+
+export const swapCourse = (session_user, { course_no, course_name }) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+      CALL swap(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  
+    `;
+
+    const values = [
+      session_user,
+      course_name,
+      section,
+      class_size,
+      sais_class_count,
+      sais_waitlisted_count,
+      actual_count,
+      course_date,
+      course_time_start,
+      course_time_end,
+      minutes,
+      units,
+      totalCourseCredit,
+      is_lab,
+      course_status,
+      day1,
+      day2,
+      reason,
+      room_no,
+      empno,
+      course_no
+    ];
+    db.query(queryString, values, (err, res) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!res.affectedRows) {
+        return reject(404);
+      }
+      return resolve();
+    });
+  });
+};

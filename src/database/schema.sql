@@ -55,7 +55,7 @@ CREATE TABLE course(
 CREATE TABLE student(
     student_no VARCHAR(10) NOT NULL PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
-    status enum("loa", "dropped", "enrolled", "dismissed") NOT NULL,
+    status ENUM("loa", "dropped", "enrolled", "dismissed") NOT NULL,
     classification ENUM("freshman", "sophomore", "junior", "senior") NOT NULL,
     student_curriculum TEXT NOT NULL,
     adviser INT,
@@ -76,6 +76,18 @@ CREATE TABLE log_data (
   log_action VARCHAR(256) NOT NULL,
   log_user VARCHAR(256) NOT NULL
 );
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- PROCEDURES
 -- For adding to log
@@ -107,8 +119,7 @@ CREATE PROCEDURE addUser(
     IN email VARCHAR(256),
     IN password VARCHAR(256),
     IN system_position ENUM("faculty", "head", "member"),
-    IN status ENUM("resigned", "on_leave", "active"),
-    IN teaching_load FLOAT
+    IN status ENUM("resigned", "on_leave", "active")
 )
 BEGIN
   INSERT INTO system_user
@@ -120,7 +131,7 @@ BEGIN
     password,
     system_position,
     status,
-    teaching_load
+    0
   );
    CALL log(
       concat('New system user: ', name, ' Position: ', system_position),
@@ -316,6 +327,55 @@ BEGIN
 END;
 $$
 DELIMITER ; 
+
+-- On Swap Prof
+DROP PROCEDURE IF EXISTS updateStudentAdviser;
+DELIMITER $$
+CREATE PROCEDURE updateStudentAdviser (
+      IN session_user_name VARCHAR(256),
+    IN student_no VARCHAR(10),
+    IN adviser INT
+)
+BEGIN
+    UPDATE student
+    SET
+    student.adviser = adviser
+    WHERE student.student_no = student_no;
+    INSERT INTO student_advisers_list  
+    VALUES (DEFAULT, student_no, adviser);
+    CALL log(
+      concat('Updated student adviser of sudent with student number: ', student_no, ' Adviser_no: ', adviser),
+      session_user_name
+    );
+END;
+$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS updateStudent;
+DELIMITER $$
+CREATE PROCEDURE updateStudent (
+    IN session_user_name VARCHAR(256),
+    IN name VARCHAR(256),
+    In status ENUM("loa", "dropped", "enrolled", "dismissed"),
+    IN classification ENUM("freshman", "sophomore", "junior", "senior"),
+    IN student_curriculum TEXT,
+    IN student_no VARCHAR(10)
+)
+BEGIN
+    UPDATE student
+    SET
+    student.name = name,
+    student.status = status,
+    student.classification = classification,
+    student.student_curriculum = student_curriculum
+    WHERE student.student_no = student_no;
+    CALL log(
+      concat('Updated student info of sudent with student number: ', student_no),
+      session_user_name
+    );
+END;
+$$
+DELIMITER ;
 
 
 -- STUDENT

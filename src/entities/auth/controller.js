@@ -10,23 +10,14 @@ export const addUser = ({
   password,
   confirm_password,
   system_position,
-  status,
-  teaching_load
+  status
 }) => {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, salt, function(err, hash) {
       const queryString = `
-                CALL addUser(?, ?, ?, ?, ?, ?, ?)
+                CALL addUser(?, ?, ?, ?, ?, ?)
         `;
-      const values = [
-        name,
-        username,
-        email,
-        hash,
-        system_position,
-        status,
-        teaching_load
-      ];
+      const values = [name, username, email, hash, system_position, status];
       db.query(queryString, values, (err, results) => {
         if (err) {
           console.log(err);

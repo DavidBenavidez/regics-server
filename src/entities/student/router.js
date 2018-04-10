@@ -75,10 +75,31 @@ router.get('/api/students/advisers/:student_no', async (req, res) => {
 });
 
 // update user adviser
-router.put('/api/students/adviser', async (req, res) => {
+router.put('/api/students/update-adviser', async (req, res) => {
   if (req.body.adviser && req.body.student_no) {
     try {
       await Ctrl.updateStudentAdviser(req.session.user.name, req.body);
+      const user = await Ctrl.getStudentByStudNo({
+        student_no: req.body.student_no
+      });
+      res.status(200).json({
+        status: 200,
+        message: 'Successfully edited user',
+        data: user
+      });
+    } catch (status) {
+      res.status(status).json({ status });
+    }
+  } else {
+    res.status(400).json({ status: 400 });
+  }
+});
+
+// update user
+router.put('/api/students/edit', async (req, res) => {
+  if (req.body.student_no) {
+    try {
+      await Ctrl.updateStudent(req.session.user.name, req.body);
       const user = await Ctrl.getStudentByStudNo({
         student_no: req.body.student_no
       });
