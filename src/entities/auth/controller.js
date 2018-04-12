@@ -28,44 +28,51 @@ export const addUser = ({
     });
   });
 };
-export const checkUser = ({ username, password }) => {
+export const checkUser = ({ username }) => {
   return new Promise((resolve, reject) => {
     const query = `
       SELECT * FROM system_user WHERE username = ?;
     `;
+    if (username) {
+      db.query(query, username, (err, res) => {
+        if (err) {
+          console.log(err.message);
+          return reject(500);
+        }
 
-    db.query(query, username, (err, res) => {
-      res = res[0];
+        res = res[0];
 
-      if (err) {
-        console.log(err.message);
-        return reject(500);
-      }
-      if (res.length == 0) return reject(404);
+        if (!res) return reject(404);
 
-      return resolve();
-    });
+        return resolve();
+      });
+    } else {
+      return reject(404);
+    }
   });
 };
 
-export const checkExists = ({ username, password }) => {
+export const checkExists = ({ username }) => {
   return new Promise((resolve, reject) => {
     const query = `
       SELECT * FROM system_user WHERE username = ?;
     `;
+    if (username) {
+      db.query(query, username, (err, res) => {
+        if (err) {
+          console.log(err.message);
+          return reject(500);
+        }
 
-    db.query(query, username, (err, res) => {
-      res = res[0];
+        res = res[0];
 
-      if (err) {
-        console.log(err.message);
-        return reject(500);
-      }
+        if (res) return reject(405);
 
-      if (res) return reject(405);
-
-      return resolve();
-    });
+        return resolve();
+      });
+    } else {
+      return reject(404);
+    }
   });
 };
 
