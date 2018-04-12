@@ -3,6 +3,28 @@ import bcrypt from 'bcryptjs';
 
 const salt = bcrypt.genSaltSync(10);
 
+function convertTime(time) {
+  var finalTime = '';
+
+  if (time.search('PM') != -1) {
+    time = time.replace('PM', '');
+    time = time.split(':');
+    if (time[0] == 12) {
+      finalTime += time[0];
+    } else {
+      finalTime += +time[0] + +12;
+    }
+    finalTime += ':' + time[1] + ':00';
+  } else if (time.search('AM') != -1) {
+    time = time.replace('AM', '');
+    time = time.split(':');
+    if (time[0] == '12') time[0] = '0';
+    finalTime += time[0];
+    finalTime += ':' + time[1] + ':00';
+  }
+  return finalTime;
+}
+
 export const getAllCourses = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
@@ -167,6 +189,9 @@ export const addCourse = (
       totalCourseCredit = 1.5;
     }
 
+    course_time_start = convertTime(course_time_start);
+    course_time_end = convertTime(course_time_end);
+
     const values = [
       session_user,
       course_name,
@@ -253,6 +278,9 @@ export const editCourse = (
     } else {
       totalCourseCredit = 1.5;
     }
+
+    course_time_start = convertTime(course_time_start);
+    course_time_end = convertTime(course_time_end);
 
     const values = [
       session_user,
