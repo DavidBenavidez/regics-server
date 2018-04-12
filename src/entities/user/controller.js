@@ -32,8 +32,8 @@ export const getUser = ({ empno }) => {
 // Get teaching load of professors
 export const getAllTeachingLoads = () => {
   return new Promise((resolve, reject) => {
-    const queryString = `select * from system_user;`;
-    const q1 = `select * from course`;
+    const queryString = `SELECT * FROM system_user ORDER BY name;`;
+    const q1 = `SELECT * FROM course ORDER BY course_name`;
     var allSub = [];
 
     db.query(q1, (err, rows1) => {
