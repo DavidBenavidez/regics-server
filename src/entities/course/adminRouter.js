@@ -14,9 +14,8 @@ router.post('/api/course/add', async (req, res) => {
     req.body.actual_count &&
     req.body.course_time_start &&
     req.body.course_time_end &&
-    req.body.minutes &&
     req.body.units &&
-    (req.body.is_lab == 'true' || req.body.is_lab == 'false') &&
+    req.body.is_lab &&
     req.body.room_no &&
     req.body.empno
   ) {
