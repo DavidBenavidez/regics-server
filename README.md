@@ -1,4 +1,19 @@
-# regICS CMSC 128 Project
+<h1 align="center">
+  <br />
+  <img src="./logo.png" alt="icon" width="450px" />
+  <br/>
+  <br/>
+  regics
+  <br/>
+  <img src="https://img.shields.io/badge/status-development-yellow.svg" />
+  <img src="https://img.shields.io/badge/node-v8.3.0-green.svg" />
+  <img src="https://img.shields.io/badge/express-v^4.16.2-green.svg" />
+  <img src="https://img.shields.io/badge/mysql-v^2.15.0-green.svg" />
+  <br/>
+</h1>
+<h4 align="center">An ICS Registration System</h4>
+
+# Server
 
 ### CMSC 128 AY 2017-2018 2ND SEMESTER
 

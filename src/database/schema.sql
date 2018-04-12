@@ -330,7 +330,7 @@ BEGIN
     course.empno = swap_empno
     WHERE course.course_no = course_no;
     CALL log(
-      concat('Swapped profs course num: ', course_no, ' empno: ', empno),
+      concat('Swapped profs course num: ', course_no, ' empno: ', empno, ' and course num ', swap_course_no, ' empno ', swap_empno),
       session_user_name
     );
 END;

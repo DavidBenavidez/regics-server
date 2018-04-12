@@ -12,7 +12,6 @@ router.post('/api/course/add', async (req, res) => {
     req.body.sais_class_count &&
     req.body.sais_waitlisted_count &&
     req.body.actual_count &&
-    req.body.course_date &&
     req.body.course_time_start &&
     req.body.course_time_end &&
     req.body.minutes &&
