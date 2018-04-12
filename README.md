@@ -6,10 +6,9 @@
   regics
   <br/>
   <img src="https://img.shields.io/badge/status-development-yellow.svg" />
-  <img src="https://img.shields.io/badge/node-v8.3.0-green.svg" />
+  <img src="https://img.shields.io/badge/node-v9.7.1-green.svg" />
   <img src="https://img.shields.io/badge/express-v^4.16.2-green.svg" />
   <img src="https://img.shields.io/badge/mysql-v^2.15.0-green.svg" />
-  <img src="https://img.shields.io/badge/MariaDB-v10.1.28-green.svg" />
   <br/>
 </h1>
 <h4 align="center">An ICS Registration System</h4>
