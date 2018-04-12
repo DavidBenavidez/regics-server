@@ -148,7 +148,7 @@ export const removeUser = (session_user, { empno }) => {
 
 export const getUsers = () => {
   return new Promise((resolve, reject) => {
-    const queryString = `SELECT empno, name FROM system_user`;
+    const queryString = `SELECT empno, name FROM system_user ORDER BY name`;
 
     db.query(queryString, (err, results) => {
       if (err) {
