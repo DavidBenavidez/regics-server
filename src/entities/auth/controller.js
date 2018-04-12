@@ -41,7 +41,6 @@ export const checkUser = ({ username, password }) => {
         console.log(err.message);
         return reject(500);
       }
-
       if (res.length == 0) return reject(404);
 
       return resolve();
