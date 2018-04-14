@@ -103,4 +103,18 @@ router.put('/api/course/edit', async (req, res) => {
   }
 });
 
+// Get all rooms
+router.get('/api/rooms', async (req, res) => {
+  try {
+    const rooms = await Ctrl.getAllRooms();
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully fetched rooms',
+      data: rooms
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
 export default router;

@@ -340,3 +340,29 @@ export const swapProf = (
     });
   });
 };
+
+export const getAllRooms = () => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+        SELECT 
+          *
+        FROM 
+          room
+        ORDER BY
+          room_name
+      `;
+
+    db.query(queryString, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+
+      if (!rows.length) {
+        return reject(404);
+      }
+
+      return resolve(rows);
+    });
+  });
+};
