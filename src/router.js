@@ -16,6 +16,8 @@ import reportGenerationRouter from './entities/report-generation/router';
 
 import logRouter from './entities/log/router';
 
+import importCSVRouter from './entities/import-csv/router';
+
 const router = Router();
 
 router.use(authRouter);
@@ -36,6 +38,7 @@ router.use(userRouter);
 router.use(courseRouter);
 router.use(studentRouter);
 router.use(reportGenerationRouter);
+router.use(importCSVRouter);
 
 router.use((req, res, next) => {
   if (req.session.user.system_position === 'head') {
