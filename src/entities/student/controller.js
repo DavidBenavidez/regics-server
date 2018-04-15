@@ -204,3 +204,31 @@ export const removeStudent = (session_user, { student_no }) => {
     });
   });
 };
+
+export const addStudent = (
+  session_user,
+  { name, student_no, status, student_curriculum, classification, adviser }
+) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+    CALL addStudent(?, ?, ?, ?, ?, ?)
+    `;
+
+    const values = [
+      name,
+      student_no,
+      status,
+      student_curriculum,
+      classification,
+      adviser
+    ];
+
+    db.query(queryString, values, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      return resolve(results.insertId);
+    });
+  });
+};
