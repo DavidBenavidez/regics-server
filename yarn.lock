@@ -1258,16 +1258,6 @@ crypto-random-string@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/crypto-random-string/-/crypto-random-string-1.0.0.tgz#a230f64f568310e1498009940790ec99545bca7e"
 
-csv-generate@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/csv-generate/-/csv-generate-2.0.2.tgz#1c26c52be318f1f0b6435f8df3d1249fb1503f4b"
-
-csv-stringify@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/csv-stringify/-/csv-stringify-2.0.4.tgz#9ace220df98ffa7ca91314ac77ff8cba0a08c863"
-  dependencies:
-    lodash.get "~4.4.2"
-
 d@1:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/d/-/d-1.0.0.tgz#754bb5bfe55451da69a58b94d45f4c5b0462d58f"
@@ -2564,7 +2554,7 @@ lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
 
-lodash.get@^4.4.0, lodash.get@~4.4.2:
+lodash.get@^4.4.0:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
 

@@ -6,7 +6,6 @@ const router = Router();
 // Get all advisers and the students assigned to them
 router.get('/api/users/advisers', async (req, res) => {
   try {
-    console.log('Tried');
     const users = await Ctrl.getAdvisersAndAdvisees();
     res.status(200).json({
       status: 200,

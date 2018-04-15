@@ -24,6 +24,7 @@ router.put('/api/course/swap-prof', async (req, res) => {
 // Get all courses
 router.get('/api/course', async (req, res) => {
   try {
+    console.log(req.session);
     const users = await Ctrl.getAllCourses();
     res.status(200).json({
       status: 200,
