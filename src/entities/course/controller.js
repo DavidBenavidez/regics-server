@@ -148,7 +148,6 @@ export const addCourse = (
     course_date,
     course_time_start,
     course_time_end,
-    minutes,
     units,
     is_lab,
     course_status,
@@ -203,7 +202,7 @@ export const addCourse = (
       course_date,
       course_time_start,
       course_time_end,
-      minutes,
+      0,
       units,
       totalCourseCredit,
       is_lab,
@@ -337,6 +336,32 @@ export const swapProf = (
         return reject(404);
       }
       return resolve();
+    });
+  });
+};
+
+export const getAllRooms = () => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+        SELECT 
+          *
+        FROM 
+          room
+        ORDER BY
+          room_name
+      `;
+
+    db.query(queryString, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+
+      if (!rows.length) {
+        return reject(404);
+      }
+
+      return resolve(rows);
     });
   });
 };
