@@ -29,24 +29,31 @@ export const getAllCourses = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
         SELECT 
-        course_no,
-        course_name,
-        section,
-        class_size,
-        sais_class_count,
-        sais_waitlisted_count,
-        actual_count,
-        date_format(course_date, "%W") AS course_date,
-        TIME_FORMAT(course_time_start, '%h:%i %p') AS course_time_start,
-        TIME_FORMAT(course_time_end, '%h:%i %p') AS course_time_end,
-        ROUND(minutes/30,1) AS course_hours,
-        units,
-        is_lab,
-        room_no,
-        empno
-        FROM 
+          course_no,
+          course_name,
+          section,
+          class_size,
+          sais_class_count,
+          sais_waitlisted_count,
+          actual_count,
+          units,
+          is_lab,
+          room_name,
+          day1,
+          day2,
+          course_time_start,
+          course_time_end,
+          name,
+          reason,
+          course_status
+        FROM
           course
+        NATURAL JOIN
+          system_user
+        NATURAL JOIN
+          room
         ORDER BY
+          FIELD(course_status, 'addition', 'approved', 'petitioned', 'dissolved'),
           course_name
       `;
 
