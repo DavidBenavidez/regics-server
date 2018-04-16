@@ -45,6 +45,19 @@ router.get('/api/users', async (req, res) => {
   }
 });
 
+// Get active users
+router.get('/api/users/active', async (req, res) => {
+  try {
+    const id = await Ctrl.getActiveUsers();
+    res.status(200).json({
+      status: 200,
+      data: id
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
 // Get User
 router.get('/api/users/:empno', async (req, res) => {
   try {

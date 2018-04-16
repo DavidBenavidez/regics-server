@@ -50,20 +50,6 @@ router.get('/api/course/:course_no', async (req, res) => {
   }
 });
 
-//Get course by empno
-router.get('/api/course/empno/:empno', async (req, res) => {
-  try {
-    const course = await Ctrl.getCoursesByEmpno(req.params);
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully fetched courses',
-      data: course
-    });
-  } catch (status) {
-    res.status(status).json({ status });
-  }
-});
-
 // edit course
 router.put('/api/course/edit', async (req, res) => {
   if (
@@ -74,10 +60,8 @@ router.put('/api/course/edit', async (req, res) => {
     req.body.sais_class_count &&
     req.body.sais_waitlisted_count &&
     req.body.actual_count &&
-    req.body.course_date &&
     req.body.course_time_start &&
     req.body.course_time_end &&
-    req.body.minutes &&
     req.body.units &&
     (req.body.is_lab == 'true' || req.body.is_lab == 'false') &&
     (req.body.course_status == 'dissolved' ||

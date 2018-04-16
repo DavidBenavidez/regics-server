@@ -163,6 +163,23 @@ export const getUsers = () => {
   });
 };
 
+export const getActiveUsers = () => {
+  return new Promise((resolve, reject) => {
+    const queryString = `SELECT empno, name FROM system_user WHERE status = 'active' ORDER BY empno`;
+
+    db.query(queryString, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!results.length) {
+        return reject(404);
+      }
+      return resolve(results);
+    });
+  });
+};
+
 export const editUser = (
   session_user,
   {
