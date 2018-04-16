@@ -65,7 +65,7 @@ export const getAllCourses = () => {
         console.log(err);
         return reject(500);
       }
-
+      
       return resolve(rows);
     });
   });
