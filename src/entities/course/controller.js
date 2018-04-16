@@ -28,26 +28,36 @@ function convertTime(time) {
 export const getAllCourses = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
-        SELECT 
+      SELECT 
         course_no,
-        course_name,
-        section,
+        UPPER(course_name) as course_name,
+        UPPER(section) as section,
         class_size,
         sais_class_count,
         sais_waitlisted_count,
         actual_count,
-        date_format(course_date, "%W") AS course_date,
-        TIME_FORMAT(course_time_start, '%h:%i %p') AS course_time_start,
-        TIME_FORMAT(course_time_end, '%h:%i %p') AS course_time_end,
-        ROUND(minutes/30,1) AS course_hours,
         units,
         is_lab,
-        room_no,
-        empno
-        FROM 
-          course
-        ORDER BY
-          course_name
+        room_name,
+        day1,
+        day2,
+        course_time_start,
+        course_time_end,
+        hours,
+        name,
+        reason,
+        course_status
+        FROM
+        course
+      NATURAL JOIN
+        system_user
+      NATURAL JOIN
+        room
+      ORDER BY
+        FIELD(course_status, 'addition', 'approved', 'petitioned', 'dissolved'),
+        course_name,
+        section,
+        FIELD(is_lab, 'false', 'true')
       `;
 
     db.query(queryString, (err, rows) => {
@@ -55,11 +65,7 @@ export const getAllCourses = () => {
         console.log(err);
         return reject(500);
       }
-
-      if (!rows.length) {
-        return resolve([]);
-      }
-
+      
       return resolve(rows);
     });
   });
@@ -68,13 +74,34 @@ export const getAllCourses = () => {
 export const getCourse = ({ course_no }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
-      SELECT *
-      FROM 
+      SELECT 
+        course_no,
+        UPPER(course_name) as course_name,
+        UPPER(section) as section,
+        class_size,
+        sais_class_count,
+        sais_waitlisted_count,
+        actual_count,
+        units,
+        is_lab,
+        room_name,
+        day1,
+        day2,
+        course_time_start,
+        course_time_end,
+        hours,
+        name,
+        reason,
+        course_status
+        FROM
         course
+      NATURAL JOIN
+        system_user
+      NATURAL JOIN
+        room
       WHERE 
         course_no = ?
-        `;
-
+      `;
     db.query(queryString, course_no, (err, rows) => {
       if (err) {
         console.log(err);
@@ -85,32 +112,6 @@ export const getCourse = ({ course_no }) => {
       }
 
       return resolve(rows[0]);
-    });
-  });
-};
-
-//get course by empno
-export const getCoursesByEmpno = ({ empno }) => {
-  return new Promise((resolve, reject) => {
-    const queryString = `
-      SELECT
-        *
-      FROM 
-        course
-      WHERE 
-        empno = ?
-        `;
-
-    db.query(queryString, empno, (err, rows) => {
-      if (err) {
-        console.log(err);
-        return reject(500);
-      }
-      if (!rows.length) {
-        return reject(404);
-      }
-
-      return resolve(rows);
     });
   });
 };
@@ -145,7 +146,6 @@ export const addCourse = (
     sais_class_count,
     sais_waitlisted_count,
     actual_count,
-    course_date,
     course_time_start,
     course_time_end,
     units,
@@ -159,10 +159,6 @@ export const addCourse = (
   }
 ) => {
   return new Promise((resolve, reject) => {
-    const queryString = `
-    CALL addCourse(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
     var totalCourseCredit;
     // Compute course credit
     if (course_name == 'CMSC 190-1') {
@@ -190,7 +186,9 @@ export const addCourse = (
 
     course_time_start = convertTime(course_time_start);
     course_time_end = convertTime(course_time_end);
-
+    const queryString = `
+    CALL addCourse(?,?,?,?,?,?,?,?,?, time_to_sec(timediff('${course_time_end}','${course_time_start}'))/3600,?,?,?,?,?,?,?,?,?)
+    `;
     const values = [
       session_user,
       course_name,
@@ -199,10 +197,8 @@ export const addCourse = (
       sais_class_count,
       sais_waitlisted_count,
       actual_count,
-      course_date,
       course_time_start,
       course_time_end,
-      0,
       units,
       totalCourseCredit,
       is_lab,
@@ -213,13 +209,32 @@ export const addCourse = (
       room_no,
       empno
     ];
-
-    db.query(queryString, values, (err, results) => {
-      if (err) {
-        console.log(err);
+    //For room conflict check
+    const queryString2 = `SELECT course_name FROM course WHERE room_no = ? AND day1 = ? AND (course_time_start = ? OR (course_time_start BETWEEN ? AND ?) )`;
+    const values2 = [
+      room_no,
+      day1,
+      course_time_start,
+      course_time_start,
+      course_time_end
+    ];
+    db.query(queryString2, values2, (err2, results2) => {
+      if (err2) {
+        console.log(err2);
         return reject(500);
+      } else if (results2.length > 0) {
+        //if query2 returns rows, error.
+        console.log('In conflict with ' + results2[0].course_name);
+        return reject(500);
+      } else {
+        db.query(queryString, values, (err, results) => {
+          if (err) {
+            console.log(err);
+            return reject(500);
+          }
+          return resolve(results.insertId);
+        });
       }
-      return resolve(results.insertId);
     });
   });
 };
@@ -234,10 +249,8 @@ export const editCourse = (
     sais_class_count,
     sais_waitlisted_count,
     actual_count,
-    course_date,
     course_time_start,
     course_time_end,
-    minutes,
     units,
     course_credit,
     is_lab,
@@ -250,9 +263,6 @@ export const editCourse = (
   }
 ) => {
   return new Promise((resolve, reject) => {
-    const queryString = `
-      CALL editCourse(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)  
-    `;
     var totalCourseCredit;
     // Compute course credit
     if (course_name == 'CMSC 190-1') {
@@ -281,6 +291,10 @@ export const editCourse = (
     course_time_start = convertTime(course_time_start);
     course_time_end = convertTime(course_time_end);
 
+    const queryString = `
+      CALL editCourse(?, ?, ?, ?, ?, ?, ?, ?, ?, time_to_sec(timediff('${course_time_end}','${course_time_start}'))/3600, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)  
+    `;
+
     const values = [
       session_user,
       course_name,
@@ -289,10 +303,8 @@ export const editCourse = (
       sais_class_count,
       sais_waitlisted_count,
       actual_count,
-      course_date,
       course_time_start,
       course_time_end,
-      minutes,
       units,
       totalCourseCredit,
       is_lab,
@@ -304,15 +316,36 @@ export const editCourse = (
       empno,
       course_no
     ];
-    db.query(queryString, values, (err, res) => {
-      if (err) {
-        console.log(err);
+
+    //For room conflict check
+    const queryString2 = `SELECT course_name FROM course WHERE room_no = ? AND day1 = ? AND (course_time_start = ? OR (course_time_start BETWEEN ? AND ?) )`;
+    const values2 = [
+      room_no,
+      day1,
+      course_time_start,
+      course_time_start,
+      course_time_end
+    ];
+    db.query(queryString2, values2, (err2, results2) => {
+      if (err2) {
+        console.log(err2);
         return reject(500);
+      } else if (results2.length > 0) {
+        //if query2 returns rows, error.
+        console.log('In conflict with ' + results2[0].course_name);
+        return reject(500);
+      } else {
+        db.query(queryString, values, (err, res) => {
+          if (err) {
+            console.log(err);
+            return reject(500);
+          }
+          if (!res.affectedRows) {
+            return reject(404);
+          }
+          return resolve();
+        });
       }
-      if (!res.affectedRows) {
-        return reject(404);
-      }
-      return resolve();
     });
   });
 };

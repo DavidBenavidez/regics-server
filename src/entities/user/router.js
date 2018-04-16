@@ -6,7 +6,6 @@ const router = Router();
 // Get all advisers and the students assigned to them
 router.get('/api/users/advisers', async (req, res) => {
   try {
-    console.log('Tried');
     const users = await Ctrl.getAdvisersAndAdvisees();
     res.status(200).json({
       status: 200,
@@ -46,6 +45,19 @@ router.get('/api/users', async (req, res) => {
   }
 });
 
+// Get active users
+router.get('/api/users/active', async (req, res) => {
+  try {
+    const id = await Ctrl.getActiveUsers();
+    res.status(200).json({
+      status: 200,
+      data: id
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
 // Get User
 router.get('/api/users/:empno', async (req, res) => {
   try {
@@ -66,6 +78,19 @@ router.get('/api/teaching_load', async (req, res) => {
     res.status(200).json({
       status: 200,
       data: professors
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
+// get teaching load by prof
+router.get('/api/teaching-load/:empno', async (req, res) => {
+  try {
+    const courses = await Ctrl.getTeachingLoad(req.params);
+    res.status(200).json({
+      status: 200,
+      data: courses
     });
   } catch (status) {
     res.status(status).json({ status });

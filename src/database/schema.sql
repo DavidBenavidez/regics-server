@@ -33,10 +33,9 @@ CREATE TABLE course(
     sais_class_count INT NOT NULL,
     sais_waitlisted_count INT NOT NULL,
     actual_count INT NOT NULL,
-    course_date DATE, 
     course_time_start TIME,
     course_time_end TIME, 
-    minutes INT NOT NULL, 
+    hours FLOAT NOT NULL, 
     units FLOAT NOT NULL,
     course_credit FLOAT NOT NULL,
     is_lab ENUM("true", "false") NOT NULL,
@@ -206,10 +205,9 @@ CREATE PROCEDURE addCourse (
     IN sais_class_count INT,
     IN sais_waitlisted_count INT,
     IN actual_count INT,
-    IN course_date DATE, 
     IN course_time_start TIME,
     IN course_time_end TIME, 
-    IN minutes INT, 
+    IN hours FLOAT, 
     IN units FLOAT,
     IN course_credit FLOAT,
     IN is_lab ENUM("true", "false"),
@@ -230,10 +228,9 @@ BEGIN
     sais_class_count,
     sais_waitlisted_count,
     actual_count,
-    course_date,
     course_time_start,
     course_time_end,
-    minutes,
+    hours,
     units,
     course_credit,
     is_lab,
@@ -262,11 +259,10 @@ CREATE PROCEDURE editCourse (
     IN class_size INT,
     IN sais_class_count INT,
     IN sais_waitlisted_count INT,
-    IN actual_count INT,
-    IN course_date DATE, 
+    IN actual_count INT, 
     IN course_time_start TIME,
     IN course_time_end TIME, 
-    IN minutes INT, 
+    IN hours FLOAT, 
     IN units FLOAT,
     IN course_credit FLOAT,
     IN is_lab ENUM("true", "false"),
@@ -287,10 +283,9 @@ BEGIN
         course.sais_class_count = sais_class_count,
         course.sais_waitlisted_count = sais_waitlisted_count,
         course.actual_count = actual_count,
-        course.course_date = course_date,
         course.course_time_start = course_time_start,
         course.course_time_end = course_time_end,
-        course.minutes = minutes,
+        course.hours = hours,
         course.units = units,
         course.course_credit = course_credit,
         course.is_lab = is_lab,
@@ -362,9 +357,6 @@ DELIMITER ;
 -- STUDENT
 
 -- addStudent
-
-
-
 DROP PROCEDURE IF EXISTS addStudent;
 DELIMITER $$
 CREATE PROCEDURE addStudent (

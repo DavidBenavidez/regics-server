@@ -22,92 +22,102 @@ insert into system_user (empno, name, username, email, password, system_position
 insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Shaughn Tumielli', 'stumiellii', 'example18@email.com', 'vO4ndRz', 'faculty', 'active', 27.26);
 insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Cissy Giraudot', 'cgiraudotj', 'example19@email.com', 'wve0ducx', 'faculty', 'active', 16.181);
 
-insert into room (room_no, room_name) values (50, 'PCLAB 1');
-insert into room (room_no, room_name) values (53, 'PCLAB 7');
-insert into room (room_no, room_name) values (73, 'PCLAB 7');
-insert into room (room_no, room_name) values (79, 'PCLAB 1');
-insert into room (room_no, room_name) values (76, 'PCLAB 7');
-insert into room (room_no, room_name) values (62, 'PCLAB 4');
-insert into room (room_no, room_name) values (35, 'PCLAB 7');
-insert into room (room_no, room_name) values (94, 'PCLAB 6');
-insert into room (room_no, room_name) values (65, 'PCLAB 0');
-insert into room (room_no, room_name) values (93, 'PCLAB 1');
-insert into room (room_no, room_name) values (9, 'PCLAB 4');
-insert into room (room_no, room_name) values (77, 'PCLAB 8');
-insert into room (room_no, room_name) values (4, 'PCLAB 2');
-insert into room (room_no, room_name) values (23, 'PCLAB 0');
-insert into room (room_no, room_name) values (74, 'PCLAB 5');
-insert into room (room_no, room_name) values (55, 'PCLAB 0');
-insert into room (room_no, room_name) values (31, 'PCLAB 6');
-insert into room (room_no, room_name) values (68, 'PCLAB 8');
-insert into room (room_no, room_name) values (52, 'PCLAB 1');
-insert into room (room_no, room_name) values (10, 'PCLAB 7');
+insert into room (room_no, room_name) values (112, 'C-112');
+insert into room (room_no, room_name) values (114, 'C-114');
+insert into room (room_no, room_name) values (115, 'C-115');
+insert into room (room_no, room_name) values (116, 'C-116');
+insert into room (room_no, room_name) values (117, 'C-117');
+insert into room (room_no, room_name) values (118, 'C-118');
+insert into room (room_no, room_name) values (119, 'C-119');
+insert into room (room_no, room_name) values (120, 'Server Room');
+insert into room (room_no, room_name) values (121, 'C-121');
+insert into room (room_no, room_name) values (122, 'C-122');
+insert into room (room_no, room_name) values (123, 'C-123');
+insert into room (room_no, room_name) values (124, 'Library');
+insert into room (room_no, room_name) values (125, 'C-125');
+insert into room (room_no, room_name) values (126, 'C-126');
+insert into room (room_no, room_name) values (127, 'C-127a');
+insert into room (room_no, room_name) values (1272, 'C-127');
+insert into room (room_no, room_name) values (128, 'Control Room');
+insert into room (room_no, room_name) values (129, 'PCLAB 8');
+insert into room (room_no, room_name) values (200, 'HPC Lab');
+insert into room (room_no, room_name) values (201, 'PCLAB 1');
+insert into room (room_no, room_name) values (202, 'PCLAB 4');
+insert into room (room_no, room_name) values (203, 'PCLAB 2');
+insert into room (room_no, room_name) values (204, 'PCLAB 5');
+insert into room (room_no, room_name) values (205, 'PCLAB 3');
+insert into room (room_no, room_name) values (206, 'ICSMH');
+insert into room (room_no, room_name) values (300, 'Admin Staff');
+insert into room (room_no, room_name) values (301, 'G5 Room');
+insert into room (room_no, room_name) values (302, 'PCLAB 8');
+insert into room (room_no, room_name) values (303, 'PCLAB 6');
+insert into room (room_no, room_name) values (304, 'PCLAB 9');
+insert into room (room_no, room_name) values (305, 'PCLAB 7');
+insert into room (room_no, room_name) values (306, 'ICS LH 3');
+insert into room (room_no, room_name) values (308, 'ICS LH 4');
 
 CALL addCourse(
-    'USER SESSION EXAMPLE', 
+    'Betel de Robles', 
     'CMSC 128', 
-    'JF-9L', 
+    'A', 
     70, 
     64, 
     142, 
-    12, 
-    '2018-03-24', 
-    '15:02:28', 
-    '15:02:28', 
-    68, 
+    12,  
+    '7:00:00', 
+    '8:00:00', 
+    1, 
     3, 
     2.75, 
-    'true', 
-    'dissolved', 
-    'Tuesday',
-    'Thursday',
+    'false', 
+    'approved', 
+    'Wednesday',
+    'Friday',
     '', 
-    50, 
+    206, 
     1
 );
 CALL addCourse(
-    'USER SESSION EXAMPLE', 
+    'Betel de Robles', 
     'CMSC 128', 
-    'JF-9L', 
+    'A-1L', 
     70, 
     64, 
     142, 
-    12, 
-    '2018-03-24', 
-    '15:02:28', 
-    '15:02:28', 
-    68, 
+    12,  
+    '10:00:00', 
+    '13:00:00', 
+    3, 
     3, 
     5.75, 
     'true', 
-    'dissolved', 
+    'approved', 
     'Tuesday',
-    'Thursday',
+    NULL,
     '', 
-    77, 
+    202, 
     1
 );
 
 CALL addCourse(
-    'BLAHBLAH NAME', 
+    'Betel de Robles', 
     'CMSC 128', 
-    'JF-9L', 
+    'A-2L', 
     70, 
     64, 
     142, 
-    12, 
-    '2018-03-24', 
-    '15:02:28', 
-    '15:02:28', 
-    68, 
+    12,  
+    '10:00:00', 
+    '13:00:00', 
+    3, 
     3, 
     2.75, 
     'true', 
-    'dissolved', 
+    'approved', 
     'Tuesday',
     'Thursday',
     '', 
-    53, 
+    204, 
     2
 );
 

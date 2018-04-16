@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as Ctrl from './controller';
+import * as Users from '../user/controller';
 
 const router = Router();
 
@@ -9,7 +10,7 @@ router.get('/api/students/', async (req, res) => {
     const users = await Ctrl.getAllStudents();
     res.status(200).json({
       status: 200,
-      message: 'Successfully fetched users',
+      message: 'Successfully fetched students',
       data: users
     });
   } catch (status) {
@@ -24,7 +25,7 @@ router.get('/api/students/:student_no', async (req, res) => {
     const user = await Ctrl.getStudentByStudNo(req.params);
     res.status(200).json({
       status: 200,
-      message: 'Successfully fetched user',
+      message: 'Successfully fetched student',
       data: user
     });
   } catch (status) {
@@ -38,7 +39,7 @@ router.get('/api/students/name/:name', async (req, res) => {
     const user = await Ctrl.getStudentByName(req.params);
     res.status(200).json({
       status: 200,
-      message: 'Successfully fetched user',
+      message: 'Successfully fetched student',
       data: user
     });
   } catch (status) {
@@ -52,7 +53,7 @@ router.get('/api/students/status/:status', async (req, res) => {
     const user = await Ctrl.getStudentByStatus(req.params);
     res.status(200).json({
       status: 200,
-      message: 'Successfully fetched user',
+      message: 'Successfully fetched students',
       data: user
     });
   } catch (status) {
@@ -66,7 +67,7 @@ router.get('/api/students/advisers/:student_no', async (req, res) => {
     const user = await Ctrl.getAllAdvisersByStudNo(req.params);
     res.status(200).json({
       status: 200,
-      message: 'Successfully fetched user',
+      message: 'Successfully fetched advisers',
       data: user
     });
   } catch (status) {
@@ -84,7 +85,7 @@ router.put('/api/students/update-adviser', async (req, res) => {
       });
       res.status(200).json({
         status: 200,
-        message: 'Successfully edited user',
+        message: 'Successfully updated student adviser',
         data: user
       });
     } catch (status) {
@@ -105,7 +106,7 @@ router.put('/api/students/edit', async (req, res) => {
       });
       res.status(200).json({
         status: 200,
-        message: 'Successfully edited user',
+        message: 'Successfully updated student',
         data: user
       });
     } catch (status) {
@@ -123,7 +124,7 @@ router.delete('/api/students/:student_no', async (req, res) => {
 
     res.status(200).json({
       status: 200,
-      message: 'Successfully removed user',
+      message: 'Successfully removed student',
       data: id
     });
   } catch (status) {

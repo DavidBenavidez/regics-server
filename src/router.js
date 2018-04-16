@@ -16,26 +16,29 @@ import reportGenerationRouter from './entities/report-generation/router';
 
 import logRouter from './entities/log/router';
 
+import importCSVRouter from './entities/import-csv/router';
+
 const router = Router();
 
 router.use(authRouter);
 
 // Middleware for auth
-// router.use((req, res, next) => {
-//   if (req.session.user) {
-//     return next();
-//   }
+router.use((req, res, next) => {
+  if (req.session.user) {
+    return next();
+  }
 
-//   res.status(401).json({
-//     status: 401,
-//     message: 'Must be logged in'
-//   });
-// });
+  res.status(401).json({
+    status: 401,
+    message: 'Not logged in'
+  });
+});
 
 router.use(userRouter);
 router.use(courseRouter);
 router.use(studentRouter);
 router.use(reportGenerationRouter);
+router.use(importCSVRouter);
 
 // router.use((req, res, next) => {
 //   if (req.session.user.system_position === 'head') {

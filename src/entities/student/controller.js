@@ -129,9 +129,8 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
       for (i = 0; i < rows.length; i++) {
         data.push(rows[i].name);
       }
-      console.log(data);
 
-      return resolve(rows);
+      return resolve(data);
     });
   });
 };

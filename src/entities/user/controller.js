@@ -92,6 +92,36 @@ export const getAllTeachingLoads = () => {
   });
 };
 
+// Get teaching load of professor
+export const getTeachingLoad = ({ empno }) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+      SELECT
+        *
+      FROM
+        course
+      NATURAL JOIN
+        room
+      WHERE
+        course_status = "addition"
+      AND
+        empno = ?
+      ORDER BY
+        course_name,
+        section,
+        FIELD(is_lab, 'false', 'true')
+    `;
+
+    db.query(queryString, empno, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      return resolve(rows);
+    });
+  });
+};
+
 //Retrieve adviser and advisee per classification
 export const getAllAdviseeClassification = () => {
   return new Promise((resolve, reject) => {
@@ -122,6 +152,37 @@ export const getAllAdviseeClassification = () => {
       if (!rows.length) {
         return reject(404);
       }
+      var f = 0,
+        so = 0,
+        j = 0,
+        se = 0,
+        t = 0;
+      for (var i = 0; i < rows.length; i++) {
+        if (rows[i].freshman == 1) {
+          f++;
+          t++;
+        }
+        if (rows[i].sophomore == 1) {
+          so++;
+          t++;
+        }
+        if (rows[i].junior == 1) {
+          j++;
+          t++;
+        }
+        if (rows[i].senior == 1) {
+          se++;
+          t++;
+        }
+      }
+      rows.push({
+        name: 'total',
+        freshman: f,
+        sophomore: so,
+        junior: j,
+        senior: se,
+        total: t
+      });
       return resolve(rows);
     });
   });
@@ -149,6 +210,23 @@ export const removeUser = (session_user, { empno }) => {
 export const getUsers = () => {
   return new Promise((resolve, reject) => {
     const queryString = `SELECT empno, name FROM system_user ORDER BY name`;
+
+    db.query(queryString, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!results.length) {
+        return reject(404);
+      }
+      return resolve(results);
+    });
+  });
+};
+
+export const getActiveUsers = () => {
+  return new Promise((resolve, reject) => {
+    const queryString = `SELECT empno, name FROM system_user WHERE status = 'active' ORDER BY empno`;
 
     db.query(queryString, (err, results) => {
       if (err) {

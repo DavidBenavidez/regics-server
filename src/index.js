@@ -25,12 +25,21 @@ app.use(
     secret: 'regicssystem',
     resave: true,
     saveUninitialized: true,
+    cookie: { secure: false },
     store: sessionStore,
     createDatabaseTable: true,
     checkExpirationInterval: 900000,
     expiration: 86400000
   })
 );
+
+// app.use(function(req, res, next) {
+//   res.setHeader('Access-Control-Allow-Credentials', 'true');
+//   res.setHeader('Access-Control-Allow-origin', 'http://localhost:3000');
+//   res.setHeader('Access-Control-Allow-Headers','origin, X-Requested-Width, Content-Type, Accept, Set-Cookie, *');
+//   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT');
+//   next();
+// });
 
 app.use(router);
 
