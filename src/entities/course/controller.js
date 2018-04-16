@@ -57,7 +57,7 @@ export const getAllCourses = () => {
       }
 
       if (!rows.length) {
-        return reject(404);
+        return resolve([]);
       }
 
       return resolve(rows);
