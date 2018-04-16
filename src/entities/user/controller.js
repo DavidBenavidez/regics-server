@@ -92,6 +92,36 @@ export const getAllTeachingLoads = () => {
   });
 };
 
+// Get teaching load of professor
+export const getTeachingLoad = ({ empno }) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+      SELECT
+        *
+      FROM
+        course
+      NATURAL JOIN
+        room
+      WHERE
+        course_status = "addition"
+      AND
+        empno = ?
+      ORDER BY
+        course_name,
+        section,
+        FIELD(is_lab, 'false', 'true')
+    `;
+
+    db.query(queryString, empno, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      return resolve(rows);
+    });
+  });
+};
+
 //Retrieve adviser and advisee per classification
 export const getAllAdviseeClassification = () => {
   return new Promise((resolve, reject) => {

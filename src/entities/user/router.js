@@ -84,6 +84,19 @@ router.get('/api/teaching_load', async (req, res) => {
   }
 });
 
+// get teaching load by prof
+router.get('/api/teaching-load/:empno', async (req, res) => {
+  try {
+    const courses = await Ctrl.getTeachingLoad(req.params);
+    res.status(200).json({
+      status: 200,
+      data: courses
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
 // update user
 router.put('/api/users/', async (req, res) => {
   if (
