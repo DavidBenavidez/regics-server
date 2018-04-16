@@ -3,7 +3,7 @@ import * as Ctrl from './controller';
 
 const router = Router();
 
-// Add Course
+// Add Student
 router.post('/api/student/add', async (req, res) => {
   if (
     req.body.name &&
@@ -27,19 +27,5 @@ router.post('/api/student/add', async (req, res) => {
     res.status(400).json({ status: 400 });
   }
 });
-
-// Remove Course
-// router.delete('/api/course/delete/:course_no', async (req, res) => {
-//   try {
-//     const id = await Ctrl.removeCourse(req.session.user.name, req.params);
-//     res.status(200).json({
-//       status: 200,
-//       message: 'successfully deleted course',
-//       data: id
-//     });
-//   } catch (status) {
-//     res.status(status).json({ status });
-//   }
-// });
 
 export default router;

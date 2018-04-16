@@ -36,13 +36,13 @@ export const getAllCourses = () => {
         sais_class_count,
         sais_waitlisted_count,
         actual_count,
+        TIME_FORMAT(course_time_start, '%h:%i %p') AS course_time_start,
+        TIME_FORMAT(course_time_end, '%h:%i %p') AS course_time_end,
         units,
         is_lab,
         room_name,
         day1,
         day2,
-        course_time_start,
-        course_time_end,
         hours,
         name,
         reason,
@@ -225,7 +225,7 @@ export const addCourse = (
       } else if (results2.length > 0) {
         //if query2 returns rows, error.
         console.log('In conflict with ' + results2[0].course_name);
-        return reject(500);
+        return reject(405);
       } else {
         db.query(queryString, values, (err, results) => {
           if (err) {
@@ -333,7 +333,7 @@ export const editCourse = (
       } else if (results2.length > 0) {
         //if query2 returns rows, error.
         console.log('In conflict with ' + results2[0].course_name);
-        return reject(500);
+        return reject(405);
       } else {
         db.query(queryString, values, (err, res) => {
           if (err) {
