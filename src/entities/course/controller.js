@@ -63,10 +63,6 @@ export const getAllCourses = () => {
         return reject(500);
       }
 
-      if (!rows.length) {
-        return reject(404);
-      }
-
       return resolve(rows);
     });
   });
