@@ -27,24 +27,37 @@ function convertTime(time) {
 
 export const getAllCourses = () => {
   return new Promise((resolve, reject) => {
-    var courses = [];
     const queryString = `
-        SELECT 
-          UPPER(course_name) as course_name,
-          UPPER(section) as section,
-          is_lab,
-          course_status
+      SELECT 
+        course_no,
+        UPPER(course_name) as course_name,
+        UPPER(section) as section,
+        class_size,
+        sais_class_count,
+        sais_waitlisted_count,
+        actual_count,
+        units,
+        is_lab,
+        room_name,
+        day1,
+        day2,
+        course_time_start,
+        course_time_end,
+        hours,
+        name,
+        reason,
+        course_status
         FROM
-          course
-        NATURAL JOIN
-          system_user
-        NATURAL JOIN
-          room
-        ORDER BY
-          FIELD(course_status, 'addition', 'approved', 'petitioned', 'dissolved'),
-          course_name,
-          section,
-          FIELD(is_lab, 'false', 'true')
+        course
+      NATURAL JOIN
+        system_user
+      NATURAL JOIN
+        room
+      ORDER BY
+        FIELD(course_status, 'addition', 'approved', 'petitioned', 'dissolved'),
+        course_name,
+        section,
+        FIELD(is_lab, 'false', 'true')
       `;
 
     db.query(queryString, (err, rows) => {
@@ -88,9 +101,6 @@ export const getCourse = ({ course_no }) => {
         room
       WHERE 
         course_no = ?
-      ORDER BY
-        FIELD(course_status, 'addition', 'approved', 'petitioned', 'dissolved'),
-        course_name;
       `;
     db.query(queryString, course_no, (err, rows) => {
       if (err) {
@@ -199,13 +209,32 @@ export const addCourse = (
       room_no,
       empno
     ];
-
-    db.query(queryString, values, (err, results) => {
-      if (err) {
-        console.log(err);
+    //For room conflict check
+    const queryString2 = `SELECT course_name FROM course WHERE room_no = ? AND day1 = ? AND (course_time_start = ? OR (course_time_start BETWEEN ? AND ?) )`;
+    const values2 = [
+      room_no,
+      day1,
+      course_time_start,
+      course_time_start,
+      course_time_end
+    ];
+    db.query(queryString2, values2, (err2, results2) => {
+      if (err2) {
+        console.log(err2);
         return reject(500);
+      } else if (results2.length > 0) {
+        //if query2 returns rows, error.
+        console.log('In conflict with ' + results2[0].course_name);
+        return reject(500);
+      } else {
+        db.query(queryString, values, (err, results) => {
+          if (err) {
+            console.log(err);
+            return reject(500);
+          }
+          return resolve(results.insertId);
+        });
       }
-      return resolve(results.insertId);
     });
   });
 };
@@ -287,15 +316,36 @@ export const editCourse = (
       empno,
       course_no
     ];
-    db.query(queryString, values, (err, res) => {
-      if (err) {
-        console.log(err);
+
+    //For room conflict check
+    const queryString2 = `SELECT course_name FROM course WHERE room_no = ? AND day1 = ? AND (course_time_start = ? OR (course_time_start BETWEEN ? AND ?) )`;
+    const values2 = [
+      room_no,
+      day1,
+      course_time_start,
+      course_time_start,
+      course_time_end
+    ];
+    db.query(queryString2, values2, (err2, results2) => {
+      if (err2) {
+        console.log(err2);
         return reject(500);
+      } else if (results2.length > 0) {
+        //if query2 returns rows, error.
+        console.log('In conflict with ' + results2[0].course_name);
+        return reject(500);
+      } else {
+        db.query(queryString, values, (err, res) => {
+          if (err) {
+            console.log(err);
+            return reject(500);
+          }
+          if (!res.affectedRows) {
+            return reject(404);
+          }
+          return resolve();
+        });
       }
-      if (!res.affectedRows) {
-        return reject(404);
-      }
-      return resolve();
     });
   });
 };

@@ -122,6 +122,37 @@ export const getAllAdviseeClassification = () => {
       if (!rows.length) {
         return reject(404);
       }
+      var f = 0,
+        so = 0,
+        j = 0,
+        se = 0,
+        t = 0;
+      for (var i = 0; i < rows.length; i++) {
+        if (rows[i].freshman == 1) {
+          f++;
+          t++;
+        }
+        if (rows[i].sophomore == 1) {
+          so++;
+          t++;
+        }
+        if (rows[i].junior == 1) {
+          j++;
+          t++;
+        }
+        if (rows[i].senior == 1) {
+          se++;
+          t++;
+        }
+      }
+      rows.push({
+        name: 'total',
+        freshman: f,
+        sophomore: so,
+        junior: j,
+        senior: se,
+        total: t
+      });
       return resolve(rows);
     });
   });
