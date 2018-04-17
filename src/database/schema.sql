@@ -54,9 +54,9 @@ CREATE TABLE course(
 CREATE TABLE student(
     student_no VARCHAR(10) NOT NULL PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
-    status ENUM("loa", "dropped", "enrolled", "dismissed") NOT NULL,
-    classification ENUM("freshman", "sophomore", "junior", "senior") NOT NULL,
+    status ENUM('loa', 'dropped', 'enrolled', 'dismissed') NOT NULL,
     student_curriculum TEXT NOT NULL,
+    classification ENUM('freshman', 'sophomore', 'junior', 'senior') NOT NULL,
     adviser INT,
     CONSTRAINT FK_adviser FOREIGN KEY (adviser) REFERENCES system_user(empno) ON DELETE SET NULL
 );
@@ -355,32 +355,32 @@ DELIMITER ;
 
 
 -- STUDENT
+
 -- addStudent
 DROP PROCEDURE IF EXISTS addStudent;
 DELIMITER $$
 CREATE PROCEDURE addStudent (
     IN session_user_name VARCHAR(256),
-    IN name VARCHAR(256),
     IN student_no VARCHAR(10),
-    IN status ENUM("loa", "dropped", "enrolled", "dismissed"),
+    IN name VARCHAR(256),
+    IN status ENUM('loa', 'dropped', 'enrolled', 'dismissed'),
     IN student_curriculum TEXT,
-    IN classification ENUM("freshman", "sophomore", "junior", "senior"),
+    IN classification ENUM('freshman', 'sophomore', 'junior', 'senior'),
     IN adviser INT
     
-)
+)     
 BEGIN
   INSERT INTO student
   VALUES (
-    DEFAULT,
-      name,
       student_no,
+      name,
       status,
-      student_curriculum,
       classification,
+      student_curriculum,
       adviser
   );
   CALL log(
-      concat('Added student: ', course_name),
+      concat('Added student: ', name),
       session_user_name
   );
 END;

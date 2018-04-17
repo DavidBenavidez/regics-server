@@ -6,15 +6,16 @@ const router = Router();
 // Add Student
 router.post('/api/student/add', async (req, res) => {
   if (
-    req.body.name &&
     req.body.student_no &&
+    req.body.name &&
     req.body.status &&
     req.body.student_curriculum &&
     req.body.classification &&
     req.body.adviser
   ) {
     try {
-      const id = await Ctrl.addStudent(req.session.user.name, req.body);
+      const id = await Ctrl.addStudent('lol', req.body);
+      console.log(req.body);
       res.status(200).json({
         status: 200,
         message: 'Successfully created student',

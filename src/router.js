@@ -9,7 +9,7 @@ import studentRouter from './entities/student/router';
 
 import courseRouter from './entities/course/router';
 import adminCourseRouter from './entities/course/adminRouter';
-
+import adminStudentRouter from './entities/student/adminRouter';
 import reportGenerationRouter from './entities/report-generation/router';
 
 import logRouter from './entities/log/router';
@@ -52,5 +52,6 @@ router.use((req, res, next) => {
 router.use(logRouter);
 router.use(adminUserRouter);
 router.use(adminCourseRouter);
+router.use(adminStudentRouter);
 
 export default router;
