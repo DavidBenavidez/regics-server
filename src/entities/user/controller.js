@@ -117,14 +117,15 @@ export const getTeachingLoad = ({ empno }) => {
         day2    ,
         reason,
         empno,
+        name,
         room_name
       FROM
         course
       NATURAL JOIN
         room
+      NATURAL JOIN
+        system_user
       WHERE
-        course_status = "addition"
-      AND
         empno = ?
       ORDER BY
         course_name,
