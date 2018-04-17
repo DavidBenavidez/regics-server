@@ -45,6 +45,20 @@ router.get('/api/users', async (req, res) => {
   }
 });
 
+//Get suggested adviser
+router.get('/api/users/advisers', async (req, res) => {
+  try {
+    const users = await Ctrl.getSuggestedAdviser();
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully fetched advisers',
+      data: users
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
 // Get active users
 router.get('/api/users/active', async (req, res) => {
   try {
@@ -148,17 +162,5 @@ router.delete('/api/deleteStudentAdviser/:id', async (req, res) => {
     res.status(status).json({ status });
   }
 });
-
-// router.get('/api/prof_info/:empno', async (req, res) => {
-//   try {
-//     const professor = await Ctrl.getProfInfo(req.params);
-//     res.status(200).json({
-//       status: 200,
-//       data: professor
-//     });
-//   } catch (status) {
-//     res.status(status).json({ status });
-//   }
-// });
 
 export default router;
