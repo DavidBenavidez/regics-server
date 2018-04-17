@@ -55,9 +55,9 @@ CREATE TABLE course(
 CREATE TABLE student(
     student_no VARCHAR(10) NOT NULL PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
-    status ENUM('loa', 'dropped', 'enrolled', 'dismissed') NOT NULL,
+    status ENUM("loa", "dropped", "enrolled", "dismissed") NOT NULL,
+    classification ENUM("freshman", "sophomore", "junior", "senior") NOT NULL,
     student_curriculum TEXT NOT NULL,
-    classification ENUM('freshman', 'sophomore', 'junior', 'senior') NOT NULL,
     adviser INT,
     CONSTRAINT FK_adviser FOREIGN KEY (adviser) REFERENCES system_user(empno) ON DELETE SET NULL
 );
@@ -371,9 +371,9 @@ CREATE PROCEDURE addStudent (
     IN session_user_name VARCHAR(256),
     IN student_no VARCHAR(10),
     IN name VARCHAR(256),
-    IN status ENUM('loa', 'dropped', 'enrolled', 'dismissed'),
+    IN status ENUM("loa", "dropped", "enrolled", "dismissed"),
+    IN classification ENUM("freshman", "sophomore", "junior", "senior"),
     IN student_curriculum TEXT,
-    IN classification ENUM('freshman', 'sophomore', 'junior', 'senior'),
     IN adviser INT
     
 )     

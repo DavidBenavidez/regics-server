@@ -208,15 +208,15 @@ export const removeStudent = (session_user, { student_no }) => {
 
 export const addStudent = (
   session_user,
-  { name, student_no, status, student_curriculum, classification, adviser }
+  { student_no, name, status, classification, student_curriculum, adviser }
 ) => {
   return new Promise((resolve, reject) => {
     const queryString = `CALL addStudent(? ,?, ?, ?, ?, ?, ?)`;
 
     const values = [
       session_user,
-      name,
       student_no,
+      name,
       status,
       classification,
       student_curriculum,
@@ -226,6 +226,8 @@ export const addStudent = (
     db.query(queryString, values, (err, results) => {
       if (err) {
         console.log(err);
+        console.log(values);
+        console.log('sad');
         return reject(500);
       }
       return resolve(results.insertId);

@@ -9,8 +9,8 @@ router.post('/api/student/add', async (req, res) => {
     req.body.student_no &&
     req.body.name &&
     req.body.status &&
-    req.body.student_curriculum &&
     req.body.classification &&
+    req.body.student_curriculum &&
     req.body.adviser
   ) {
     try {
