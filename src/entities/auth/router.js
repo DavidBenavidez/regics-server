@@ -72,6 +72,10 @@ router.post('/api/logout', (req, res) => {
 });
 
 router.get('/api/session', (req, res) => {
+  if (req.session.user) {
+    var firstName = req.session.user.name.split(' ');
+    req.session.user['firstName'] = firstName[0];
+  }
   res.status(200).json({
     status: 200,
     message: 'Successfully fetched current session',
