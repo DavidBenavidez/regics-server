@@ -211,14 +211,13 @@ export const addStudent = (
 ) => {
   return new Promise((resolve, reject) => {
     const queryString = `CALL addStudent(? ,?, ?, ?, ?, ?, ?)`;
-
     const values = [
       session_user,
-      name,
       student_no,
+      name,
+      student_curriculum,
       status,
       classification,
-      student_curriculum,
       adviser
     ];
 

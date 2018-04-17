@@ -21,16 +21,16 @@ const router = Router();
 router.use(authRouter);
 
 // Middleware for auth
-router.use((req, res, next) => {
-  if (req.session.user) {
-    return next();
-  }
+// router.use((req, res, next) => {
+//   if (req.session.user) {
+//     return next();
+//   }
 
-  res.status(401).json({
-    status: 401,
-    message: 'Not logged in'
-  });
-});
+//   res.status(401).json({
+//     status: 401,
+//     message: 'Not logged in'
+//   });
+// });
 
 router.use(userRouter);
 router.use(courseRouter);
@@ -38,16 +38,16 @@ router.use(studentRouter);
 router.use(reportGenerationRouter);
 router.use(importCSVRouter);
 
-router.use((req, res, next) => {
-  if (req.session.user.system_position === 'head') {
-    return next();
-  }
+// router.use((req, res, next) => {
+//   if (req.session.user.system_position === 'head') {
+//     return next();
+//   }
 
-  res.status(401).json({
-    status: 401,
-    message: 'You have no correct privilege to access this data'
-  });
-});
+//   res.status(401).json({
+//     status: 401,
+//     message: 'You have no correct privilege to access this data'
+//   });
+// });
 
 router.use(logRouter);
 router.use(adminUserRouter);

@@ -54,9 +54,9 @@ CREATE TABLE course(
 CREATE TABLE student(
     student_no VARCHAR(10) NOT NULL PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
-    status ENUM('loa', 'dropped', 'enrolled', 'dismissed') NOT NULL,
     student_curriculum TEXT NOT NULL,
-    classification ENUM('freshman', 'sophomore', 'junior', 'senior') NOT NULL,
+    status ENUM("loa", "dropped", "enrolled", "dismissed") NOT NULL,
+    classification ENUM("freshman", "sophomore", "junior", "senior") NOT NULL,
     adviser INT,
     CONSTRAINT FK_adviser FOREIGN KEY (adviser) REFERENCES system_user(empno) ON DELETE SET NULL
 );
@@ -75,18 +75,6 @@ CREATE TABLE log_data (
   log_action VARCHAR(256) NOT NULL,
   log_user VARCHAR(256) NOT NULL
 );
-
-
-
-
-
-
-
-
-
-
-
-
 
 -- PROCEDURES
 -- For adding to log
@@ -359,30 +347,29 @@ DELIMITER ;
 -- addStudent
 DROP PROCEDURE IF EXISTS addStudent;
 DELIMITER $$
-CREATE PROCEDURE addStudent (
+CREATE PROCEDURE addStudent(
     IN session_user_name VARCHAR(256),
     IN student_no VARCHAR(10),
     IN name VARCHAR(256),
-    IN status ENUM('loa', 'dropped', 'enrolled', 'dismissed'),
     IN student_curriculum TEXT,
-    IN classification ENUM('freshman', 'sophomore', 'junior', 'senior'),
+    IN status ENUM("loa", "dropped", "enrolled", "dismissed"),
+    IN classification ENUM("freshman", "sophomore", "junior", "senior"),
     IN adviser INT
-    
-)     
+)
 BEGIN
   INSERT INTO student
   VALUES (
-      student_no,
-      name,
-      status,
-      classification,
-      student_curriculum,
-      adviser
-  );
-  CALL log(
-      concat('Added student: ', name),
-      session_user_name
-  );
+    student_no,
+    name,
+    student_curriculum,
+    status,
+    classification,
+    adviser
+      );
+   CALL log(
+      concat('New student: ', name, ' classification: ', classification),
+      name
+    );
 END;
 $$
 DELIMITER ;
@@ -413,7 +400,7 @@ $$
 DELIMITER ;
 
 -- on edit student
-DROP PROCEDURE IF EXISTS updateStudent;
+DROP PROCEDURE IF EXISTS updateStudent;    
 DELIMITER $$
 CREATE PROCEDURE updateStudent (
     IN session_user_name VARCHAR(256),
