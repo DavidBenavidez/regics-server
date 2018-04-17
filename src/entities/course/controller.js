@@ -30,11 +30,24 @@ export const getAllCourses = () => {
     var courses = [];
     const queryString = `
         SELECT 
-          UPPER(course_name) as course_name,
-          UPPER(section) as section,
-          is_lab,
-          course_status
-        FROM
+            course_no,
+            UPPER(course_name) as course_name,
+            UPPER(section) as section,
+            class_size,
+            sais_class_count,
+            sais_waitlisted_count,
+            actual_count,
+            units,
+            is_lab,
+            room_name,
+            day1,
+            day2,
+            course_time_start,
+            course_time_end,
+            name,
+            reason,
+            course_status
+         FROM
           course
         NATURAL JOIN
           system_user
