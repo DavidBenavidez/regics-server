@@ -14,7 +14,7 @@ router.post('/api/student/add', async (req, res) => {
     req.body.adviser
   ) {
     try {
-      const id = await Ctrl.addStudent('HEY', req.body);
+      const id = await Ctrl.addStudent(req.session.user, req.body);
       console.log(req.body);
       res.status(200).json({
         status: 200,
