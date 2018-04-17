@@ -28,7 +28,7 @@ function convertTime(time) {
 export const getAllCourses = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
-      SELECT 
+        SELECT 
         course_no,
         UPPER(course_name) as course_name,
         UPPER(section) as section,
@@ -36,13 +36,13 @@ export const getAllCourses = () => {
         sais_class_count,
         sais_waitlisted_count,
         actual_count,
-        TIME_FORMAT(course_time_start, '%h:%i %p') AS course_time_start,
-        TIME_FORMAT(course_time_end, '%h:%i %p') AS course_time_end,
         units,
         is_lab,
         room_name,
         day1,
         day2,
+        TIME_FORMAT(course_time_start, '%h:%i %p') AS course_time_start,
+        TIME_FORMAT(course_time_end, '%h:%i %p') AS course_time_end,
         hours,
         name,
         reason,
@@ -59,7 +59,6 @@ export const getAllCourses = () => {
         section,
         FIELD(is_lab, 'false', 'true')
       `;
-
     db.query(queryString, (err, rows) => {
       if (err) {
         console.log(err);
@@ -87,8 +86,8 @@ export const getCourse = ({ course_no }) => {
         room_name,
         day1,
         day2,
-        course_time_start,
-        course_time_end,
+        TIME_FORMAT(course_time_start, '%h:%i %p') AS course_time_start,
+        TIME_FORMAT(course_time_end, '%h:%i %p') AS course_time_end,
         hours,
         name,
         reason,
