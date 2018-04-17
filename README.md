@@ -1,6 +1,6 @@
 <h1 align="center">
   <br />
-  <img src="./logo.png" alt="icon" width="450px" />
+  <img src="./assets/logo.png" alt="icon" width="450px" />
   <br/>
   <br/>
   regics

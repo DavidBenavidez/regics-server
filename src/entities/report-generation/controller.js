@@ -3,11 +3,11 @@ import fs from 'fs';
 import csv from 'fast-csv';
 
 var csvStream = csv.createWriteStream({ headers: true });
-var courseOfferingWS = fs.createWriteStream('CourseOffering.csv');
-var teachingLoadWS = fs.createWriteStream('TeachingLoad.csv');
-var StudentsCountWS = fs.createWriteStream('StudentsCount.csv');
-var EnlistedStudentsWS = fs.createWriteStream('EnlistedStudents.csv');
-var RoomsWS = fs.createWriteStream('Rooms.csv');
+var courseOfferingWS = fs.createWriteStream('./reports/CourseOffering.csv');
+var teachingLoadWS = fs.createWriteStream('./reports/TeachingLoad.csv');
+var StudentsCountWS = fs.createWriteStream('./reports/StudentsCount.csv');
+var EnlistedStudentsWS = fs.createWriteStream('./reports/EnlistedStudents.csv');
+var RoomsWS = fs.createWriteStream('./reports/Rooms.csv');
 
 export const generateCourseOffering = () => {
   return new Promise((resolve, reject) => {
@@ -225,7 +225,7 @@ export const generateStudents = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
         SELECT
-          a.student_no, a.name, a.status, a.student_curriculum, a.classification, b.name AS adviser
+          a.student_no AS "Student Number", a.name AS "Student Name", a.status AS "Student Status", a.student_curriculum as "Curriculum", a.classification as "Classification", b.name AS "Adviser"
         FROM
           student a, system_user b
         WHERE
@@ -249,7 +249,6 @@ export const generateStudents = () => {
         csvStream.write(rows[i]);
       }
       csvStream.end();
-
       return resolve(rows);
     });
   });
@@ -259,7 +258,8 @@ export const generateRooms = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
         SELECT 
-          *
+          room_no as "Room Number",
+          room_name as "Room Name"
         FROM 
           room
         ORDER BY
