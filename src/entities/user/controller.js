@@ -97,7 +97,27 @@ export const getTeachingLoad = ({ empno }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
       SELECT
-        *
+        room_no,
+        course_no,
+        course_name,
+        section,
+        class_size,
+        sais_class_count,
+        sais_waitlisted_count,
+        actual_count,
+        course_date,
+        course_time_start,
+        course_time_end,
+        minutes,
+        units,
+        course_credit,
+        is_lab,
+        course_status,
+        day1   ,
+        day2    ,
+        reason,
+        empno,
+        room_name
       FROM
         course
       NATURAL JOIN

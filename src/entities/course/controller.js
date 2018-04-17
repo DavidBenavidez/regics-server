@@ -29,35 +29,34 @@ export const getAllCourses = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
         SELECT 
-        course_no,
-        UPPER(course_name) as course_name,
-        UPPER(section) as section,
-        class_size,
-        sais_class_count,
-        sais_waitlisted_count,
-        actual_count,
-        units,
-        is_lab,
-        room_name,
-        day1,
-        day2,
-        TIME_FORMAT(course_time_start, '%h:%i %p') AS course_time_start,
-        TIME_FORMAT(course_time_end, '%h:%i %p') AS course_time_end,
-        hours,
-        name,
-        reason,
-        course_status
-        FROM
-        course
-      NATURAL JOIN
-        system_user
-      NATURAL JOIN
-        room
-      ORDER BY
-        FIELD(course_status, 'addition', 'approved', 'petitioned', 'dissolved'),
-        course_name,
-        section,
-        FIELD(is_lab, 'false', 'true')
+            course_no,
+            UPPER(course_name) as course_name,
+            UPPER(section) as section,
+            class_size,
+            sais_class_count,
+            sais_waitlisted_count,
+            actual_count,
+            units,
+            is_lab,
+            room_name,
+            day1,
+            day2,
+            TIME_FORMAT(course_time_start, '%h:%i %p') AS course_time_start,
+            TIME_FORMAT(course_time_end, '%h:%i %p') AS course_time_end,
+            name,
+            reason,
+            course_status
+         FROM
+          course
+        NATURAL JOIN
+          system_user
+        NATURAL JOIN
+          room
+        ORDER BY
+          FIELD(course_status, 'addition', 'approved', 'petitioned', 'dissolved'),
+          course_name,
+          section,
+          FIELD(is_lab, 'false', 'true')
       `;
     db.query(queryString, (err, rows) => {
       if (err) {
