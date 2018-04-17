@@ -44,6 +44,7 @@ export const getAllCourses = () => {
             TIME_FORMAT(course_time_start, '%h:%i %p') AS course_time_start,
             TIME_FORMAT(course_time_end, '%h:%i %p') AS course_time_end,
             name,
+            empno,
             reason,
             course_status
          FROM
