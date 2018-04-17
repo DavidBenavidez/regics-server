@@ -216,21 +216,47 @@ export const addCourse = (
       course_time_start,
       course_time_end
     ];
-    db.query(queryString2, values2, (err2, results2) => {
-      if (err2) {
-        console.log(err2);
+
+    var time = [
+      empno,
+      day1,
+      course_time_start,
+      course_time_end,
+      course_time_start,
+      course_time_end
+    ];
+    var queryString3 = `SELECT * FROM course a JOIN system_user b ON a.empno = b.empno WHERE a.empno = ? AND day1 = ? AND (course_time_start BETWEEN ? AND ? OR course_time_end BETWEEN ? AND ?)`;
+
+    db.query(queryString3, time, (err, results) => {
+      if (err) {
+        console.log(err);
         return reject(500);
-      } else if (results2.length > 0) {
-        //if query2 returns rows, error.
-        console.log('In conflict with ' + results2[0].course_name);
+      }
+      if (results.length) {
+        //not empty, not
+        console.log('conflict with prof of subject ' + results[0].course_name);
         return reject(405);
       } else {
-        db.query(queryString, values, (err, results) => {
-          if (err) {
-            console.log(err);
+        db.query(queryString2, values2, (err2, results2) => {
+          if (err2) {
+            console.log(err2);
             return reject(500);
           }
-          return resolve(results.insertId);
+
+          if (results2.length > 0) {
+            console.log(
+              'Room conflict with subject ' + results2[0].course_name
+            );
+            return reject(406);
+          } else {
+            db.query(queryString, values, (err, results) => {
+              if (err) {
+                console.log(err);
+                return reject(500);
+              }
+              return resolve(results.insertId);
+            });
+          }
         });
       }
     });

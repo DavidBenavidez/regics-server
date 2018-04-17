@@ -12,7 +12,6 @@ export const addUser = ({
   system_position,
   status
 }) => {
-  console.log('HAHA');
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, salt, function(err, hash) {
       const queryString = `
