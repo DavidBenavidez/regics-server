@@ -344,9 +344,10 @@ export const editCourse = (
     ];
 
     //For room conflict check
-    const queryString2 = `SELECT course_name FROM course WHERE room_no = ? AND day1 = ? AND (course_time_start = ? OR (course_time_start BETWEEN ? AND ?) )`;
+    const queryString2 = `SELECT course_name FROM course WHERE room_no = ? AND course_no != ? AND day1 = ? AND (course_time_start = ? OR (course_time_start BETWEEN ? AND ?) )`;
     const values2 = [
       room_no,
+      course_no,
       day1,
       course_time_start,
       course_time_start,
