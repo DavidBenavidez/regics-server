@@ -39,6 +39,7 @@ export const getAllCourses = () => {
             units,
             is_lab,
             room_name,
+            room_no,
             day1,
             day2,
             TIME_FORMAT(course_time_start, '%h:%i %p') AS course_time_start,
