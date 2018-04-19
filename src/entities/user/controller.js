@@ -162,7 +162,7 @@ export const getAllAdviseeClassification = () => {
           COUNT(CASE classification WHEN 'sophomore' THEN 1 ELSE null END) AS "sophomore", 
           COUNT(CASE classification WHEN 'junior' THEN 1 ELSE null END) AS "junior", 
           COUNT(CASE classification WHEN 'senior' THEN 1 ELSE null END) AS "senior", 
-          COUNT(student_no) AS "total" 
+          COUNT(student_no) AS "Total" 
         FROM
           system_user a
         JOIN
