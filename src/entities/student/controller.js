@@ -6,12 +6,13 @@ export const getAllStudents = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
         SELECT
-          a.student_no, a.name, a.status, a.student_curriculum, a.classification, b.name AS adviser
+          a.student_no, a.name, a.status, a.student_curriculum, a.classification, b.name AS adviser, b.empno
         FROM
           student a, system_user b
         WHERE
           a.adviser = b.empno
         ORDER BY
+          FIELD(a.status, 'enrolled', 'droppped', 'loa', 'dismissed'),
           a.name
       `;
 
@@ -158,19 +159,18 @@ export const updateStudentAdviser = (session_user, { adviser, student_no }) => {
 // Update student info
 export const updateStudent = (
   session_user,
-  { student_no, name, status, student_curriculum, classification, adviser }
+  { student_no, name, status, student_curriculum, classification }
 ) => {
   return new Promise((resolve, reject) => {
     const queryString = `CALL updateStudent(?,?,?,?,?,?)`;
 
     const values = [
       session_user,
-      student_no,
       name,
       status,
-      student_curriculum,
       classification,
-      adviser
+      student_curriculum,
+      student_no
     ];
 
     db.query(queryString, values, (err, rows) => {
