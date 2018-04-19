@@ -169,8 +169,8 @@ export const updateStudent = (
       student_no,
       name,
       status,
-      student_curriculum,
       classification,
+      student_curriculum,
       adviser
     ];
 
