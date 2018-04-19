@@ -38,6 +38,10 @@ router.post('/api/login', async (req, res) => {
     await Ctrl.checkUser(req.body);
     const user = await Ctrl.login(req.body);
     req.session.user = user;
+    if (req.session.user) {
+      var firstName = req.session.user.name.split(' ');
+      req.session.user['firstName'] = firstName[0];
+    }
 
     res.status(200).json({
       status: 200,
