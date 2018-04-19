@@ -162,7 +162,7 @@ export const getAllAdviseeClassification = () => {
           COUNT(CASE classification WHEN 'sophomore' THEN 1 ELSE null END) AS "sophomore", 
           COUNT(CASE classification WHEN 'junior' THEN 1 ELSE null END) AS "junior", 
           COUNT(CASE classification WHEN 'senior' THEN 1 ELSE null END) AS "senior", 
-          COUNT(student_no) AS "Total" 
+          COUNT(student_no) AS "total" 
         FROM
           system_user a
         JOIN
@@ -189,25 +189,18 @@ export const getAllAdviseeClassification = () => {
         se = 0,
         t = 0;
       for (var i = 0; i < rows.length; i++) {
-        if (rows[i].freshman == 1) {
-          f++;
-          t++;
-        }
-        if (rows[i].sophomore == 1) {
-          so++;
-          t++;
-        }
-        if (rows[i].junior == 1) {
-          j++;
-          t++;
-        }
-        if (rows[i].senior == 1) {
-          se++;
-          t++;
-        }
+        f += rows[i].freshman;
+        so += rows[i].sophomore;
+        j += rows[i].junior;
+        se += rows[i].senior;
+        t +=
+          rows[i].freshman +
+          rows[i].sophomore +
+          rows[i].junior +
+          rows[i].senior;
       }
       rows.push({
-        name: 'total',
+        name: 'Total',
         freshman: f,
         sophomore: so,
         junior: j,
