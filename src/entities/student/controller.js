@@ -6,12 +6,13 @@ export const getAllStudents = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
         SELECT
-          a.student_no, a.name, a.status, a.student_curriculum, a.classification, b.name AS adviser
+          a.student_no, a.name, a.status, a.student_curriculum, a.classification, b.name AS adviser, b.empno
         FROM
           student a, system_user b
         WHERE
           a.adviser = b.empno
         ORDER BY
+          FIELD(a.status, 'enrolled', 'droppped', 'loa', 'dismissed'),
           a.name
       `;
 
