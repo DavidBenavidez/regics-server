@@ -33,7 +33,18 @@ export const getUser = ({ empno }) => {
 export const getAllTeachingLoads = () => {
   return new Promise((resolve, reject) => {
     const queryString = `SELECT * FROM system_user ORDER BY name;`;
-    const q1 = `SELECT * FROM course ORDER BY course_name`;
+    const q1 = `
+      SELECT
+        *
+      FROM
+        course 
+      ORDER BY 
+        FIELD(course_status, 'addition', 'approved', 'petitioned', 'dissolved'),
+        course_name,
+        section,
+        FIELD(is_lab, 'false', 'true')
+      `;
+
     var allSub = [];
 
     db.query(q1, (err, rows1) => {
@@ -65,8 +76,7 @@ export const getAllTeachingLoads = () => {
               sais_class_count: allSub[j].sais_class_count,
               sais_waitlisted_count: allSub[j].sais_waitlisted_count,
               actual_count: allSub[j].actual_count,
-              course_date: allSub[j].course_date,
-              minutes: allSub[j].minutes,
+              hours: allSub[j].hours,
               units: allSub[j].units,
               course_credit: allSub[j].course_credit,
               empno: allSub[j].room_no
@@ -105,16 +115,15 @@ export const getTeachingLoad = ({ empno }) => {
         sais_class_count,
         sais_waitlisted_count,
         actual_count,
-        course_date,
         course_time_start,
         course_time_end,
-        minutes,
+        hours,
         units,
         course_credit,
         is_lab,
         course_status,
-        day1   ,
-        day2    ,
+        day1,
+        day2,
         reason,
         empno,
         name,
@@ -128,10 +137,11 @@ export const getTeachingLoad = ({ empno }) => {
       WHERE
         empno = ?
       ORDER BY
+        FIELD(course_status, 'addition', 'approved', 'petitioned', 'dissolved'),
         course_name,
         section,
         FIELD(is_lab, 'false', 'true')
-    `;
+      `;
 
     db.query(queryString, empno, (err, rows) => {
       if (err) {
@@ -152,7 +162,7 @@ export const getAllAdviseeClassification = () => {
           COUNT(CASE classification WHEN 'sophomore' THEN 1 ELSE null END) AS "sophomore", 
           COUNT(CASE classification WHEN 'junior' THEN 1 ELSE null END) AS "junior", 
           COUNT(CASE classification WHEN 'senior' THEN 1 ELSE null END) AS "senior", 
-          COUNT(student_no) AS "total" 
+          COUNT(student_no) AS "Total" 
         FROM
           system_user a
         JOIN
