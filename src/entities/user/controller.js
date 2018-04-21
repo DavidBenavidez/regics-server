@@ -86,6 +86,7 @@ export const getAllTeachingLoads = () => {
         }
 
         professor.push({
+          empno: rows[i].empno,
           name: rows[i].name,
           status: rows[i].status,
           teaching_load: totalTeachingLoad,
