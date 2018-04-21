@@ -68,7 +68,6 @@ router.put('/api/course/edit', async (req, res) => {
       req.body.course_status == 'petitioned' ||
       req.body.course_status == 'addition' ||
       req.body.course_status == 'approved') &&
-    req.body.reason &&
     req.body.room_no &&
     req.body.empno
   ) {
