@@ -12,7 +12,7 @@ export const getAllStudents = () => {
         WHERE
           a.adviser = b.empno
         ORDER BY
-          FIELD(a.status, 'enrolled', 'droppped', 'loa', 'dismissed'),
+          FIELD(a.status, 'enrolled', 'dropped', 'loa', 'dismissed'),
           a.name
       `;
 
