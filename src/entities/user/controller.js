@@ -87,6 +87,7 @@ export const getAllTeachingLoads = () => {
 
         professor.push({
           name: rows[i].name,
+          status: rows[i].status,
           teaching_load: totalTeachingLoad,
           subjects: subjects
         });
