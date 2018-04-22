@@ -46,7 +46,7 @@ router.get('/api/users', async (req, res) => {
 });
 
 //Get suggested adviser
-router.get('/api/users/advisers', async (req, res) => {
+router.get('/api/users/suggested-advisers', async (req, res) => {
   try {
     const users = await Ctrl.getSuggestedAdviser();
     res.status(200).json({
