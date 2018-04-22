@@ -20,6 +20,7 @@ router.get('/api/students/export', async (req, res) => {
         classification: students[i].classification,
         adviser: students[i].adviser,
         empno: students[i].empno,
+        status: students[i].status,
         history: advisers
       });
     }
@@ -99,20 +100,6 @@ router.get('/api/students/advisers/:student_no', async (req, res) => {
       status: 200,
       message: 'Successfully fetched advisers',
       data: user
-    });
-  } catch (status) {
-    res.status(status).json({ status });
-  }
-});
-
-router.post('/api/students/import', async (req, res) => {
-  try {
-    const string = await Ctrl.importStudent(req.body);
-    console.log(req.body);
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully created student',
-      data: id
     });
   } catch (status) {
     res.status(status).json({ status });

@@ -22,19 +22,30 @@ function convertTime(time) {
   return finalTime;
 }
 
-export const importTeaachingLoad = data => {
+export const importStudent = ({ data }) => {
   return new Promise((resolve, reject) => {
-    const queryString = `insert `;
-    data = data.splice(1, data.length);
+    // const queryString = `CALL addStudent(? ,?, ?, ?, ?, ?, ?)`;
+    // const values = [
+    //   session_user,
+    //   student_no,
+    //   name,
+    //   student_curriculum,
+    //   status,
+    //   classification,
+    //   adviser
+    // ];
 
-    for (var i = 0; i < data.length; i++) {
-      db.query(queryString, (err, rows) => {
-        if (err) {
-          console.log(err);
-          return reject(500);
-        }
-        return resolve(rows);
-      });
-    }
+    var advisers = data[0].slice(6, data[0].length);
+    data[0] = data[0].slice(0, 6);
+    console.log(data[0]);
+    console.log(advisers);
+    return resolve(data);
+    // db.query(queryString, values, (err, results) => {
+    //   if (err) {
+    //     console.log(err);
+    //     return reject(500);
+    //   }
+    //   return resolve(results.insertId);
+    // });
   });
 };

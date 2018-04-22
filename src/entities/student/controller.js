@@ -6,7 +6,7 @@ export const getAllStudents = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
         SELECT
-          a.student_no, a.name, a.status, a.student_curriculum, a.classification, b.name AS adviser, b.empno
+          a.student_no, a.name, a.status, a.student_curriculum, a.classification, b.name, b.status AS adviser, b.empno
         FROM
           student a, system_user b
         WHERE
@@ -116,7 +116,9 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
     NATURAL JOIN
       system_user
     WHERE
-      student_no = ?`;
+      student_no = ?
+    ORDER BY
+      id DESC`;
 
     db.query(queryString, student_no, (err, rows) => {
       if (err) {
@@ -281,29 +283,5 @@ export const addStudent = (
       });
       return resolve(results.insertId);
     });
-  });
-};
-
-export const importStudent = ({ data }) => {
-  return new Promise((resolve, reject) => {
-    console.log('HAHA' + data);
-    // const queryString = `CALL addStudent(? ,?, ?, ?, ?, ?, ?)`;
-    // const values = [
-    //   session_user,
-    //   student_no,
-    //   name,
-    //   student_curriculum,
-    //   status,
-    //   classification,
-    //   adviser
-    // ];
-    return resolve(data);
-    // db.query(queryString, values, (err, results) => {
-    //   if (err) {
-    //     console.log(err);
-    //     return reject(500);
-    //   }
-    //   return resolve(results.insertId);
-    // });
   });
 };
