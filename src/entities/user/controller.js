@@ -224,7 +224,7 @@ export const getAllAdviseeClassification = () => {
           (SELECT adviser AS empno FROM student)
       `;
 
-      db.query(queryString, (err, rows1) => {
+      db.query(queryString2, (err, rows1) => {
         for (var i = 0; i < rows1.length; i++) {
           rows.push({
             name: rows1[i].name,
