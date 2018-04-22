@@ -10,25 +10,26 @@ router.get('/api/students/export', async (req, res) => {
     var advisers = [];
     const students = await Ctrl.getAllStudents();
     advisers = advisers.splice(1, advisers.length);
-    exportTable.push([
-      'student_no',
-      'name',
-      'student_curriculum',
-      'status',
-      'classification',
-      'adviser'
-    ]);
+
+    // exportTable.push([
+    //   'student_no',
+    //   'name',
+    //   'student_curriculum',
+    //   'status',
+    //   'classification',
+    //   'adviser'
+    // ]);
     for (var i = 0; i < students.length; i++) {
       advisers = await Ctrl.getAllAdviserNames(students[i].student_no);
-      exportTable.push([
-        students[i].student_no,
-        students[i].name,
-        students[i].student_curriculum,
-        students[i].status,
-        students[i].classification,
-        students[i].adviser,
-        advisers
-      ]);
+      exportTable.push({
+        student_no: students[i].student_no,
+        name: students[i].name,
+        student_curriculum: students[i].student_curriculum,
+        status: students[i].status,
+        classification: students[i].classification,
+        adviser: students[i].adviser,
+        history: advisers
+      });
     }
 
     res.status(200).json({
