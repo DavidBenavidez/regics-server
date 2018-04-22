@@ -114,7 +114,8 @@ export const getAllTeachingLoads = () => {
               day1: allSub[j].day1,
               day2: allSub[j].day2,
               course_time_start: allSub[j].course_time_start,
-              course_time_end: allSub[j].course_time_end
+              course_time_end: allSub[j].course_time_end,
+              room_name: allSub[j].room_name
             });
             totalTeachingLoad += allSub[j].course_credit;
           }
@@ -185,7 +186,6 @@ export const getTeachingLoad = ({ empno }) => {
         console.log(err);
         return reject(500);
       }
-      console.log(rows);
       return resolve(rows);
     });
   });
