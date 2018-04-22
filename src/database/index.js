@@ -4,8 +4,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'regicsserver',
   password: 'regicsserver',
-  db: 'regicsserver',
-  multipleStatements: true
+  db: 'regicsserver'
 });
 
 db.on('ready', () => console.log('Database is connected')).on('error', err => {

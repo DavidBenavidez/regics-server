@@ -453,6 +453,18 @@ DELIMITER ;
 
 
 -- On Delete
+DROP PROCEDURE IF EXISTS removeStudentFromAdvisersList;
+DELIMITER $$
+CREATE PROCEDURE removeStudentFromAdvisersList (
+    IN student_no VARCHAR(10)
+)
+BEGIN
+    DELETE FROM student_advisers_list
+    WHERE student_advisers_list.student_no = student_no;
+END;
+$$
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS removeStudent;
 DELIMITER $$
 CREATE PROCEDURE removeStudent (

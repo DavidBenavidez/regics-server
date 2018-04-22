@@ -132,7 +132,41 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
   });
 };
 
-// Add student
+// retrieve an array of names of advisers
+export const getAllAdviserNames = student_no => {
+  return new Promise((resolve, reject) => {
+    var data = [];
+    const queryString = `
+      SELECT
+        id,
+        name,
+        status,
+        teaching_load
+      FROM
+        student_advisers_list
+      NATURAL JOIN
+        system_user
+      WHERE
+        student_no = ?`;
+
+    db.query(queryString, student_no, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!rows.length) {
+        return reject(404);
+      }
+      var names = [];
+
+      for (var i = 0; i < rows.length; i++) {
+        names.push(rows[i].name);
+      }
+
+      return resolve(names);
+    });
+  });
+};
 
 // U P D A T E
 //update student's adviser and add to adviser history
@@ -185,7 +219,20 @@ export const removeStudent = (session_user, { student_no }) => {
     const queryString = `
         CALL removeStudent(?, ?)
       `;
+
+    const removeFromAdvisers = `CALL removeStudentFromAdvisersList(?)`;
     const values = [session_user, student_no];
+
+    db.query(removeFromAdvisers, student_no, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+
+      if (!results.affectedRows) {
+        console.log('Not in advisers List');
+      }
+    });
 
     db.query(queryString, values, (err, results) => {
       if (err) {
@@ -196,6 +243,7 @@ export const removeStudent = (session_user, { student_no }) => {
       if (!results.affectedRows) {
         return reject(404);
       }
+
       return resolve(student_no);
     });
   });

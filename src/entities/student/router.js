@@ -4,6 +4,43 @@ import * as Users from '../user/controller';
 
 const router = Router();
 
+router.get('/api/students/export', async (req, res) => {
+  try {
+    var exportTable = [];
+    var advisers = [];
+    const students = await Ctrl.getAllStudents();
+    advisers = advisers.splice(1, advisers.length);
+    exportTable.push([
+      'student_no',
+      'name',
+      'student_curriculum',
+      'status',
+      'classification',
+      'adviser'
+    ]);
+    for (var i = 0; i < students.length; i++) {
+      advisers = await Ctrl.getAllAdviserNames(students[i].student_no);
+      exportTable.push([
+        students[i].student_no,
+        students[i].name,
+        students[i].student_curriculum,
+        students[i].status,
+        students[i].classification,
+        students[i].adviser,
+        advisers
+      ]);
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully fetched advisers',
+      data: exportTable
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
 // Get all students
 router.get('/api/students/', async (req, res) => {
   try {
