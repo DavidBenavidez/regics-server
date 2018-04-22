@@ -3,6 +3,16 @@ import bcrypt from 'bcryptjs';
 
 const salt = bcrypt.genSaltSync(10);
 
+function containsObject(obj, list) {
+  var i;
+  for (i = 0; i < list.length; i++) {
+    if (list[i] === obj) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export const getUser = ({ empno }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
@@ -357,42 +367,167 @@ export const deleteAdviserAdvisee = (session_user, { id }) => {
 
 export const getSuggestedAdviser = () => {
   return new Promise((resolve, reject) => {
-    var noOfAdviseeArray = getAllAdviseeClassification(); //{{empno, noOfAdvisee},{empno, noOfAdvisee}}
-    var suggestedAdviserArray = {}; // array of top 3 profs w/ least number of advisee
+    var advisersString = 'SELECT empno FROM student_advisers_list';
+    var count = [];
+    var advisersArray = [];
+    var minIndexes = [];
+    var recommendedAdvisers = [];
+    var queryString2 = 'SELECT * FROM system_user';
 
-    /* ipasok mo muna lahat sa suggestedArray then sort mo then kunin mo ung index 0-3 */
-    noOfAdviseeArray.sort(function(a, b) {
-      return a.total - b.total;
-    });
-
-    var count = 0;
-    var status;
-    var profName;
-    for (var i = 0; i < noOfAdviseeArray.length; i++) {
-      if (count == 3)
-        //if there are already top 3 advisers
-        return resolve(suggestedAdviserArray);
-
-      /* query if active */
-      const queryString = `SELECT name, status from system_user where empno=?`;
-      db.query(queryString, noOfAdviseeArray[i].empno, (err, row) => {
-        if (err) {
-          console.log(err);
-          return reject(500);
-        }
-        if (!row.length) {
-          return reject(404);
-        }
-        status = row[0].status;
-        profName = row[0].name;
-      });
-      /* query end */
-
-      if (status == 'active') {
-        noOfAdviseeArray[i].name = profName; //add the name of the prof
-        suggestedAdviserArray.push(noOfAdviseeArray[i]); //add the obj to the suggestedArray
-        count++;
+    db.query(queryString2, (err3, row3) => {
+      var lessThanThree = [];
+      if (err3) {
+        console.log(err3);
+        return reject(500);
       }
-    }
+      if (!row3.length) {
+        return reject(404);
+      }
+      if (row3.length < 3) {
+        for (var i = 0; i < row3.length; i++) {
+          lessThanThree.push({ empno: row3[i].empno, name: row3[i].name });
+        }
+      } else {
+        db.query(advisersString, (err, row) => {
+          if (err) {
+            console.log(err);
+            return reject(500);
+          }
+          if (!row.length) {
+            return reject(404);
+          }
+          for (var i = 0; i < row.length; i++) {
+            if (!containsObject({ empno: row[i].empno }, advisersArray))
+              advisersArray.push({ empno: row[i].empno });
+          }
+
+          for (var i = 0; i < advisersArray.length; i++) {
+            count[i] = 0;
+          }
+
+          for (var i = 0; i < row.length; i++) {
+            for (var j = 0; j < advisersArray.length; j++) {
+              if (row[i].empno == advisersArray[j].empno)
+                count[j] = count[j] + 1;
+            }
+          }
+
+          db.query(queryString2, (err2, row2) => {
+            if (err2) {
+              console.log(err2);
+              return reject(500);
+            }
+
+            if (!row2.length) {
+              return reject(404);
+            }
+
+            for (var counter = 0; counter < advisersArray.length; counter++) {
+              if (advisersArray[counter].empno === row2[counter].empno) {
+                if (row2[counter].status !== 'active') {
+                  count.splice(count.indexOf(counter), 1);
+                }
+              }
+            }
+
+            var minValue1 = count[0];
+            var minValue2 = count[0];
+            var minValue3 = count[0];
+            var minIndex1 = 0;
+            var minIndex2 = 1;
+            var minIndex3 = 2;
+
+            for (var i = 0; i < count.length; i++) {
+              if (count[i] < minValue1) {
+                minValue1 = count[i];
+                minIndex1 = i;
+              }
+            }
+
+            for (var i = 0; i < count.length; i++) {
+              if (count[i] < minValue2 && count[i] > minValue1) {
+                minValue2 = count[i];
+                minIndex2 = i;
+              }
+            }
+
+            for (var i = 0; i < count.length; i++) {
+              if (
+                count[i] < minValue3 &&
+                count[i] > minValue1 &&
+                count[i] > minValue2
+              ) {
+                minValue3 = count[i];
+                minIndex3 = i;
+              }
+            }
+
+            minIndexes.push(minIndex1);
+            minIndexes.push(minIndex2);
+            minIndexes.push(minIndex3);
+
+            for (var counter2 = 0; counter2 < row3.length; counter2++) {
+              if (row3[counter2].empno == advisersArray[minIndex3].empno) {
+                recommendedAdvisers.push({
+                  empno: row3[counter2].empno,
+                  name: row3[counter2].name
+                });
+              }
+              if (row3[counter2].empno == advisersArray[minIndex2].empno) {
+                recommendedAdvisers.push({
+                  empno: row3[counter2].empno,
+                  name: row3[counter2].name
+                });
+              }
+              if (row3[counter2].empno == advisersArray[minIndex1].empno) {
+                recommendedAdvisers.push({
+                  empno: row3[counter2].empno,
+                  name: row3[counter2].name
+                });
+              }
+            }
+
+            return resolve(advisersArray);
+          });
+        });
+      }
+    });
+    // var noOfAdviseeArray = getAllAdviseeClassification(); //{{empno, noOfAdvisee},{empno, noOfAdvisee}}
+    // var suggestedAdviserArray = {}; // array of top 3 profs w/ least number of advisee
+
+    // /* ipasok mo muna lahat sa suggestedArray then sort mo then kunin mo ung index 0-3 */
+    // noOfAdviseeArray.sort(function(a, b) {
+    //   return a.total - b.total;
+    // });
+
+    // var count = 0;
+    // var status;
+    // var profName;
+    // for (var i = 0; i < noOfAdviseeArray.length; i++) {
+    //   if (count == 3)
+    //     //if there are already top 3 advisers
+    //     return resolve(suggestedAdviserArray);
+
+    //   /* query if active */
+    //   const queryString = `SELECT name, status from system_user where empno=?`;
+    //   db.query(queryString, noOfAdviseeArray[i].empno, (err, row) => {
+    //     if (err) {
+    //       console.log(err);
+    //       return reject(500);
+    //     }
+    //     if (!row.length) {
+    //       return reject(404);
+    //     }
+    //     status = row[0].status;
+    //     profName = row[0].name;
+    //   });
+    //   /* query end */
+
+    //   if (status == 'active') {
+    //     noOfAdviseeArray[i].name = profName; //add the name of the prof
+    //     suggestedAdviserArray.push(noOfAdviseeArray[i]); //add the obj to the suggestedArray
+    //     count++;
+    //   }
+    // }
   });
 };
