@@ -211,15 +211,47 @@ export const getAllAdviseeClassification = () => {
           rows[i].junior +
           rows[i].senior;
       }
-      rows.push({
-        name: 'Total',
-        freshman: f,
-        sophomore: so,
-        junior: j,
-        senior: se,
-        total: t
+
+      const queryString2 = `
+        SELECT
+          empno,
+          name
+        FROM
+          system_user
+        WHERE
+          empno
+        NOT IN
+          (SELECT adviser AS empno FROM student)
+      `;
+
+      db.query(queryString, (err, rows1) => {
+        for (var i = 0; i < rows1.length; i++) {
+          rows.push({
+            name: rows1[i].name,
+            freshman: 0,
+            sophomore: 0,
+            junior: 0,
+            senior: 0,
+            total: 0
+          });
+        }
+
+        rows.sort(function(a, b) {
+          a = a.name.toLowerCase();
+          b = b.name.toLowerCase();
+          return a < b ? -1 : a > b ? 1 : 0;
+        });
+
+        rows.push({
+          name: 'Total',
+          freshman: f,
+          sophomore: so,
+          junior: j,
+          senior: se,
+          total: t
+        });
+        return resolve(rows);
       });
-      return resolve(rows);
     });
   });
 };
