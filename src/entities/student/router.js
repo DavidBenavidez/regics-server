@@ -6,19 +6,10 @@ const router = Router();
 
 router.get('/api/students/export', async (req, res) => {
   try {
+    var students = await Ctrl.getAllStudents();
     var exportTable = [];
     var advisers = [];
-    const students = await Ctrl.getAllStudents();
-    advisers = advisers.splice(1, advisers.length);
 
-    // exportTable.push([
-    //   'student_no',
-    //   'name',
-    //   'student_curriculum',
-    //   'status',
-    //   'classification',
-    //   'adviser'
-    // ]);
     for (var i = 0; i < students.length; i++) {
       advisers = await Ctrl.getAllAdviserNames(students[i].student_no);
       exportTable.push({
@@ -107,6 +98,20 @@ router.get('/api/students/advisers/:student_no', async (req, res) => {
       status: 200,
       message: 'Successfully fetched advisers',
       data: user
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
+router.post('/api/students/import', async (req, res) => {
+  try {
+    const string = await Ctrl.importStudent(req.body);
+    console.log(req.body);
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully created student',
+      data: id
     });
   } catch (status) {
     res.status(status).json({ status });

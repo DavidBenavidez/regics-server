@@ -1,7 +1,7 @@
 -- DUMMY  DATA
 USE regicsserver;
 
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Meriel John', 'mjohn0', 'example@email.com', 'FZEvjCmKjFN', 'faculty', 'resigned', 29.1136);
+insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Marie Betel de Robles', 'Betsy', 'example@email.com', 'FZEvjCmKjFN', 'faculty', 'resigned', 29.1136);
 insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Anny Whelan', 'awhelan1', 'example1@email.com', '2VWKdGcd', 'head', 'resigned', 13.9978);
 insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Sandy Macvain', 'smacvain2', 'example2@email.com', 'Acieo9', 'member', 'on_leave', 10.9264);
 insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Thalia Beedell', 'tbeedell3', 'example3@email.com', '2GCz245', 'member', 'on_leave', 13.5265);

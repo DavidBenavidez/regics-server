@@ -155,15 +155,14 @@ export const getAllAdviserNames = student_no => {
         return reject(500);
       }
       if (!rows.length) {
-        return reject(404);
+        return resolve(data);
       }
-      var names = [];
 
       for (var i = 0; i < rows.length; i++) {
-        names.push(rows[i].name);
+        data.push(rows[i].name);
       }
 
-      return resolve(names);
+      return resolve(data);
     });
   });
 };
@@ -255,6 +254,8 @@ export const addStudent = (
 ) => {
   return new Promise((resolve, reject) => {
     const queryString = `CALL addStudent(? ,?, ?, ?, ?, ?, ?)`;
+    const queryString2 = `CALL updateStudentAdviser(?, ?, ?)`;
+
     const values = [
       session_user,
       student_no,
@@ -270,7 +271,39 @@ export const addStudent = (
         console.log(err);
         return reject(500);
       }
+
+      const values2 = [session_user, student_no, adviser];
+      db.query(queryString2, values2, (err2, results2) => {
+        if (err) {
+          console.log(err);
+          return reject(500);
+        }
+      });
       return resolve(results.insertId);
     });
+  });
+};
+
+export const importStudent = ({ data }) => {
+  return new Promise((resolve, reject) => {
+    console.log('HAHA' + data);
+    // const queryString = `CALL addStudent(? ,?, ?, ?, ?, ?, ?)`;
+    // const values = [
+    //   session_user,
+    //   student_no,
+    //   name,
+    //   student_curriculum,
+    //   status,
+    //   classification,
+    //   adviser
+    // ];
+    return resolve(data);
+    // db.query(queryString, values, (err, results) => {
+    //   if (err) {
+    //     console.log(err);
+    //     return reject(500);
+    //   }
+    //   return resolve(results.insertId);
+    // });
   });
 };
