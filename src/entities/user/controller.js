@@ -384,7 +384,7 @@ export const getSuggestedAdviser = () => {
       if (!row3.length) {
         return reject(404);
       }
-      if (row3.length < 3) {
+      if (row3.length < 4) {
         for (var i = 0; i < row3.length; i++) {
           lessThanThree.push({ empno: row3[i].empno, name: row3[i].name });
         }

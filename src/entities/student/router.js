@@ -105,20 +105,6 @@ router.get('/api/students/advisers/:student_no', async (req, res) => {
   }
 });
 
-router.post('/api/students/import', async (req, res) => {
-  try {
-    const string = await Ctrl.importStudent(req.body);
-    console.log(req.body);
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully created student',
-      data: id
-    });
-  } catch (status) {
-    res.status(status).json({ status });
-  }
-});
-
 // update user adviser
 router.put('/api/students/update-adviser', async (req, res) => {
   if (req.body.adviser && req.body.student_no) {
