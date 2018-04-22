@@ -20,6 +20,7 @@ router.get('/api/students/export', async (req, res) => {
         classification: students[i].classification,
         adviser: students[i].adviser,
         empno: students[i].empno,
+        status: students[i].status,
         history: advisers
       });
     }
