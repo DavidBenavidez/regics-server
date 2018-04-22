@@ -45,9 +45,30 @@ export const getAllTeachingLoads = () => {
     const queryString = `SELECT * FROM system_user ORDER BY name;`;
     const q1 = `
       SELECT
-        *
+        room_no,
+        course_no,
+        course_name,
+        section,
+        class_size,
+        sais_class_count,
+        sais_waitlisted_count,
+        actual_count,
+        TIME_FORMAT(course_time_start, '%h:%i%p') AS course_time_start,
+        TIME_FORMAT(course_time_end, '%h:%i%p') AS course_time_end,
+        hours,
+        units,
+        course_credit,
+        is_lab,
+        course_status,
+        day1,
+        day2,
+        reason,
+        empno,
+        room_name
       FROM
-        course 
+        course
+      NATURAL JOIN 
+        room
       ORDER BY 
         FIELD(course_status, 'addition', 'approved', 'petitioned', 'dissolved'),
         course_name,
@@ -89,7 +110,11 @@ export const getAllTeachingLoads = () => {
               hours: allSub[j].hours,
               units: allSub[j].units,
               course_credit: allSub[j].course_credit,
-              empno: allSub[j].room_no
+              empno: allSub[j].room_no,
+              day1: allSub[j].day1,
+              day2: allSub[j].day2,
+              course_time_start: allSub[j].course_time_start,
+              course_time_end: allSub[j].course_time_end
             });
             totalTeachingLoad += allSub[j].course_credit;
           }
@@ -127,8 +152,8 @@ export const getTeachingLoad = ({ empno }) => {
         sais_class_count,
         sais_waitlisted_count,
         actual_count,
-        course_time_start,
-        course_time_end,
+        TIME_FORMAT(course_time_start, '%h:%i%p') AS course_time_start,
+        TIME_FORMAT(course_time_end, '%h:%i%p') AS course_time_end,
         hours,
         units,
         course_credit,
@@ -160,6 +185,7 @@ export const getTeachingLoad = ({ empno }) => {
         console.log(err);
         return reject(500);
       }
+      console.log(rows);
       return resolve(rows);
     });
   });
