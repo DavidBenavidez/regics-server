@@ -132,6 +132,7 @@ router.put('/api/users/', async (req, res) => {
       await Ctrl.editUser(req.session.user.name, req.body);
       const user = await Ctrl.getUser({ empno: req.body.empno });
 
+      req.session.user.name = req.body.name;
       res.status(200).json({
         status: 200,
         message: 'Successfully edited user',
