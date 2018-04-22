@@ -108,8 +108,9 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
     const queryString = `
     SELECT
       id,
-      student_no,
-      name
+      name,
+      status,
+      teaching_load
     FROM
       student_advisers_list
     NATURAL JOIN
@@ -126,12 +127,7 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
         return reject(404);
       }
 
-      var i;
-      for (i = 0; i < rows.length; i++) {
-        data.push(rows[i].name);
-      }
-
-      return resolve(data);
+      return resolve(rows);
     });
   });
 };
