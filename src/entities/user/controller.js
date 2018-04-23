@@ -318,6 +318,20 @@ export const getUsers = () => {
   });
 };
 
+export const getUsersInfo = () => {
+  return new Promise((resolve, reject) => {
+    const queryString = `SELECT empno, name, username, email, system_position, status, teaching_load FROM system_user ORDER BY name`;
+
+    db.query(queryString, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      return resolve(results);
+    });
+  });
+};
+
 export const getActiveUsers = () => {
   return new Promise((resolve, reject) => {
     const queryString = `SELECT empno, name FROM system_user WHERE status = 'active' ORDER BY empno`;
