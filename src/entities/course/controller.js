@@ -362,7 +362,7 @@ export const editCourse = (
       course_time_start,
       course_time_end
     ];
-    var queryString3 = `SELECT * FROM course a JOIN system_user b ON a.empno = b.empno WHERE a.empno = ? AND day1 = ? AND (course_time_start BETWEEN ? AND ? OR course_time_end BETWEEN ? AND ?)`;
+    var queryString3 = `SELECT * FROM course a JOIN system_user b ON a.empno = b.empno WHERE a.empno = ? AND day1 = ? AND a.course_no != course_no AND (course_time_start BETWEEN ? AND ? OR course_time_end BETWEEN ? AND ?)`;
 
     db.query(queryString3, time, (err, results) => {
       if (err) {
