@@ -17,7 +17,8 @@ CREATE TABLE system_user (
     password VARCHAR(256) NOT NULL,
     system_position ENUM("faculty", "head", "member") NOT NULL,
     status ENUM("resigned", "on_leave", "active") NOT NULL,
-    teaching_load FLOAT NOT NULL
+    teaching_load FLOAT NOT NULL,
+    firstLogin ENUM("true", "false") NOT NULL
 );
 
 CREATE TABLE room(
@@ -106,7 +107,7 @@ CREATE PROCEDURE addUser(
     IN email VARCHAR(256),
     IN password VARCHAR(256),
     IN system_position ENUM("faculty", "head", "member"),
-    IN status ENUM("resigned", "on_leave", "active")
+    IN status ENUM("resigned", "on_leave", "active"),
 )
 BEGIN
   INSERT INTO system_user
@@ -118,7 +119,8 @@ BEGIN
     password,
     system_position,
     status,
-    0
+    0,
+    'true'
   );
    CALL log(
       concat('New system user: ', name, ' Position: ', system_position),
@@ -496,6 +498,69 @@ BEGIN
       "Deleted from student advisers list",
       session_user_name
     );
+END;
+$$
+DELIMITER ;
+
+
+-- Reset student table
+DROP PROCEDURE IF EXISTS clearStudentTable;
+DELIMITER $$
+CREATE PROCEDURE clearStudentTable()
+BEGIN
+DROP TABLE IF EXISTS student_advisers_list;
+ALTER TABLE student DROP FOREIGN KEY FK_adviser;
+DROP TABLE IF EXISTS student;
+CREATE TABLE student(
+    student_no VARCHAR(10) NOT NULL PRIMARY KEY,
+    name VARCHAR(256) NOT NULL,
+    student_curriculum TEXT NOT NULL,
+    status ENUM("loa", "dropped", "enrolled", "dismissed") NOT NULL,
+    classification ENUM("freshman", "sophomore", "junior", "senior") NOT NULL,
+    adviser INT,
+    CONSTRAINT FK_adviser FOREIGN KEY (adviser) REFERENCES system_user(empno) ON DELETE SET NULL
+);
+CREATE TABLE student_advisers_list(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    student_no VARCHAR(10),
+    empno INT, 
+    CONSTRAINT FK_student FOREIGN KEY (student_no) REFERENCES student(student_no) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT FK_EmpNo2 FOREIGN KEY (empno) REFERENCES system_user(empno) ON DELETE SET NULL
+);
+END;
+$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS clearCourseTable;
+DELIMITER $$
+CREATE PROCEDURE clearCourseTable()
+BEGIN
+DROP TABLE IF EXISTS course;
+CREATE TABLE course( 
+    course_no INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    course_name VARCHAR(256) NOT NULL,
+    section VARCHAR(5) NOT NULL,
+    class_size INT NOT NULL,
+    sais_class_count INT NOT NULL,
+    sais_waitlisted_count INT NOT NULL,
+    actual_count INT NOT NULL,
+    course_time_start TIME,
+    course_time_end TIME, 
+    hours FLOAT NOT NULL, 
+    units FLOAT NOT NULL,
+    course_credit FLOAT NOT NULL,
+    is_lab ENUM("true", "false") NOT NULL,
+    course_status ENUM("dissolved", "petitioned", "addition", "approved") NOT NULL,
+    day1 ENUM("Monday", "Tuesday", "Wednesday", "Thursday", "Friday") NOT NULL,
+    day2 ENUM("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"),
+    reason TEXT NOT NULL,
+    room_no INT, 
+    empno INT,
+    CONSTRAINT FK_RoomNo FOREIGN KEY (room_no)
+    REFERENCES room(room_no) ON DELETE SET NULL,
+    CONSTRAINT FK_EmpNo FOREIGN KEY (empno)
+    REFERENCES system_user(empno) ON DELETE SET NULL
+);
 END;
 $$
 DELIMITER ;

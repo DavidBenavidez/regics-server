@@ -6,7 +6,7 @@ export const getAllStudents = () => {
   return new Promise((resolve, reject) => {
     const queryString = `
         SELECT
-          a.student_no, a.name, a.status, a.student_curriculum, a.classification, b.name, b.status AS adviser, b.empno
+          a.student_no, a.name, a.status, a.student_curriculum, a.classification, b.status AS adviser_status, b.name AS adviser, b.empno
         FROM
           student a, system_user b
         WHERE
@@ -161,7 +161,7 @@ export const getAllAdviserNames = student_no => {
       }
 
       for (var i = 0; i < rows.length; i++) {
-        data.push(rows[i].name);
+        data.push(rows[i].id);
       }
 
       return resolve(data);

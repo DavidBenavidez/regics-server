@@ -5,7 +5,7 @@ export const getLogs = () => {
     const query = `
       SELECT
         log_no, 
-        DATE_FORMAT(log_timestamp, '%M %d %Y %h:%i %p') AS log_timestamp,
+        DATE_FORMAT(log_timestamp, '%Y %b %d %h:%i %p') AS log_timestamp,
         log_action,
         log_user
       FROM 
