@@ -110,7 +110,7 @@ router.get('/api/teaching-load/:empno', async (req, res) => {
     res.status(status).json({ status });
   }
 });
-router.put('/api/users/firstTime', async () => {
+router.put('/api/users/firstTime', async (req, res) => {
   try {
     await Ctrl.editUserFirstTime(req.body);
     const user = await Ctrl.getUser({ empno: req.body.empno });
