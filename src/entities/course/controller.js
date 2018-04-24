@@ -218,8 +218,6 @@ export const addCourse = (
       day2,
       day2,
       course_time_start,
-      course_time_start,
-      course_time_end,
       course_time_end,
       course_time_start,
       course_time_end
