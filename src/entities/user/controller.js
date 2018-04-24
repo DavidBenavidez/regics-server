@@ -591,13 +591,14 @@ export const getSuggestedAdviser = () => {
   });
 };
 
-export const checkExists = ({ username }) => {
+export const checkExists = ({ empno, username }) => {
   return new Promise((resolve, reject) => {
     const query = `
-      SELECT * FROM system_user WHERE username = ?;
+      SELECT * FROM system_user WHERE BINARY username = ? AND empno != ?;
     `;
+    const values = [username, empno];
     if (username) {
-      db.query(query, username, (err, res) => {
+      db.query(query, values, (err, res) => {
         if (err) {
           console.log(err.message);
           return reject(500);
