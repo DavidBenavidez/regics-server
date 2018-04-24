@@ -31,7 +31,7 @@ export const addUser = ({
 export const checkUser = ({ username }) => {
   return new Promise((resolve, reject) => {
     const query = `
-      SELECT * FROM system_user WHERE username = ?;
+      SELECT * FROM system_user WHERE BINARY username = ?;
     `;
     if (username) {
       db.query(query, username, (err, res) => {
@@ -55,7 +55,7 @@ export const checkUser = ({ username }) => {
 export const checkExists = ({ username }) => {
   return new Promise((resolve, reject) => {
     const query = `
-      SELECT * FROM system_user WHERE username = ?;
+      SELECT * FROM system_user WHERE BINARY username = ?;
     `;
     if (username) {
       db.query(query, username, (err, res) => {
@@ -83,7 +83,7 @@ export const login = ({ username, password }) => {
           *
         FROM
           system_user
-        WHERE
+        WHERE BINARY
           username = ?
       `;
     db.query(queryString, username, (err, rows) => {
