@@ -121,14 +121,18 @@ router.put('/api/users/', async (req, res) => {
     (req.body.status == 'resigned' ||
       req.body.status == 'on_leave' ||
       req.body.status == 'active') &&
-    req.body.teaching_load
+    req.body.teaching_load != null
   ) {
     try {
       await Ctrl.checkExists(req.body);
       await Ctrl.editUser(req.session.user.name, req.body);
       const user = await Ctrl.getUser({ empno: req.body.empno });
 
-      req.session.user.name = req.body.name;
+      req.session.user.name = user.name;
+      req.session.user.firstName = user.name.split(" ")[0];
+      req.session.user.status = user.status;
+      req.session.user.username = user.username;
+      req.session.user.email = user.email;
       res.status(200).json({
         status: 200,
         message: 'Successfully edited user',
