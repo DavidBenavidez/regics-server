@@ -107,7 +107,7 @@ CREATE PROCEDURE addUser(
     IN email VARCHAR(256),
     IN password VARCHAR(256),
     IN system_position ENUM("faculty", "head", "member"),
-    IN status ENUM("resigned", "on_leave", "active"),
+    IN status ENUM("resigned", "on_leave", "active")
 )
 BEGIN
   INSERT INTO system_user

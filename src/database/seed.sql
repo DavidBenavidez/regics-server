@@ -1,26 +1,26 @@
 -- DUMMY  DATA
 USE regicsserver;
 
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Marie Betel de Robles', 'Betsy', 'mdderobles@up.edu.ph', 'password', 'head', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Anny Whelan', 'awhelan1', 'example1@email.com', '2VWKdGcd', 'faculty', 'resigned', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Sandy Macvain', 'smacvain2', 'example2@email.com', 'Acieo9', 'member', 'on_leave', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Thalia Beedell', 'tbeedell3', 'example3@email.com', '2GCz245', 'member', 'on_leave', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Oswald Keast', 'okeast4', 'example4@email.com', 'Klm8iXSSp', 'member', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Hermia McCraine', 'hmccraine5', 'example5@email.com', 'tMMlu7ruu1', 'member', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Ailbert Legg', 'alegg6', 'example6@email.com', 'Fy8OjUI', 'member', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Linnie Creffeild', 'lcreffeild7', 'example7@email.com', 'LTZJm32EEpE', 'member', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Gwenora Veschambre', 'gveschambre8', 'example8@email.com', 'UTfZ5Bkp', 'member', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Starla Bodleigh', 'sbodleigh9', 'example9@email.com', 'QHbWCsu5C', 'member', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Audrey Monger', 'amongera', 'example10@email.com', 'FlM1Mj', 'member', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Markos Dudderidge', 'mdudderidgeb', 'example11@email.com', 'OomKCZ7', 'member', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Suzanna Mellanby', 'smellanbyc', 'example12@email.com', 'rCz2bO', 'member', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Elfie Mathewson', 'emathewsond', 'example13@email.com', 'tTsHGyPv', 'member', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Cello Blaydon', 'cblaydone', 'example14@email.com', 'Pi3j7dfy', 'member', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Talbot Bernat', 'tbernatf', 'example15@email.com', 'sSSdJH', 'member', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Dov Goddard', 'dgoddardg', 'example16@email.com', 'R71u1DG', 'member', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Roseann Franklyn', 'rfranklynh', 'example17@email.com', 'eGfz799', 'faculty', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Shaughn Tumielli', 'stumiellii', 'example18@email.com', 'vO4ndRz', 'faculty', 'active', 0.0);
-insert into system_user (empno, name, username, email, password, system_position, status, teaching_load) values (DEFAULT, 'Cissy Giraudot', 'cgiraudotj', 'example19@email.com', 'wve0ducx', 'faculty', 'active', 0.0);
+CALL addUser ('Marie Betel de Robles', 'Betsy', 'mdderobles@up.edu.ph', 'password', 'head', 'active');
+CALL addUser ('Anny Whelan', 'awhelan1', 'example1@email.com', '2VWKdGcd', 'faculty', 'resigned');
+CALL addUser ('Sandy Macvain', 'smacvain2', 'example2@email.com', 'Acieo9', 'member', 'on_leave');
+CALL addUser ('Thalia Beedell', 'tbeedell3', 'example3@email.com', '2GCz245', 'member', 'on_leave');
+CALL addUser ('Oswald Keast', 'okeast4', 'example4@email.com', 'Klm8iXSSp', 'member', 'active');
+CALL addUser ('Hermia McCraine', 'hmccraine5', 'example5@email.com', 'tMMlu7ruu1', 'member', 'active');
+CALL addUser ('Ailbert Legg', 'alegg6', 'example6@email.com', 'Fy8OjUI', 'member', 'active');
+CALL addUser ('Linnie Creffeild', 'lcreffeild7', 'example7@email.com', 'LTZJm32EEpE', 'member', 'active');
+CALL addUser ('Gwenora Veschambre', 'gveschambre8', 'example8@email.com', 'UTfZ5Bkp', 'member', 'active');
+CALL addUser ('Starla Bodleigh', 'sbodleigh9', 'example9@email.com', 'QHbWCsu5C', 'member', 'active');
+CALL addUser ('Audrey Monger', 'amongera', 'example10@email.com', 'FlM1Mj', 'member', 'active');
+CALL addUser ('Markos Dudderidge', 'mdudderidgeb', 'example11@email.com', 'OomKCZ7', 'member', 'active');
+CALL addUser ('Suzanna Mellanby', 'smellanbyc', 'example12@email.com', 'rCz2bO', 'member', 'active');
+CALL addUser ('Elfie Mathewson', 'emathewsond', 'example13@email.com', 'tTsHGyPv', 'member', 'active');
+CALL addUser ('Cello Blaydon', 'cblaydone', 'example14@email.com', 'Pi3j7dfy', 'member', 'active');
+CALL addUser ('Talbot Bernat', 'tbernatf', 'example15@email.com', 'sSSdJH', 'member', 'active');
+CALL addUser ('Dov Goddard', 'dgoddardg', 'example16@email.com', 'R71u1DG', 'member', 'active');
+CALL addUser ('Roseann Franklyn', 'rfranklynh', 'example17@email.com', 'eGfz799', 'faculty', 'active');
+CALL addUser ('Shaughn Tumielli', 'stumiellii', 'example18@email.com', 'vO4ndRz', 'faculty', 'active');
+CALL addUser ('Cissy Giraudot', 'cgiraudotj', 'example19@email.com', 'wve0ducx', 'faculty', 'active');
 
 insert into room (room_no, room_name) values (112, 'C-112');
 insert into room (room_no, room_name) values (114, 'C-114');

@@ -51,7 +51,7 @@
   ```
   then you will be prompted to enter your password.
 
-2. (OPTIONAL/ FOR TESTING) You can populate the database with dummy/fake data.
+2. Populate the database with initial data.
 
   ```
   yarn populate
