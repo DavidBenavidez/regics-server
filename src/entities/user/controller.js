@@ -377,58 +377,82 @@ export const editUserFirstTime = ({ empno }) => {
 
 export const editUser = (
   session_user,
-  {
-    empno,
-    name,
-    username,
-    email,
-    password,
-    confirm_password,
-    system_position,
-    status,
-    teaching_load
-  }
+  { empno, name, username, email, status, teaching_load }
 ) => {
   return new Promise((resolve, reject) => {
-    bcrypt.hash(password, salt, function(err, hash) {
-      const queryString = `
-        CALL editUser(?,?,?,?,?,?,?,?,?);
-      `;
+    const queryString = `
+      CALL editUser(?,?,?,?,?,?,?);
+    `;
 
-      var array_of_name = name.split(' ');
-      var name = '';
+    const values = [
+      session_user,
+      name,
+      username,
+      email,
+      status,
+      teaching_load,
+      empno
+    ];
 
-      for (var i = 0; i < array_of_name.length; i++) {
-        array_of_name[i] =
-          array_of_name[i].charAt(0).toUpperCase() + array_of_name[i].slice(1);
-        name = name + array_of_name[i];
+    db.query(queryString, values, (err, res) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
       }
 
-      console.log('name: ' + name);
+      if (!res.affectedRows) {
+        return reject(404);
+      }
 
-      const values = [
-        session_user,
-        name,
-        username,
-        email,
-        hash,
-        system_position,
-        status,
-        teaching_load,
-        empno
-      ];
+      return resolve();
+    });
+  });
+};
 
+export const editPassword = (session_user, { username, new_password }) => {
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(new_password, salt, function(err, hash) {
+      const queryString = `UPDATE system_user SET password = ? WHERE username = ?`;
+      var values = [hash, username];
       db.query(queryString, values, (err, res) => {
         if (err) {
           console.log(err);
           return reject(500);
         }
-
         if (!res.affectedRows) {
           return reject(404);
         }
-
         return resolve();
+      });
+    });
+    console.log('in');
+  });
+};
+
+export const checkPassword = ({ username, password }) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+        SELECT 
+          *
+        FROM
+          system_user
+        WHERE
+          username = ?
+      `;
+    db.query(queryString, username, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+
+      if (!rows.length) {
+        return reject(404);
+      }
+
+      bcrypt.compare(password, rows[0].password, (error, isMatch) => {
+        if (error) return reject(500);
+        else if (!isMatch) return reject(401);
+        return resolve(rows[0]);
       });
     });
   });
@@ -564,5 +588,29 @@ export const getSuggestedAdviser = () => {
         });
       }
     });
+  });
+};
+
+export const checkExists = ({ username }) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT * FROM system_user WHERE username = ?;
+    `;
+    if (username) {
+      db.query(query, username, (err, res) => {
+        if (err) {
+          console.log(err.message);
+          return reject(500);
+        }
+
+        res = res[0];
+
+        if (res) return reject(405);
+
+        return resolve();
+      });
+    } else {
+      return reject(404);
+    }
   });
 };

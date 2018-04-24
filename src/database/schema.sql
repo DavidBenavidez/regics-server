@@ -113,7 +113,7 @@ BEGIN
   INSERT INTO system_user
   VALUES (
     DEFAULT,
-    name,
+    CAP_FIRST(name),
     username,
     email,
     password,
@@ -155,9 +155,7 @@ CREATE PROCEDURE editUser (
   IN session_user_name VARCHAR(256),
   IN name VARCHAR(256),
   IN username VARCHAR(256),
-  IN email VARCHAR(256), 
-  IN password VARCHAR(256),
-  IN system_position ENUM("faculty", "head", "member"),
+  IN email VARCHAR(256),
   IN status ENUM("resigned", "on_leave", "active"),
   IN teaching_load FLOAT,
   IN empno INT
@@ -165,16 +163,14 @@ CREATE PROCEDURE editUser (
 BEGIN
   UPDATE system_user
   SET
-    system_user.name = name,
+    system_user.name = CAP_FIRST(name),
     system_user.username = username,
     system_user.email = email,
-    system_user.password = password,
-    system_user.system_position = system_position,
     system_user.status = status,
     system_user.teaching_load = teaching_load
   WHERE system_user.empno = empno;
   CALL log(
-      concat('Edited system user: ', name, ' Position: ', system_position),
+      concat('Edited system user: ', name),
       session_user_name
     );
 END;

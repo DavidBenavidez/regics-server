@@ -118,17 +118,13 @@ router.put('/api/users/', async (req, res) => {
     req.body.name &&
     req.body.username &&
     req.body.email &&
-    req.body.password &&
-    req.body.password == req.body.confirm_password &&
-    (req.body.system_position == 'faculty' ||
-      req.body.system_position == 'head' ||
-      req.body.system_position == 'member') &&
     (req.body.status == 'resigned' ||
       req.body.status == 'on_leave' ||
       req.body.status == 'active') &&
     req.body.teaching_load
   ) {
     try {
+      await Ctrl.checkExists(req.body);
       await Ctrl.editUser(req.session.user.name, req.body);
       const user = await Ctrl.getUser({ empno: req.body.empno });
 
@@ -136,6 +132,29 @@ router.put('/api/users/', async (req, res) => {
       res.status(200).json({
         status: 200,
         message: 'Successfully edited user',
+        data: user
+      });
+    } catch (status) {
+      res.status(status).json({ status });
+    }
+  } else {
+    res.status(400).json({ status: 400 });
+  }
+});
+
+router.put('/api/users/editPassword', async (req, res) => {
+  if (
+    req.body.username &&
+    req.body.password &&
+    req.body.new_password === req.body.confirm_password &&
+    req.body.new_password !== req.body.password
+  ) {
+    try {
+      var user = await Ctrl.checkPassword(req.body);
+      await Ctrl.editPassword(req.session.user.name, req.body);
+      res.status(200).json({
+        status: 200,
+        message: 'Successfully updated password',
         data: user
       });
     } catch (status) {
