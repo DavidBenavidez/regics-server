@@ -17,7 +17,15 @@ export const getUser = ({ empno }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
         SELECT 
-          *
+          empno,
+          CAP_FIRST(name) as name,
+          username,
+          email,
+          password,
+          system_position,
+          status,
+          teaching_load
+
         FROM 
           system_user
         WHERE
@@ -348,6 +356,24 @@ export const getActiveUsers = () => {
     });
   });
 };
+export const editUserFirstTime = ({ empno }) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `UPDATE system_user SET firstLogin='false' WHERE empno = ?`;
+
+    db.query(queryString, empno, (err, res) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+
+      if (!res.affectedRows) {
+        return reject(404);
+      }
+
+      return resolve();
+    });
+  });
+};
 
 export const editUser = (
   session_user,
@@ -368,6 +394,17 @@ export const editUser = (
       const queryString = `
         CALL editUser(?,?,?,?,?,?,?,?,?);
       `;
+
+      var array_of_name = name.split(' ');
+      var name = '';
+
+      for (var i = 0; i < array_of_name.length; i++) {
+        array_of_name[i] =
+          array_of_name[i].charAt(0).toUpperCase() + array_of_name[i].slice(1);
+        name = name + array_of_name[i];
+      }
+
+      console.log('name: ' + name);
 
       const values = [
         session_user,
