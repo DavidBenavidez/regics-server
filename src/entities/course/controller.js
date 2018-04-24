@@ -210,7 +210,7 @@ export const addCourse = (
       empno
     ];
     //For room conflict check
-    const queryString2 = `SELECT course_name FROM course WHERE room_no = ? AND ((day1 = ? OR day2 = ?) OR (day1 = ? OR day2 = ?)) AND ((course_time_start = ? OR (course_time_start BETWEEN ? AND ?)) OR (course_time_end = ? OR (course_time_end BETWEEN ? AND ?)))`;
+    const queryString2 = `SELECT course_name FROM course WHERE room_no = ? AND ((day1 = ? OR day2 = ?) OR (day1 = ? OR day2 = ?)) AND ((course_time_start >= ? AND course_time_start < ?) OR (course_time_end > ? AND course_time_end <= ?))`;
     const values2 = [
       room_no,
       day1,
@@ -218,8 +218,6 @@ export const addCourse = (
       day2,
       day2,
       course_time_start,
-      course_time_start,
-      course_time_end,
       course_time_end,
       course_time_start,
       course_time_end
@@ -353,16 +351,15 @@ export const editCourse = (
     ];
 
     //For room conflict check
-    const queryString2 = `SELECT course_name FROM course WHERE room_no = ? AND ((day1 = ? OR day2 = ?) OR (day1 = ? OR day2 = ?)) AND ((course_time_start = ? OR (course_time_start BETWEEN ? AND ?)) OR (course_time_end = ? OR (course_time_end BETWEEN ? AND ?)))`;
+    const queryString2 = `SELECT course_name, section FROM course WHERE room_no = ? AND course_no != ? AND ((day1 = ? OR day2 = ?) OR (day1 = ? OR day2 = ?)) AND ((course_time_start >= ? AND course_time_start < ?) OR (course_time_end > ? AND course_time_end <= ?))`;
     const values2 = [
       room_no,
+      course_no,
       day1,
       day1,
       day2,
       day2,
       course_time_start,
-      course_time_start,
-      course_time_end,
       course_time_end,
       course_time_start,
       course_time_end
@@ -370,6 +367,7 @@ export const editCourse = (
 
     var time = [
       empno,
+      course_no,
       day1,
       day1,
       day2,
@@ -379,7 +377,7 @@ export const editCourse = (
       course_time_start,
       course_time_end
     ];
-    const queryString3 = `SELECT * FROM course WHERE empno = ? AND ((day1 = ? OR day2 = ?) OR (day1 = ? OR day2 = ?)) AND ((course_time_start >= ? AND course_time_start < ?) OR (course_time_end > ? AND course_time_end <= ?))`;
+    const queryString3 = `SELECT course_name, section FROM course WHERE empno = ? AND course_no != ? AND ((day1 = ? OR day2 = ?) OR (day1 = ? OR day2 = ?)) AND ((course_time_start >= ? AND course_time_start < ?) OR (course_time_end > ? AND course_time_end <= ?))`;
 
     db.query(queryString3, time, (err, results) => {
       if (err) {
