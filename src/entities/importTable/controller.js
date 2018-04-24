@@ -120,7 +120,6 @@ export const importCourse = (session_user, { data }) => {
           totalCourseCredit = 2.0 * data[i][4] * (0.5 / 3);
         }
       } else if (data[i][8] == 'false') {
-        console.log('not lab');
         if (data[i][4] <= 40) {
           totalCourseCredit = 2;
         } else {
@@ -129,35 +128,56 @@ export const importCourse = (session_user, { data }) => {
       } else {
         totalCourseCredit = 1.5;
       }
-      console.log(data);
-      if (data[i][14] === '') {
-        data[i][14] = '';
+      var queryString;
+      var values;
+      if (!data[i][8]) {
+        queryString = `CALL addCourse(?,?,?,?,?,?,?,?,?, time_to_sec(timediff('${data[
+          i
+        ][14]}','${data[i][13]}'))/3600,?,?,?,?,?,?,?,?,?)`;
+        values = [
+          session_user,
+          data[i][1],
+          data[i][2],
+          data[i][3],
+          data[i][4],
+          data[i][5],
+          data[i][6],
+          data[i][13],
+          data[i][14],
+          data[i][7],
+          totalCourseCredit,
+          data[i][8],
+          data[i][16],
+          data[i][11],
+          data[i][12],
+          data[i][17],
+          data[i][10],
+          data[i][15]
+        ];
+      } else {
+        queryString = `CALL addCourse(?,?,?,?,?,?,?,?,?, time_to_sec(timediff('${data[
+          i
+        ][14]}','${data[i][13]}'))/3600,?,?,?,?,?,NULL,?,?,?)`;
+        var values = [
+          session_user,
+          data[i][1],
+          data[i][2],
+          data[i][3],
+          data[i][4],
+          data[i][5],
+          data[i][6],
+          data[i][13],
+          data[i][14],
+          data[i][7],
+          totalCourseCredit,
+          data[i][8],
+          data[i][16],
+          data[i][11],
+          data[i][17],
+          data[i][10],
+          data[i][15]
+        ];
       }
-      var values = [
-        session_user,
-        data[i][1],
-        data[i][2],
-        data[i][3],
-        data[i][4],
-        data[i][5],
-        data[i][6],
-        data[i][13],
-        data[i][14],
-        data[i][7],
-        totalCourseCredit,
-        data[i][8],
-        data[i][16],
-        data[i][11],
-        data[i][12],
-        data[i][17],
-        data[i][10],
-        data[i][15]
-      ];
-      const queryString = `
-      CALL addCourse(?,?,?,?,?,?,?,?,?, time_to_sec(timediff('${data[
-        i
-      ][14]}','${data[i][13]}'))/3600,?,?,?,?,?,?,?,?,?)
-      `;
       db.query(queryString, values, (err, results) => {
         if (err) {
           console.log(err);
