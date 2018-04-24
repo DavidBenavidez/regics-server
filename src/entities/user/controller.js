@@ -348,24 +348,6 @@ export const getActiveUsers = () => {
     });
   });
 };
-export const editUserFirstTime = ({ empno }) => {
-  return new Promise((resolve, reject) => {
-    const queryString = `UPDATE system_user SET firstLogin='false' WHERE empno = ?`;
-
-    db.query(queryString, empno, (err, res) => {
-      if (err) {
-        console.log(err);
-        return reject(500);
-      }
-
-      if (!res.affectedRows) {
-        return reject(404);
-      }
-
-      return resolve();
-    });
-  });
-};
 
 export const editUser = (
   session_user,

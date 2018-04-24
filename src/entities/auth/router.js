@@ -67,12 +67,17 @@ router.post('/api/login', async (req, res) => {
   }
 });
 
-router.post('/api/logout', (req, res) => {
-  req.session.destroy();
-  res.status(200).json({
-    status: 200,
-    message: 'Successfully logged out'
-  });
+router.post('/api/logout', async (req, res) => {
+  try {
+    await Ctrl.editUserFirstTime(req.session.user.empno);
+    req.session.destroy();
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully logged out'
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
 });
 
 router.get('/api/session', (req, res) => {
