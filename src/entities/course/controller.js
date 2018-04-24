@@ -228,6 +228,9 @@ export const addCourse = (
       course_time_end
     ];
     var queryString3 = `SELECT * FROM course a JOIN system_user b ON a.empno = b.empno WHERE a.empno = ? AND day1 = ? AND (course_time_start BETWEEN ? AND ? OR course_time_end BETWEEN ? AND ?)`;
+    //check for course duplicate
+    var queryString4 = `SELECT course_name FROM course WHERE course_name = ? AND section = ? AND day1 = ?`;
+    var values3 = [course_name, section, day1];
 
     db.query(queryString3, time, (err, results) => {
       if (err) {
@@ -251,12 +254,26 @@ export const addCourse = (
             );
             return reject(406);
           } else {
-            db.query(queryString, values, (err, results) => {
-              if (err) {
-                console.log(err);
+            //check if course exists
+            db.query(queryString4, values3, (err3, results3) => {
+              if (err3) {
+                console.log(err3);
                 return reject(500);
               }
-              return resolve(results.insertId);
+
+              if (results3.length > 0) {
+                console.log('Course already exists.');
+                return reject(407);
+              } else {
+                //add course
+                db.query(queryString, values, (err, results) => {
+                  if (err) {
+                    console.log(err);
+                    return reject(500);
+                  }
+                  return resolve(results.insertId);
+                });
+              }
             });
           }
         });
@@ -354,6 +371,10 @@ export const editCourse = (
       course_time_end
     ];
 
+    //check for course duplicate
+    var queryString4 = `SELECT course_name FROM course WHERE course_name = ? AND section = ? AND day1 = ?`;
+    var values3 = [course_name, section, day1];
+
     var time = [
       empno,
       day1,
@@ -362,7 +383,7 @@ export const editCourse = (
       course_time_start,
       course_time_end
     ];
-    var queryString3 = `SELECT * FROM course a JOIN system_user b ON a.empno = b.empno WHERE a.empno = ? AND day1 = ? AND a.course_no != course_no AND (course_time_start BETWEEN ? AND ? OR course_time_end BETWEEN ? AND ?)`;
+    var queryString3 = `SELECT * FROM course a JOIN system_user b ON a.empno = b.empno WHERE a.empno = ? AND day1 = ? AND (course_time_start BETWEEN ? AND ? OR course_time_end BETWEEN ? AND ?)`;
 
     db.query(queryString3, time, (err, results) => {
       if (err) {
@@ -386,12 +407,26 @@ export const editCourse = (
             );
             return reject(406);
           } else {
-            db.query(queryString, values, (err, results) => {
-              if (err) {
-                console.log(err);
+            //check if course exists
+            db.query(queryString4, values3, (err3, results3) => {
+              if (err3) {
+                console.log(err3);
                 return reject(500);
               }
-              return resolve(results.insertId);
+
+              if (results3.length > 0) {
+                console.log('Course already exists.');
+                return reject(407);
+              } else {
+                //edit course
+                db.query(queryString, values, (err, results) => {
+                  if (err) {
+                    console.log(err);
+                    return reject(500);
+                  }
+                  return resolve(results.insertId);
+                });
+              }
             });
           }
         });
