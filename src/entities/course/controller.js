@@ -159,6 +159,12 @@ export const addCourse = (
   }
 ) => {
   return new Promise((resolve, reject) => {
+    if (course_status == 'dissolved') {
+      if (actual_count > 10) {
+        return reject(407);
+      }
+    }
+
     var totalCourseCredit;
     // Compute course credit
     if (course_name == 'CMSC 190-1') {
@@ -296,12 +302,11 @@ export const editCourse = (
   }
 ) => {
   return new Promise((resolve, reject) => {
-    if (course_status == 'dissolved') {
-      if (actual_count > 10 || class_size > 10) {
-        return reject(444);
+    if (course_status === 'dissolved') {
+      if (actual_count > 10) {
+        return reject(407);
       }
     }
-
     var totalCourseCredit;
     // Compute course credit
     if (course_name == 'CMSC 190-1') {
