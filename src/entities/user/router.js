@@ -125,11 +125,12 @@ router.put('/api/users/', async (req, res) => {
   ) {
     try {
       await Ctrl.checkExists(req.body);
+      await Ctrl.checkEmail(req.body);
       await Ctrl.editUser(req.session.user.name, req.body);
       const user = await Ctrl.getUser({ empno: req.body.empno });
 
       req.session.user.name = user.name;
-      req.session.user.firstName = user.name.split(" ")[0];
+      req.session.user.firstName = user.name.split(' ')[0];
       req.session.user.status = user.status;
       req.session.user.username = user.username;
       req.session.user.email = user.email;

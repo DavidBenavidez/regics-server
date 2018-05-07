@@ -19,6 +19,7 @@ router.post('/api/users', async (req, res) => {
   ) {
     try {
       await Ctrl.checkExists(req.body);
+      await Ctrl.checkEmail(req.body);
       const id = await Ctrl.addUser(req.body);
       res.status(200).json({
         status: 200,

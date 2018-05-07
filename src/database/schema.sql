@@ -480,6 +480,24 @@ END;
 $$
 DELIMITER ;
 
+--delete adviser
+DROP PROCEDURE IF EXISTS removeAdviser;
+DELIMITER $$
+CREATE PROCEDURE removeAdviser (
+    IN session_user_name VARCHAR(256),
+    IN id INT
+)
+BEGIN
+    DELETE FROM student_advisers_list
+    WHERE student_advisers_list.id = id;
+    CALL log(
+      concat('Deleted Adviser: ', id),
+      session_user_name
+    );
+END;
+$$
+DELIMITER ;
+
 -- On delete adviser advisee
 DROP PROCEDURE IF EXISTS deleteAdviserAdvisee;
 DELIMITER $$

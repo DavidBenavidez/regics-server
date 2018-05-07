@@ -286,3 +286,26 @@ export const addStudent = (
     });
   });
 };
+
+//delete adviser
+export const removeAdviserFromStudent = (session_user, id) => {
+  return new Promise((resolve, reject) => {
+    console.log(id);
+    const queryString = `
+        CALL removeAdviser(?, ?)
+      `;
+    const values = [session_user, id];
+    db.query(queryString, values, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+
+      if (!results.affectedRows) {
+        return reject(404);
+      }
+
+      return resolve(id);
+    });
+  });
+};
