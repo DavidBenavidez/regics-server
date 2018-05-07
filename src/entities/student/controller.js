@@ -109,6 +109,7 @@ export const getAllAdvisersByStudNo = ({ student_no }) => {
     SELECT
       id,
       name,
+      empno,
       status,
       teaching_load
     FROM

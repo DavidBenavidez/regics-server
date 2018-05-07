@@ -8,7 +8,7 @@ router.post('/api/users', async (req, res) => {
   if (
     req.body.name &&
     req.body.username &&
-    req.body.password &&
+    req.body.password.length >= 8 &&
     req.body.password == req.body.confirm_password &&
     (req.body.system_position == 'faculty' ||
       req.body.system_position == 'head' ||

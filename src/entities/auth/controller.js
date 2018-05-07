@@ -17,7 +17,14 @@ export const addUser = ({
       const queryString = `
                 CALL addUser(?, ?, ?, ?, ?, ?)
         `;
-      const values = [name, username, email, hash, system_position, status];
+      const values = [
+        name,
+        username.toLowerCase(),
+        email,
+        hash,
+        system_position,
+        status
+      ];
       db.query(queryString, values, (err, results) => {
         if (err) {
           console.log(err);
@@ -34,7 +41,7 @@ export const checkUser = ({ username }) => {
       SELECT * FROM system_user WHERE BINARY username = ?;
     `;
     if (username) {
-      db.query(query, username, (err, res) => {
+      db.query(query, username.toLowerCase(), (err, res) => {
         if (err) {
           console.log(err.message);
           return reject(500);
@@ -58,7 +65,7 @@ export const checkExists = ({ username }) => {
       SELECT * FROM system_user WHERE BINARY username = ?;
     `;
     if (username) {
-      db.query(query, username, (err, res) => {
+      db.query(query, username.toLowerCase(), (err, res) => {
         if (err) {
           console.log(err.message);
           return reject(500);
@@ -86,7 +93,7 @@ export const login = ({ username, password }) => {
         WHERE BINARY
           username = ?
       `;
-    db.query(queryString, username, (err, rows) => {
+    db.query(queryString, username.toLowerCase(), (err, rows) => {
       if (err) {
         console.log(err);
         return reject(500);

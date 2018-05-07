@@ -387,7 +387,7 @@ export const editUser = (
     const values = [
       session_user,
       name,
-      username,
+      username.toLowerCase(),
       email,
       status,
       teaching_load,
@@ -596,7 +596,7 @@ export const checkExists = ({ empno, username }) => {
     const query = `
       SELECT * FROM system_user WHERE BINARY username = ? AND empno != ?;
     `;
-    const values = [username, empno];
+    const values = [username.toLowerCase(), empno];
     if (username) {
       db.query(query, values, (err, res) => {
         if (err) {
