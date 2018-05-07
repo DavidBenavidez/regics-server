@@ -165,22 +165,20 @@ router.delete('/api/students/:student_no', async (req, res) => {
 
 //remove adviser
 
-router.delete('/api/students/delete-adviser', async (req, res) => {
-  if (req.body.student_no && req.body.empno) {
-    try {
-      const id = await Ctrl.removeAdviserFromStudent(
-        req.session.user.name,
-        req.body
-      );
+router.delete('/api/students/delete-adviser/', async (req, res) => {
+  try {
+    const id = await Ctrl.removeAdviserFromStudent(
+      req.session.user.name,
+      req.body.id
+    );
 
-      res.status(200).json({
-        status: 200,
-        message: 'Successfully removed adviser',
-        data: id
-      });
-    } catch (status) {
-      res.status(status).json({ status, message });
-    }
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully removed adviser',
+      data: id
+    });
+  } catch (status) {
+    res.status(status).json({ status, message });
   }
 });
 

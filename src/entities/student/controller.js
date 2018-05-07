@@ -288,32 +288,13 @@ export const addStudent = (
 };
 
 //delete adviser
-export const removeAdviserFromStudent = (
-  session_user,
-  { student_no, empno }
-) => {
+export const removeAdviserFromStudent = (session_user, id) => {
   return new Promise((resolve, reject) => {
+    console.log(id);
     const queryString = `
-        CALL removeAdviser(?, ?, ?)
+        CALL removeAdviser(?, ?)
       `;
-
-    const queryString2 = `SELECT adviser FROM student WHERE student_no = ? `;
-
-    db.query(queryString2, student_no, (err, results) => {
-      if (results == empno) {
-        console.log(results);
-        return reject(401);
-      }
-      if (err) {
-        console.log(err);
-        return reject(500);
-      }
-      if (!results.affectedRows) {
-        console.log('Not in advisers List');
-      }
-    });
-
-    const values = [session_user, empno, student_no];
+    const values = [session_user, id];
     db.query(queryString, values, (err, results) => {
       if (err) {
         console.log(err);
@@ -324,7 +305,7 @@ export const removeAdviserFromStudent = (
         return reject(404);
       }
 
-      return resolve(student_no);
+      return resolve(id);
     });
   });
 };
