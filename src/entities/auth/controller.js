@@ -76,6 +76,25 @@ export const checkExists = ({ username }) => {
   });
 };
 
+export const checkEmail = ({ email }) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT * FROM system_user WHERE email = ?;
+    `;
+
+    db.query(query, email, (err, res) => {
+      if (err) {
+        console.log(err.message);
+        return reject(500);
+      }
+
+      if (res.length) return reject(406);
+
+      return resolve();
+    });
+  });
+};
+
 export const login = ({ username, password }) => {
   return new Promise((resolve, reject) => {
     const queryString = `
