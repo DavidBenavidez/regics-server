@@ -165,11 +165,11 @@ router.delete('/api/students/:student_no', async (req, res) => {
 
 //remove adviser
 
-router.delete('/api/students/delete-adviser/', async (req, res) => {
+router.delete('/api/students/delete-adviser/:id', async (req, res) => {
   try {
     const id = await Ctrl.removeAdviserFromStudent(
       req.session.user.name,
-      req.body.id
+      req.params
     );
 
     res.status(200).json({

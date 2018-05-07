@@ -288,7 +288,7 @@ export const addStudent = (
 };
 
 //delete adviser
-export const removeAdviserFromStudent = (session_user, id) => {
+export const removeAdviserFromStudent = (session_user, { id }) => {
   return new Promise((resolve, reject) => {
     console.log(id);
     const queryString = `
