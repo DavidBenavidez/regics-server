@@ -615,3 +615,22 @@ export const checkExists = ({ empno, username }) => {
     }
   });
 };
+
+export const checkEmail = ({ email, empno }) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT * FROM system_user WHERE email = ? AND empno != ?
+    `;
+
+    db.query(query, [email, empno], (err, res) => {
+      if (err) {
+        console.log(err.message);
+        return reject(500);
+      }
+
+      if (res.length) return reject(406);
+
+      return resolve();
+    });
+  });
+};

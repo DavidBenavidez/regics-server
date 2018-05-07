@@ -79,7 +79,7 @@ export const checkExists = ({ username }) => {
 export const checkEmail = ({ email }) => {
   return new Promise((resolve, reject) => {
     const query = `
-      SELECT * FROM system_user WHERE email = ?;
+      SELECT * FROM system_user WHERE email = ?
     `;
 
     db.query(query, email, (err, res) => {
