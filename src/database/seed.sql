@@ -2,7 +2,7 @@
 USE regicsserver;
 
 CALL addUser ('Marie Betel de Robles', 'Betsy', 'mdderobles@up.edu.ph', 'password', 'head', 'active');
-CALL addUser ('Anny Whelan', 'awhelan1', 'example1@email.com', '2VWKdGcd', 'faculty', 'resigned');
+CALL addUser ('Anny Whelan', 'awhelan1', 'example1@email.com', '2VWKdGcd', 'faculty', 'active');
 CALL addUser ('Sandy Macvain', 'smacvain2', 'example2@email.com', 'Acieo9', 'member', 'on_leave');
 CALL addUser ('Thalia Beedell', 'tbeedell3', 'example3@email.com', '2GCz245', 'member', 'on_leave');
 CALL addUser ('Oswald Keast', 'okeast4', 'example4@email.com', 'Klm8iXSSp', 'member', 'active');
