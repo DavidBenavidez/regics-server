@@ -285,3 +285,45 @@ export const addStudent = (
     });
   });
 };
+
+//delete adviser
+export const removeAdviserFromStudent = (
+  session_user,
+  { student_no, empno }
+) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+        CALL removeAdviser(?, ?, ?)
+      `;
+
+    const queryString2 = `SELECT adviser FROM student WHERE student_no = ? `;
+
+    db.query(queryString2, student_no, (err, results) => {
+      if (results == empno) {
+        console.log(results);
+        return reject(401);
+      }
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!results.affectedRows) {
+        console.log('Not in advisers List');
+      }
+    });
+
+    const values = [session_user, empno, student_no];
+    db.query(queryString, values, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+
+      if (!results.affectedRows) {
+        return reject(404);
+      }
+
+      return resolve(student_no);
+    });
+  });
+};
