@@ -166,10 +166,14 @@ router.delete('/api/students/delete-adviser/:id', async (req, res) => {
   }
 });
 
-// remove student
-router.delete('/api/students/:student_no', async (req, res) => {
+//remove adviser
+
+router.delete('/api/students/delete-adviser/:id', async (req, res) => {
   try {
-    const id = await Ctrl.removeStudent(req.session.user.name, req.params);
+    const id = await Ctrl.removeAdviserFromStudent(
+      req.session.user.name,
+      req.params
+    );
 
     res.status(200).json({
       status: 200,
