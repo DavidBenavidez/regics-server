@@ -1,6 +1,7 @@
 import db from '../../database';
+import { getOffset } from '../utils/';
 
-export const getLogs = () => {
+export const getLogs = page => {
   return new Promise((resolve, reject) => {
     const query = `
       SELECT
@@ -12,9 +13,11 @@ export const getLogs = () => {
         log_data
       ORDER BY
         log_timestamp
-      DESC
+        DESC
+      LIMIT 15
+      OFFSET ?
     `;
-    db.query(query, (err, row) => {
+    db.query(query, getOffset(15, page), (err, row) => {
       if (err) {
         console.log(err.message);
         return reject(500);
