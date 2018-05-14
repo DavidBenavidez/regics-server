@@ -18,7 +18,8 @@ CREATE TABLE system_user (
     system_position ENUM("faculty", "head", "member") NOT NULL,
     status ENUM("resigned", "on_leave", "active") NOT NULL,
     teaching_load FLOAT NOT NULL,
-    firstLogin ENUM("true", "false") NOT NULL
+    firstLogin ENUM("true", "false") NOT NULL,
+    approved ENUM("true", "false") NOT NULL
 );
 
 CREATE TABLE room(
@@ -120,7 +121,8 @@ BEGIN
     system_position,
     status,
     0,
-    'true'
+    'true',
+    'false'
   );
    CALL log(
       concat('New system user: ', name, ' Position: ', system_position),
@@ -177,6 +179,45 @@ END;
 $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS approveUser;
+DELIMITER $$
+CREATE PROCEDURE approveUser(
+    IN session_user_name VARCHAR(256),
+    empno INT
+)
+BEGIN
+  UPDATE system_user SET
+  system_user.approved="true"
+  WHERE
+  system_user.empno = empno;
+   CALL log(
+      concat('Approved system user: ', empno),
+      session_user_name
+    );
+END;
+$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS editUserPrivilege;
+DELIMITER $$
+CREATE PROCEDURE editUserPrivilege (
+  IN session_user_name VARCHAR(256),
+  IN empno INT,
+  IN system_position ENUM("faculty", "head", "member")
+)
+BEGIN
+  UPDATE system_user
+  SET
+    system_user.system_position = system_position
+  WHERE system_user.empno = empno;
+  CALL log(
+      concat('Edited system user privileges: ', empno),
+      session_user_name
+    );
+END;
+$$
+DELIMITER ;
+
 
 
 -- COURSE
@@ -227,6 +268,11 @@ BEGIN
     room_no,
     empno
   );
+  UPDATE system_user SET 
+    system_user.teaching_load = system_user.teaching_load + course_credit 
+  WHERE 
+    system_user.empno = empno
+  ; 
   CALL log(
       concat('Added Course: ', course_name, ' Section: ', section),
       session_user_name

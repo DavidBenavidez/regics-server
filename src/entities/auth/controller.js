@@ -149,3 +149,21 @@ export const editUserFirstTime = empno => {
     });
   });
 };
+
+export const editUserApproved = (session_user, empno) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `CALL approveUser(?,?)`;
+    // console.log(session_user, empno);
+    const values = [session_user, empno];
+    db.query(queryString, values, (err, res) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      if (!res.affectedRows) {
+        return reject(404);
+      }
+      return resolve();
+    });
+  });
+};

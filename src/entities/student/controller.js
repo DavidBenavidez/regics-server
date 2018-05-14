@@ -215,42 +215,6 @@ export const updateStudent = (
   });
 };
 
-//removes a student
-export const removeStudent = (session_user, { student_no }) => {
-  return new Promise((resolve, reject) => {
-    const queryString = `
-        CALL removeStudent(?, ?)
-      `;
-
-    const removeFromAdvisers = `CALL removeStudentFromAdvisersList(?)`;
-    const values = [session_user, student_no];
-
-    db.query(removeFromAdvisers, student_no, (err, results) => {
-      if (err) {
-        console.log(err);
-        return reject(500);
-      }
-
-      if (!results.affectedRows) {
-        console.log('Not in advisers List');
-      }
-    });
-
-    db.query(queryString, values, (err, results) => {
-      if (err) {
-        console.log(err);
-        return reject(500);
-      }
-
-      if (!results.affectedRows) {
-        return reject(404);
-      }
-
-      return resolve(student_no);
-    });
-  });
-};
-
 export const addStudent = (
   session_user,
   { name, student_no, status, student_curriculum, classification, adviser }
@@ -288,7 +252,7 @@ export const addStudent = (
 };
 
 //delete adviser
-export const removeAdviserFromStudent = (session_user, id) => {
+export const removeAdviserFromStudent = (session_user, { id }) => {
   return new Promise((resolve, reject) => {
     console.log(id);
     const queryString = `
@@ -306,6 +270,42 @@ export const removeAdviserFromStudent = (session_user, id) => {
       }
 
       return resolve(id);
+    });
+  });
+};
+
+//removes a student
+export const removeStudent = (session_user, { student_no }) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+        CALL removeStudent(?, ?)
+      `;
+
+    const removeFromAdvisers = `CALL removeStudentFromAdvisersList(?)`;
+    const values = [session_user, student_no];
+
+    db.query(removeFromAdvisers, student_no, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+
+      if (!results.affectedRows) {
+        console.log('Not in advisers List');
+      }
+    });
+
+    db.query(queryString, values, (err, results) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+
+      if (!results.affectedRows) {
+        return reject(404);
+      }
+
+      return resolve(student_no);
     });
   });
 };

@@ -160,7 +160,7 @@ export const addCourse = (
 ) => {
   return new Promise((resolve, reject) => {
     if (course_status == 'dissolved') {
-      if (actual_count > 10) {
+      if (actual_count >= 10) {
         return reject(407);
       }
     }
@@ -417,11 +417,72 @@ export const editCourse = (
                 console.log(err);
                 return reject(500);
               }
-              return resolve(results.insertId);
+              // return resolve(results.insertId);
             });
           }
         });
       }
+    });
+    const queryString4 = `SELECT * FROM system_user ORDER BY name;`;
+    const q1 = `
+      SELECT
+        course_credit,
+        empno
+      FROM
+        course
+      `;
+
+    var allSub = [];
+
+    db.query(q1, (err, rows1) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+      for (var a = 0; a < rows1.length; a++) {
+        allSub.push(rows1[a]);
+      }
+      db.query(queryString4, (err, rows) => {
+        var subjects = [];
+        var professor = [];
+        var totalTeachingLoad;
+        var totalCourseCredit;
+        for (var i = 0; i < rows.length; i++) {
+          totalTeachingLoad = 0;
+          for (var j = 0; j < allSub.length; j++) {
+            totalCourseCredit = 0;
+
+            if (rows[i].empno == allSub[j].empno) {
+              subjects.push({
+                course_credit: allSub[j].course_credit,
+                empno: allSub[j].room_no
+              });
+              totalTeachingLoad += allSub[j].course_credit;
+            }
+          }
+          professor.push({
+            empno: rows[i].empno,
+            teaching_load: totalTeachingLoad
+          });
+          subjects = [];
+        }
+
+        if (err) {
+          console.log(err);
+          return reject(500);
+        }
+        var newQueryString = `UPDATE system_user SET teaching_load = ? WHERE empno = ?`;
+        for (var i = 0; i < professor.length; i++) {
+          var newValues = [professor[i].teaching_load, professor[i].empno];
+          db.query(newQueryString, newValues, (err, rows) => {
+            if (err) {
+              console.log(err);
+              return reject(500);
+            }
+          });
+        }
+        return resolve(professor);
+      });
     });
   });
 };

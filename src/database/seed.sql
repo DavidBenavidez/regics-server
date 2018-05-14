@@ -17,7 +17,7 @@ CALL addUser ('Suzanna Mellanby', 'smellanbyc', 'example12@email.com', 'rCz2bO',
 CALL addUser ('Elfie Mathewson', 'emathewsond', 'example13@email.com', 'tTsHGyPv', 'member', 'active');
 CALL addUser ('Cello Blaydon', 'cblaydone', 'example14@email.com', 'Pi3j7dfy', 'member', 'active');
 CALL addUser ('Talbot Bernat', 'tbernatf', 'example15@email.com', 'sSSdJH', 'member', 'active');
-CALL addUser ('Dov Goddard', 'dgoddardg', 'example16@email.com', 'R71u1DG', 'member', 'active');
+CALL addUser ('Dov Goddard', 'dgoddardg', 'example16@email.com', 'R71u1DG', 'member', 'resigned');
 CALL addUser ('Roseann Franklyn', 'rfranklynh', 'example17@email.com', 'eGfz799', 'faculty', 'active');
 CALL addUser ('Shaughn Tumielli', 'stumiellii', 'example18@email.com', 'vO4ndRz', 'faculty', 'active');
 CALL addUser ('Cissy Giraudot', 'cgiraudotj', 'example19@email.com', 'wve0ducx', 'faculty', 'active');

@@ -3,6 +3,18 @@ import * as Ctrl from './controller';
 
 const router = Router();
 
+router.put('/api/approve/:empno', async (req, res) => {
+  try {
+    await Ctrl.editUserApproved(req.session.user.name, req.params.empno);
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully approved user'
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
 // Add user
 router.post('/api/users', async (req, res) => {
   if (
@@ -35,36 +47,39 @@ router.post('/api/users', async (req, res) => {
 });
 
 router.post('/api/login', async (req, res) => {
-  try {
-    await Ctrl.checkUser(req.body);
-    const user = await Ctrl.login(req.body);
-    req.session.user = user;
-    if (req.session.user) {
-      var firstName = req.session.user.name.split(' ');
-      req.session.user['firstName'] = firstName[0];
+  if (req.body.username && req.body.password) {
+    try {
+      await Ctrl.checkUser(req.body);
+      const user = await Ctrl.login(req.body);
+      req.session.user = user;
+      if (req.session.user) {
+        var firstName = req.session.user.name.split(' ');
+        req.session.user['firstName'] = firstName[0];
+      }
+
+      res.status(200).json({
+        status: 200,
+        message: 'Successfully logged in',
+        data: user
+      });
+    } catch (status) {
+      let message = '';
+
+      switch (status) {
+        case 500:
+          message = 'Internal server error while logging in';
+          break;
+        case 404:
+          message = 'User does not exist';
+          break;
+        case 401:
+          message = 'Incorrect username and password combination';
+          break;
+      }
+      res.status(status).json({ status, message });
     }
-
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully logged in',
-      data: user
-    });
-  } catch (status) {
-    let message = '';
-
-    switch (status) {
-      case 500:
-        message = 'Internal server error while logging in';
-        break;
-      case 404:
-        message = 'User does not exist';
-        break;
-      case 401:
-        message = 'Incorrect username and password combination';
-        break;
-    }
-
-    res.status(status).json({ status, message });
+  } else {
+    res.status(400).json({ status: 400 });
   }
 });
 

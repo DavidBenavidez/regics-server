@@ -147,6 +147,24 @@ router.put('/api/students/edit', async (req, res) => {
     res.status(400).json({ status: 400 });
   }
 });
+//remove adviser
+
+router.delete('/api/students/delete-adviser/:id', async (req, res) => {
+  try {
+    const id = await Ctrl.removeAdviserFromStudent(
+      req.session.user.name,
+      req.params.id
+    );
+
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully removed adviser',
+      data: id
+    });
+  } catch (status) {
+    res.status(status).json({ status, message });
+  }
+});
 
 // remove student
 router.delete('/api/students/:student_no', async (req, res) => {
@@ -156,25 +174,6 @@ router.delete('/api/students/:student_no', async (req, res) => {
     res.status(200).json({
       status: 200,
       message: 'Successfully removed student',
-      data: id
-    });
-  } catch (status) {
-    res.status(status).json({ status, message });
-  }
-});
-
-//remove adviser
-
-router.delete('/api/students/delete-adviser/', async (req, res) => {
-  try {
-    const id = await Ctrl.removeAdviserFromStudent(
-      req.session.user.name,
-      req.body.id
-    );
-
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully removed adviser',
       data: id
     });
   } catch (status) {

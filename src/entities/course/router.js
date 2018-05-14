@@ -73,6 +73,7 @@ router.put('/api/course/edit', async (req, res) => {
   ) {
     try {
       await Ctrl.editCourse(req.session.user.name, req.body);
+      // await Ctrl.updateTeachingLoad();
       const user = await Ctrl.getCourse({ course_no: req.body.course_no });
       res.status(200).json({
         status: 200,

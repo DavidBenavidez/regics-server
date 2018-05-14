@@ -143,6 +143,7 @@ export const getAllTeachingLoads = () => {
         console.log(err);
         return reject(500);
       }
+
       return resolve(professor);
     });
   });
@@ -409,6 +410,28 @@ export const editUser = (
   });
 };
 
+export const editUserPrivilege = (session_user, empno, system_position) => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+      CALL editUserPrivilege(?,?,?);
+    `;
+    const values = [session_user, empno, system_position];
+
+    db.query(queryString, values, (err, res) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+
+      if (!res.affectedRows) {
+        return reject(404);
+      }
+
+      return resolve();
+    });
+  });
+};
+
 export const editPassword = (session_user, { username, new_password }) => {
   return new Promise((resolve, reject) => {
     bcrypt.hash(new_password, salt, function(err, hash) {
@@ -609,6 +632,31 @@ export const checkExists = ({ empno, username }) => {
         if (res) return reject(405);
 
         return resolve();
+      });
+    } else {
+      return reject(404);
+    }
+  });
+};
+
+export const checkExistsForPrivilege = ({ empno, username }) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT * FROM system_user WHERE BINARY username = ? AND empno != ?;
+    `;
+    const values = [username.toLowerCase(), empno];
+    if (username) {
+      db.query(query, values, (err, res) => {
+        if (err) {
+          console.log(err.message);
+          return reject(500);
+        }
+
+        res = res[0];
+
+        if (res) return resolve();
+
+        return reject(405);
       });
     } else {
       return reject(404);
