@@ -1,4 +1,5 @@
 import db from '../../database';
+import { getOffset } from '../utils/';
 import bcrypt from 'bcryptjs';
 
 const salt = bcrypt.genSaltSync(10);
@@ -48,7 +49,7 @@ export const getUser = ({ empno }) => {
 };
 
 // Get teaching load of professors
-export const getAllTeachingLoads = () => {
+export const getAllTeachingLoads = page => {
   return new Promise((resolve, reject) => {
     const queryString = `SELECT * FROM system_user ORDER BY name;`;
     const q1 = `
@@ -137,6 +138,12 @@ export const getAllTeachingLoads = () => {
           subjects: subjects
         });
         subjects = [];
+
+        var pagination = professor.slice(page - 1 * 15, page * 15);
+        0, 15;
+        15, 30;
+        30, 45;
+        45, 60;
       }
 
       if (err) {
@@ -144,7 +151,7 @@ export const getAllTeachingLoads = () => {
         return reject(500);
       }
 
-      return resolve(professor);
+      return resolve(pagination);
     });
   });
 };

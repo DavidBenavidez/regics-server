@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as Ctrl from './controller';
+import { countItems } from '../utils/';
 
 const router = Router();
 
@@ -86,13 +87,21 @@ router.get('/api/users/:empno', async (req, res) => {
 });
 
 // getAllTeachingLoads
-router.get('/api/teaching_load', async (req, res) => {
+router.get('/api/teaching_load/:page', async (req, res) => {
   try {
-    const professors = await Ctrl.getAllTeachingLoads();
-    res.status(200).json({
-      status: 200,
-      data: professors
-    });
+    const { pages } = await countItems('log_data', 15);
+    if (req.params.page > pages) {
+      res.status(400).json({
+        status: 400,
+        message: 'Invalid logs pagination'
+      });
+    } else {
+      const professors = await Ctrl.getAllTeachingLoads(req.params.page);
+      res.status(200).json({
+        status: 200,
+        data: professors
+      });
+    }
   } catch (status) {
     res.status(status).json({ status });
   }
