@@ -17,7 +17,7 @@ router.get('/api/logs/:page', async (req, res) => {
       res.status(200).json({
         status: 200,
         message: 'Successfully fetched logs',
-        data: { data: logs, pages: pages }
+        data: logs
       });
     }
   } catch (status) {

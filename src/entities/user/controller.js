@@ -1,5 +1,4 @@
 import db from '../../database';
-import { getOffset } from '../utils/';
 import bcrypt from 'bcryptjs';
 
 const salt = bcrypt.genSaltSync(10);
@@ -82,7 +81,7 @@ export const getAllUnapproved = () => {
 };
 
 // Get teaching load of professors
-export const getAllTeachingLoads = page => {
+export const getAllTeachingLoads = () => {
   return new Promise((resolve, reject) => {
     const queryString = `SELECT * FROM system_user ORDER BY name LIMIT 15 OFFSET ?`;
     const q1 = `
@@ -171,8 +170,6 @@ export const getAllTeachingLoads = page => {
           subjects: subjects
         });
         subjects = [];
-
-        // var pagination = professor.slice(page - 1 * 15, page * 15);
       }
 
       if (err) {
