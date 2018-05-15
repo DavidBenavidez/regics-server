@@ -18,6 +18,20 @@ router.get('/api/users/advisers', async (req, res) => {
   }
 });
 
+// Get all advisers and the students assigned to them
+router.get('/api/users/unapproved', async (req, res) => {
+  try {
+    const users = await Ctrl.getAllUnapproved();
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully fetched advisers',
+      data: users
+    });
+  } catch (status) {
+    res.status(status).json({ status });
+  }
+});
+
 // Get all advisee count by classification
 router.get('/api/students-count', async (req, res) => {
   try {
