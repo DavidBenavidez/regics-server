@@ -526,7 +526,7 @@ END;
 $$
 DELIMITER ;
 
---delete adviser
+-- delete adviser
 DROP PROCEDURE IF EXISTS removeAdviser;
 DELIMITER $$
 CREATE PROCEDURE removeAdviser (
