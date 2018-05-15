@@ -51,7 +51,7 @@ export const getUser = ({ empno }) => {
 // Get teaching load of professors
 export const getAllTeachingLoads = page => {
   return new Promise((resolve, reject) => {
-    const queryString = `SELECT * FROM system_user ORDER BY name;`;
+    const queryString = `SELECT * FROM system_user ORDER BY name LIMIT 15 OFFSET ?`;
     const q1 = `
       SELECT
         room_no,
@@ -97,7 +97,7 @@ export const getAllTeachingLoads = page => {
       }
     });
 
-    db.query(queryString, (err, rows) => {
+    db.query(queryString, getOffset(15, page), (err, rows) => {
       var subjects = [];
       var professor = [];
       var totalTeachingLoad;
@@ -139,11 +139,7 @@ export const getAllTeachingLoads = page => {
         });
         subjects = [];
 
-        var pagination = professor.slice(page - 1 * 15, page * 15);
-        0, 15;
-        15, 30;
-        30, 45;
-        45, 60;
+        // var pagination = professor.slice(page - 1 * 15, page * 15);
       }
 
       if (err) {
@@ -151,7 +147,7 @@ export const getAllTeachingLoads = page => {
         return reject(500);
       }
 
-      return resolve(pagination);
+      return resolve(professor);
     });
   });
 };

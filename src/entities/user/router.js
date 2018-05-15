@@ -99,7 +99,7 @@ router.get('/api/teaching_load/:page', async (req, res) => {
       const professors = await Ctrl.getAllTeachingLoads(req.params.page);
       res.status(200).json({
         status: 200,
-        data: professors
+        data: { data: professors, pages: pages }
       });
     }
   } catch (status) {

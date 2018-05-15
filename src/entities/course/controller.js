@@ -1,4 +1,5 @@
 import db from '../../database';
+import { getOffset } from '../utils/';
 import bcrypt from 'bcryptjs';
 
 const salt = bcrypt.genSaltSync(10);
@@ -25,7 +26,7 @@ function convertTime(time) {
   return finalTime;
 }
 
-export const getAllCourses = () => {
+export const getAllCourses = page => {
   return new Promise((resolve, reject) => {
     const queryString = `
         SELECT 
@@ -59,8 +60,10 @@ export const getAllCourses = () => {
           course_name,
           section,
           FIELD(is_lab, 'false', 'true')
+        LIMIT 15
+        OFFSET ?
       `;
-    db.query(queryString, (err, rows) => {
+    db.query(queryString, getOffset(15, page), (err, rows) => {
       if (err) {
         console.log(err);
         return reject(500);
