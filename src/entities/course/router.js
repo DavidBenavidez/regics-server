@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as Ctrl from './controller';
+import { countItems } from '../utils/';
 
 const router = Router();
 
@@ -22,15 +23,22 @@ router.put('/api/course/swap-prof', async (req, res) => {
 });
 
 // Get all courses
-router.get('/api/course', async (req, res) => {
+router.get('/api/course/:page', async (req, res) => {
   try {
-    console.log(req.session);
-    const users = await Ctrl.getAllCourses();
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully fetched courses',
-      data: users
-    });
+    const { pages } = await countItems('log_data', 15);
+    if (req.params.page > pages) {
+      res.status(400).json({
+        status: 400,
+        message: 'Invalid courses pagination'
+      });
+    } else {
+      const users = await Ctrl.getAllCourses(req.params.page);
+      res.status(200).json({
+        status: 200,
+        message: 'Successfully fetched courses',
+        data: { data: users, pages: pages }
+      });
+    }
   } catch (status) {
     res.status(status).json({ status });
   }
