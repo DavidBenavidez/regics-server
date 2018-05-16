@@ -22,9 +22,5 @@ export const countItems = (table, m) => {
 };
 
 export const getOffset = (m, page) => {
-  var val = m * (page - 1);
-  if (isNaN(val) || val < 0) {
-    return 0;
-  }
-  return val;
+  return m * (page - 1);
 };

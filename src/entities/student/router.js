@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import * as Ctrl from './controller';
 import * as Users from '../user/controller';
-import { countItems } from '../utils/';
 
 const router = Router();
 
@@ -31,45 +30,6 @@ router.get('/api/students/export', async (req, res) => {
       message: 'Successfully fetched advisers',
       data: exportTable
     });
-  } catch (status) {
-    res.status(status).json({ status });
-  }
-});
-
-router.get('/api/students/enlisted-stud/:page', async (req, res) => {
-  try {
-    const { pages } = await countItems('log_data', 15);
-    if (req.params.page > pages) {
-      res.status(400).json({
-        status: 400,
-        message: 'Invalid enlisted students pagination'
-      });
-    } else {
-      var students = await Ctrl.getAllStudents2(req.params.page);
-      var exportTable = [];
-      var advisers = [];
-
-      for (var i = 0; i < students.length; i++) {
-        advisers = await Ctrl.getAllAdviserNames(students[i].student_no);
-        exportTable.push({
-          student_no: students[i].student_no,
-          name: students[i].name,
-          student_curriculum: students[i].student_curriculum,
-          status: students[i].status,
-          classification: students[i].classification,
-          adviser: students[i].adviser,
-          empno: students[i].empno,
-          status: students[i].status,
-          history: advisers
-        });
-      }
-
-      res.status(200).json({
-        status: 200,
-        message: 'Successfully fetched advisers',
-        data: { data: exportTable, pages: pages }
-      });
-    }
   } catch (status) {
     res.status(status).json({ status });
   }
@@ -206,10 +166,14 @@ router.delete('/api/students/delete-adviser/:id', async (req, res) => {
   }
 });
 
-// remove student
-router.delete('/api/students/:student_no', async (req, res) => {
+//remove adviser
+
+router.delete('/api/students/delete-adviser/:id', async (req, res) => {
   try {
-    const id = await Ctrl.removeStudent(req.session.user.name, req.params);
+    const id = await Ctrl.removeAdviserFromStudent(
+      req.session.user.name,
+      req.params
+    );
 
     res.status(200).json({
       status: 200,

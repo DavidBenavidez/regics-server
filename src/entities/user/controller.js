@@ -1,5 +1,4 @@
 import db from '../../database';
-import { getOffset } from '../utils/';
 import bcrypt from 'bcryptjs';
 
 const salt = bcrypt.genSaltSync(10);
@@ -48,43 +47,10 @@ export const getUser = ({ empno }) => {
   });
 };
 
-export const getAllUnapproved = () => {
-  return new Promise((resolve, reject) => {
-    const queryString = `
-        SELECT 
-          empno,
-          CAP_FIRST(name) as name,
-          username,
-          email,
-          password,
-          system_position,
-          status,
-          teaching_load
-        FROM 
-          system_user
-        WHERE
-          approved = 'false'
-      `;
-
-    db.query(queryString, (err, rows) => {
-      if (err) {
-        console.log(err);
-        return reject(500);
-      }
-
-      if (!rows.length) {
-        return reject(404);
-      }
-
-      return resolve(rows[0]);
-    });
-  });
-};
-
 // Get teaching load of professors
-export const getAllTeachingLoads = page => {
+export const getAllTeachingLoads = () => {
   return new Promise((resolve, reject) => {
-    const queryString = `SELECT * FROM system_user ORDER BY name LIMIT 15 OFFSET ?`;
+    const queryString = `SELECT * FROM system_user ORDER BY name;`;
     const q1 = `
       SELECT
         room_no,
@@ -130,7 +96,7 @@ export const getAllTeachingLoads = page => {
       }
     });
 
-    db.query(queryString, getOffset(15, page), (err, rows) => {
+    db.query(queryString, (err, rows) => {
       var subjects = [];
       var professor = [];
       var totalTeachingLoad;
@@ -171,8 +137,6 @@ export const getAllTeachingLoads = page => {
           subjects: subjects
         });
         subjects = [];
-
-        // var pagination = professor.slice(page - 1 * 15, page * 15);
       }
 
       if (err) {

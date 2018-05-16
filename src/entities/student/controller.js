@@ -1,5 +1,4 @@
 import db from '../../database';
-import { getOffset } from '../utils/';
 
 // R E T R I E V E
 //gets all students
@@ -18,32 +17,6 @@ export const getAllStudents = () => {
       `;
 
     db.query(queryString, (err, rows) => {
-      if (err) {
-        console.log(err);
-        return reject(500);
-      }
-      return resolve(rows);
-    });
-  });
-};
-
-export const getAllStudents2 = page => {
-  return new Promise((resolve, reject) => {
-    const queryString = `
-        SELECT
-          a.student_no, a.name, a.status, a.student_curriculum, a.classification, b.status AS adviser_status, b.name AS adviser, b.empno
-        FROM
-          student a, system_user b
-        WHERE
-          a.adviser = b.empno
-        ORDER BY
-          FIELD(a.status, 'enrolled', 'dropped', 'loa', 'dismissed'),
-          a.name
-        LIMIT 15
-        OFFSET ?
-      `;
-
-    db.query(queryString, getOffset(15, page), (err, rows) => {
       if (err) {
         console.log(err);
         return reject(500);
