@@ -159,117 +159,135 @@ export const addCourse = (
   }
 ) => {
   return new Promise((resolve, reject) => {
-    if (course_status == 'dissolved') {
-      if (actual_count >= 10) {
-        return reject(407);
-      }
-    }
-
-    var totalCourseCredit;
-    // Compute course credit
-    if (course_name == 'CMSC 190-1') {
-      if (sais_class_count * (0.5 / 3) > 3) {
-        totalCourseCredit = 3;
-      } else {
-        totalCourseCredit = sais_class_count * (0.5 / 3);
-      }
-    } else if (course_name == 'CMSC 190-2') {
-      if (2.0 * sais_class_count * (0.5 / 3) > 3) {
-        totalCourseCredit = 3;
-      } else {
-        totalCourseCredit = 2.0 * sais_class_count * (0.5 / 3);
-      }
-    } else if (is_lab == 'false') {
-      console.log('not lab');
-      if (sais_class_count <= 40) {
-        totalCourseCredit = 2;
-      } else {
-        totalCourseCredit = 2.0 * ((sais_class_count - 40) / 120 + 1);
-      }
-    } else {
-      totalCourseCredit = 1.5;
-    }
-
-    course_time_start = convertTime(course_time_start);
-    course_time_end = convertTime(course_time_end);
-    const queryString = `
-    CALL addCourse(?,?,?,?,?,?,?,?,?, time_to_sec(timediff('${course_time_end}','${course_time_start}'))/3600,?,?,?,?,?,?,?,?,?)
+    const queryString1 = `
+      SELECT * FROM course WHERE course_name = ? AND section = ?
     `;
-    const values = [
-      session_user,
-      course_name,
-      section,
-      class_size,
-      sais_class_count,
-      sais_waitlisted_count,
-      actual_count,
-      course_time_start,
-      course_time_end,
-      units,
-      totalCourseCredit,
-      is_lab,
-      course_status,
-      day1,
-      day2,
-      reason,
-      room_no,
-      empno
-    ];
-    //For room conflict check
-    const queryString2 = `SELECT course_name FROM course WHERE room_no = ? AND ((day1 = ? OR day2 = ?) OR (day1 = ? OR day2 = ?)) AND ((course_time_start >= ? AND course_time_start < ?) OR (course_time_end > ? AND course_time_end <= ?))`;
-    const values2 = [
-      room_no,
-      day1,
-      day1,
-      day2,
-      day2,
-      course_time_start,
-      course_time_end,
-      course_time_start,
-      course_time_end
-    ];
+    const values = [course_name, section];
 
-    var time = [
-      empno,
-      day1,
-      day1,
-      day2,
-      day2,
-      course_time_start,
-      course_time_end,
-      course_time_start,
-      course_time_end
-    ];
-    const queryString3 = `SELECT * FROM course WHERE empno = ? AND ((day1 = ? OR day2 = ?) OR (day1 = ? OR day2 = ?)) AND ((course_time_start >= ? AND course_time_start < ?) OR (course_time_end > ? AND course_time_end <= ?))`;
-
-    db.query(queryString3, time, (err, results) => {
+    db.query(queryString1, values, (err, res) => {
       if (err) {
         console.log(err);
         return reject(500);
       }
-      if (results.length) {
-        //not empty, not
-        console.log('conflict with prof of subject ' + results[0].course_name);
-        return reject(405);
+
+      if (res.length) {
+        return reject(401);
       } else {
-        db.query(queryString2, values2, (err2, results2) => {
-          if (err2) {
-            console.log(err2);
+        if (course_status == 'dissolved') {
+          if (actual_count >= 10) {
+            return reject(407);
+          }
+        }
+
+        var totalCourseCredit;
+        // Compute course credit
+        if (course_name == 'CMSC 190-1') {
+          if (sais_class_count * (0.5 / 3) > 3) {
+            totalCourseCredit = 3;
+          } else {
+            totalCourseCredit = sais_class_count * (0.5 / 3);
+          }
+        } else if (course_name == 'CMSC 190-2') {
+          if (2.0 * sais_class_count * (0.5 / 3) > 3) {
+            totalCourseCredit = 3;
+          } else {
+            totalCourseCredit = 2.0 * sais_class_count * (0.5 / 3);
+          }
+        } else if (is_lab == 'false') {
+          console.log('not lab');
+          if (sais_class_count <= 40) {
+            totalCourseCredit = 2;
+          } else {
+            totalCourseCredit = 2.0 * ((sais_class_count - 40) / 120 + 1);
+          }
+        } else {
+          totalCourseCredit = 1.5;
+        }
+
+        course_time_start = convertTime(course_time_start);
+        course_time_end = convertTime(course_time_end);
+        const queryString = `
+        CALL addCourse(?,?,?,?,?,?,?,?,?, time_to_sec(timediff('${course_time_end}','${course_time_start}'))/3600,?,?,?,?,?,?,?,?,?)
+        `;
+        const values = [
+          session_user,
+          course_name,
+          section,
+          class_size,
+          sais_class_count,
+          sais_waitlisted_count,
+          actual_count,
+          course_time_start,
+          course_time_end,
+          units,
+          totalCourseCredit,
+          is_lab,
+          course_status,
+          day1,
+          day2,
+          reason,
+          room_no,
+          empno
+        ];
+        //For room conflict check
+        const queryString2 = `SELECT course_name FROM course WHERE room_no = ? AND ((day1 = ? OR day2 = ?) OR (day1 = ? OR day2 = ?)) AND ((course_time_start >= ? AND course_time_start < ?) OR (course_time_end > ? AND course_time_end <= ?))`;
+        const values2 = [
+          room_no,
+          day1,
+          day1,
+          day2,
+          day2,
+          course_time_start,
+          course_time_end,
+          course_time_start,
+          course_time_end
+        ];
+
+        var time = [
+          empno,
+          day1,
+          day1,
+          day2,
+          day2,
+          course_time_start,
+          course_time_end,
+          course_time_start,
+          course_time_end
+        ];
+        const queryString3 = `SELECT * FROM course WHERE empno = ? AND ((day1 = ? OR day2 = ?) OR (day1 = ? OR day2 = ?)) AND ((course_time_start >= ? AND course_time_start < ?) OR (course_time_end > ? AND course_time_end <= ?))`;
+
+        db.query(queryString3, time, (err, results) => {
+          if (err) {
+            console.log(err);
             return reject(500);
           }
-
-          if (results2.length > 0) {
+          if (results.length) {
+            //not empty, not
             console.log(
-              'Room conflict with subject ' + results2[0].course_name
+              'conflict with prof of subject ' + results[0].course_name
             );
-            return reject(406);
+            return reject(405);
           } else {
-            db.query(queryString, values, (err, results) => {
-              if (err) {
-                console.log(err);
+            db.query(queryString2, values2, (err2, results2) => {
+              if (err2) {
+                console.log(err2);
                 return reject(500);
               }
-              return resolve(results.insertId);
+
+              if (results2.length > 0) {
+                console.log(
+                  'Room conflict with subject ' + results2[0].course_name
+                );
+                return reject(406);
+              } else {
+                db.query(queryString, values, (err, results) => {
+                  if (err) {
+                    console.log(err);
+                    return reject(500);
+                  }
+                  return resolve(results.insertId);
+                });
+              }
             });
           }
         });
