@@ -200,6 +200,39 @@ export const getTeachingLoad = ({ empno }) => {
   });
 };
 
+export const getAllUnapproved = () => {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+        SELECT 
+          empno,
+          CAP_FIRST(name) as name,
+          username,
+          email,
+          password,
+          system_position,
+          status,
+          teaching_load
+        FROM 
+          system_user
+        WHERE
+          approved = 'false'
+      `;
+
+    db.query(queryString, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return reject(500);
+      }
+
+      if (!rows.length) {
+        return reject(404);
+      }
+
+      return resolve(rows);
+    });
+  });
+};
+
 //Retrieve adviser and advisee per classification
 export const getAllAdviseeClassification = () => {
   return new Promise((resolve, reject) => {

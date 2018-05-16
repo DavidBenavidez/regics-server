@@ -15,6 +15,7 @@ router.get('/api/users-info', async (req, res) => {
     res.status(status).json({ status });
   }
 });
+
 router.put('/api/users/position', async (req, res) => {
   if (req.body.empno && req.body.username && req.body.system_position) {
     try {
