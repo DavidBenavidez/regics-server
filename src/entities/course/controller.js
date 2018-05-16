@@ -492,20 +492,92 @@ export const swapProf = (
   { course_no, empno, swap_course_no, swap_empno }
 ) => {
   return new Promise((resolve, reject) => {
-    const queryString = `
-      CALL swapProf(?,?,?,?,?)  
-    `;
+    const queryString1 = `SELECT * FROM course WHERE course_no = ?`;
 
-    const values = [session_user, course_no, empno, swap_course_no, swap_empno];
-    db.query(queryString, values, (err, res) => {
+    db.query(queryString1, swap_course_no, (err, res1) => {
       if (err) {
         console.log(err);
         return reject(500);
       }
-      if (!res.affectedRows) {
-        return reject(404);
-      }
-      return resolve();
+
+      var time = [
+        empno,
+        course_no,
+        res1[0].day1,
+        res1[0].day1,
+        res1[0].day2,
+        res1[0].day2,
+        res1[0].course_time_start,
+        res1[0].course_time_end,
+        res1[0].course_time_start,
+        res1[0].course_time_end
+      ];
+
+      const queryString2 = `SELECT course_name, section FROM course WHERE empno = ? AND course_no != ? AND ((day1 = ? OR day2 = ?) OR (day1 = ? OR day2 = ?)) AND ((course_time_start >= ? AND course_time_start < ?) OR (course_time_end > ? AND course_time_end <= ?))`;
+
+      db.query(queryString2, time, (err, res2) => {
+        if (err) {
+          console.log(err);
+          return reject(500);
+        }
+
+        if (res2.length) {
+          return reject(405);
+        } else {
+          db.query(queryString1, course_no, (err, res3) => {
+            if (err) {
+              console.log(err);
+              return reject(500);
+            }
+
+            time = [
+              swap_empno,
+              swap_course_no,
+              res3[0].day1,
+              res3[0].day1,
+              res3[0].day2,
+              res3[0].day2,
+              res3[0].course_time_start,
+              res3[0].course_time_end,
+              res3[0].course_time_start,
+              res3[0].course_time_end
+            ];
+
+            db.query(queryString2, time, (err, res4) => {
+              if (err) {
+                console.log(err);
+                return reject(500);
+              }
+
+              if (res4.length) {
+                return reject(406);
+              } else {
+                const queryString = `
+                  CALL swapProf(?,?,?,?,?)  
+                `;
+
+                const values = [
+                  session_user,
+                  course_no,
+                  empno,
+                  swap_course_no,
+                  swap_empno
+                ];
+                db.query(queryString, values, (err, res) => {
+                  if (err) {
+                    console.log(err);
+                    return reject(500);
+                  }
+                  if (!res.affectedRows) {
+                    return reject(404);
+                  }
+                  return resolve();
+                });
+              }
+            });
+          });
+        }
+      });
     });
   });
 };
