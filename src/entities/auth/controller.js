@@ -125,7 +125,7 @@ export const login = ({ username, password }) => {
       bcrypt.compare(password, rows[0].password, (error, isMatch) => {
         if (error) return reject(500);
         else if (!isMatch) return reject(404);
-        else if (rows[0].approved === 'false') return reject(405);
+        // else if (rows[0].approved === 'false') return reject(405);
         return resolve(rows[0]);
       });
     });

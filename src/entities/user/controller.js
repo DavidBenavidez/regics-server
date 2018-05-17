@@ -25,7 +25,6 @@ export const getUser = ({ empno }) => {
           system_position,
           status,
           teaching_load
-
         FROM 
           system_user
         WHERE
@@ -360,11 +359,11 @@ export const getUsers = () => {
   });
 };
 
-export const getUsersInfo = () => {
+export const getUsersInfo = page => {
   return new Promise((resolve, reject) => {
-    const queryString = `SELECT empno, name, username, email, system_position, status, teaching_load FROM system_user ORDER BY name`;
+    const queryString = `SELECT empno, name, username, email, system_position, status, teaching_load FROM system_user ORDER BY name LIMIT 15 OFFSET ?`;
 
-    db.query(queryString, (err, results) => {
+    db.query(queryString, getOffset(15, page), (err, results) => {
       if (err) {
         console.log(err);
         return reject(500);

@@ -1,16 +1,25 @@
 import { Router } from 'express';
 import * as Ctrl from './controller';
+import { countItems } from '../utils/';
 
 const router = Router();
 
 // Get all User Info
-router.get('/api/users-info', async (req, res) => {
+router.get('/api/users-info/:id', async (req, res) => {
   try {
-    const id = await Ctrl.getUsersInfo();
-    res.status(200).json({
-      status: 200,
-      data: id
-    });
+    const { pages } = await countItems('log_data', 15);
+    if (req.params.page > pages) {
+      res.status(400).json({
+        status: 400,
+        message: 'Invalid enlisted students pagination'
+      });
+    } else {
+      const id = await Ctrl.getUsersInfo(req.params.id);
+      res.status(200).json({
+        status: 200,
+        data: id
+      });
+    }
   } catch (status) {
     res.status(status).json({ status });
   }
